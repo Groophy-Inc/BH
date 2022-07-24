@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="AF\" />
     <Folder Include="Builder\" />
     <Folder Include="Varriables\" />
     <Folder Include="Script\" />
