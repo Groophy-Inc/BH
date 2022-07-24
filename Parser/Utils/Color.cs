@@ -26,6 +26,23 @@ namespace BH.Parser.Utils
             return new ANSIString(before + mid.ToString() + after);
         }
 
+        static public ANSIString ColorByIndex(string text, int Index, ConsoleColor DefualtColor, ConsoleColor color)
+        {
+            if (string.IsNullOrEmpty(text)) return new ANSIString("");
+            var before = text.Substring(0, Index).Color(DefualtColor);
+            var after = text.Substring(Index).Color(color);
+            return new ANSIString(before.ToString() + after.ToString());
+        }
+
+        static public ANSIString ColorByIndex(string text, int Index, int Len, ConsoleColor DefualtColor, ConsoleColor color)
+        {
+            if (string.IsNullOrEmpty(text)) return new ANSIString("");
+            var before = text.Substring(0, Index).Color(DefualtColor);
+            var mid = text.Substring(Index, Len).Color(color);
+            var after = text.Substring(Index + Len).Color(DefualtColor);
+            return new ANSIString(before.ToString() + mid.ToString() + after.ToString());
+        }
+
         static public ANSIString ColorByIndex(string text, int Index, string HEXcolor)
         {
             if (string.IsNullOrEmpty(text)) return new ANSIString("");

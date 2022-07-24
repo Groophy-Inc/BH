@@ -5,6 +5,7 @@ using BH.Structes;
 using System.Linq;
 using ANSIConsole;
 using BH.ErrorHandle;
+using System.Collections.Generic;
 
 namespace BH.Parser
 {
@@ -14,7 +15,7 @@ namespace BH.Parser
         public static string masterPagePath { get; set; }
         public static string[] Options { get; set; }
 
-        public static void ParseMasterPage(string _srcPath, string _masterPagePath, string[] _Options)
+        public static AllElements ParseMasterPage(string _srcPath, string _masterPagePath, string[] _Options)
         {
             
             srcPath = _srcPath;
@@ -34,8 +35,10 @@ namespace BH.Parser
             bool isAttributeBuildName = false;
             string AttributeBuildName = "";
             bool isAttributeBuildContentStart = false;
+            bool isAttributeBackSlash = false;
             bool isAttributeBuildContent = false;
             string AttributeBuildContent = "";
+            bool isNewAttributeWaiting = false;
             var Attributes = new System.Collections.Generic.Dictionary<string, string>();
             int LineLen = 0;
             bool isSkipSecondCheck = false;
@@ -43,6 +46,8 @@ namespace BH.Parser
             bool isErrorStack = false;
             var errors = new System.Collections.Generic.List<Error>();
             int StackErrorID = -1;
+
+            List<Element> allofelements = new List<Element>();
             
             /*
             
@@ -59,12 +64,27 @@ namespace BH.Parser
                 string lineLower = line.Replace("ı", "i").Replace("I", "i").ToLower();
                 //For each line start
 
+                LineLen = 0;
+
+                if (isAttributeBuildContent)
+                {
+                    AttributeBuildContent += "\r\n";
+                }
+
                 string[] words = line.Split(' ');
                 for (int j = 0; j < words.Length; j++)
                 {
                     string word = words[j].Trim();
                     string wordLower = word.Replace("ı", "i").Replace("I", "i").ToLower();
+
+
                     //For each word of line start
+
+                    if (isAttributeBuildContent && j != 0)
+                    {
+                        AttributeBuildContent += " ";
+                    }
+                   
 
                     if (isProgress)
                     {
@@ -77,6 +97,7 @@ namespace BH.Parser
                             Attributes.Add("name", __name);
                             isWaitingName = false;
                             isWaitingGenre = true;
+                            LogSystem.log("New Attribute - '" + "name" + "': " + __name, ConsoleColor.Green);
                         }
                         else if (isWaitingGenre)
                         {
@@ -84,20 +105,26 @@ namespace BH.Parser
                             Attributes.Add("genre", __genre);
                             isWaitingGenre = false;
                             isWaitingAttributes = true;
+                            LogSystem.log("New Attribute - '" + "genre" + "': " + __genre, ConsoleColor.Green);
                         }
                         else if (isWaitingAttributes)
                         {
                             for (int p =0;p <word.Length;p++)
                             {
                                 //For each char of word
+                                char _c = ' ';
                                 char c = word[p];
-                                char c2 = ' '; //second char
+                                char c_ = ' '; //second char
 
                                 bool isError = false;
                                 Error error = new Error();
 
-                                if (p + 1 < word.Length) c2 = word[p + 1];
-                                
+                                int LineC = i;
+                                int LenC = LineLen + j;
+
+                                if (p + 1 < word.Length) c_ = word[p + 1];
+                                if (p - 1 < word.Length && p-1>=0) _c = word[p - 1];
+
                                 if (isAttributeBuild)
                                 {
                                     if (isAttributeBuildName)
@@ -135,21 +162,11 @@ namespace BH.Parser
                                                     ErrorMessage = "Spilled out obscure object",
                                                     FilePath = masterPagePath,
                                                     line = line,
-                                                    lineC = i,
-                                                    lenC = LineLen + j
+                                                    lineC = LineC,
+                                                    lenC = LenC
                                                 };
                                                 isError = true;
                                                 error = err;
-                                                //ErrorHandle.ErrMessageBuilder.Build(
-                                                //    ErrorHandle.ErrorPathCodes.Parser,
-                                                //    0,
-                                                //    2, //DevCode
-                                                //    "Spilled out obscure object",
-                                                //    masterPagePath,
-                                                //    j,
-                                                //    LineLen + j,
-                                                //    line
-                                                //    ).Print();
                                             }
                                         }
                                         
@@ -162,13 +179,46 @@ namespace BH.Parser
                                         {
                                             if (isAttributeBuildContentStart)
                                             {
-
+                                                if (c == '\\')
+                                                {
+                                                    isAttributeBackSlash = true;
+                                                }
+                                                else
+                                                {
+                                                    if (isAttributeBackSlash)
+                                                    {
+                                                        AttributeBuildContent += c;
+                                                        isAttributeBackSlash = false;
+                                                    }
+                                                    else
+                                                    {
+                                                        if (c == '"')
+                                                        {
+                                                            isAttributeBuildContentStart = false;
+                                                            isAttributeBuildContent = false;
+                                                            isAttributeBuild = false;
+                                                            Attributes.Add(AttributeBuildName, AttributeBuildContent);
+                                                            LogSystem.log("New Attribute - '" + AttributeBuildName + "': " + AttributeBuildContent, ConsoleColor.Green);
+                                                            //Console.WriteLine(("attr: " + AttributeBuildName + ": " + AttributeBuildContent).Color(ConsoleColor.Green));
+                                                            AttributeBuildName = "";
+                                                            AttributeBuildContent = "";
+                                                            isNewAttributeWaiting = true;
+                                                        }
+                                                        else
+                                                        {
+                                                            AttributeBuildContent += c;
+                                                        }
+                                                    }
+                                                }
                                             }
                                             else
                                             {
                                                 if (c == '"')
                                                 {
-                                                    isAttributeBuildContentStart = true;
+                                                    if (isAttributeBuildContent)
+                                                    {
+                                                        isAttributeBuildContentStart = true;
+                                                    }
                                                 }
                                                 else
                                                 {
@@ -180,8 +230,8 @@ namespace BH.Parser
                                                         ErrorMessage = "Spilled out obscure object",
                                                         FilePath = masterPagePath,
                                                         line = line,
-                                                        lineC = i,
-                                                        lenC = LineLen + j
+                                                        lineC = LineC,
+                                                        lenC = LenC
                                                     };
                                                     isError = true;
                                                     error = err;
@@ -199,6 +249,35 @@ namespace BH.Parser
                                         isAttributeBuild = true;
                                         isAttributeBuildName = true;
                                     }
+                                    else if (c == ',')
+                                    {
+                                        isAttributeBuild = false;
+                                    }
+                                    else if (c == ';')
+                                    {
+                                        allofelements.Add(new Element()
+                                        {
+                                            Genre = Attributes["genre"],
+                                            Attributes = Attributes
+                                        });
+
+                                        LogSystem.log("New attribute added to element list name of $" + Attributes["name"].Color(ConsoleColor.Magenta), ConsoleColor.DarkGreen);
+
+                                        isProgress = false;
+                                        ProgressSyntax = "";
+                                        isWaitingName = false;
+                                        isWaitingGenre = false;
+                                        isWaitingAttributes = false;
+                                        isAttributeBuild = false;
+                                        isAttributeBuildName = false;
+                                        AttributeBuildName = "";
+                                        isAttributeBuildContentStart = false;
+                                        isAttributeBackSlash = false;
+                                        isAttributeBuildContent = false;
+                                        AttributeBuildContent = "";
+                                        isNewAttributeWaiting = false;
+                                        Attributes = new System.Collections.Generic.Dictionary<string, string>();
+                                    }
                                     else
                                     {
                                         Error err = new Error()
@@ -209,8 +288,8 @@ namespace BH.Parser
                                             ErrorMessage = "Spilled out obscure object",
                                             FilePath = masterPagePath,
                                             line = line,
-                                            lineC = i,
-                                            lenC = LineLen + j
+                                            lineC = LineC,
+                                            lenC = LenC
                                         };
                                         isError = true;
                                         error = err;
@@ -274,6 +353,8 @@ namespace BH.Parser
 
                 //For each line end
             }
+
+            return new AllElements() { ElementList = allofelements.ToArray() };
         }
     }
 }

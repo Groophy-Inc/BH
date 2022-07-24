@@ -12,23 +12,21 @@ namespace BH.ErrorHandle
     }
     internal class ErrMessageBuilder
     {
-        //BH#1#0 - DevCode>2. Fix here 'C:\Users\GROOPHY\Desktop\BH.txt' Line: 0, Len: 0, CharInfo: e
-        //L0S0->err"title"err: err"world",
-        public static string Build(ErrorPathCodes ErrorPathCode, 
+        public static string Build(ErrorPathCodes ErrorPathCode,
                                    int ErrorID,
                                    int DevCode,
                                    string ErrorMessage,
                                    string FilePath,
                                    int lineC, //Ln
                                    int lenC, //ChLn
-                                   string line) 
+                                   string line)
         {
-            return $"BH#{(int)ErrorPathCode}#{ErrorID} - DevCode -> {DevCode} | Path '{FilePath}'\r\n{Color.ColorByIndex(ErrorMessage, 0, System.ConsoleColor.Yellow)}\r\nLn: '{lineC}' | ChLn: '{lenC}' | Ch: '{line.Substring(lenC, 1)}'\r\n{Color.ColorByIndex(line, lenC,1,System.ConsoleColor.Red)}\r\n";
+            return $"BH#{(int)ErrorPathCode}#{ErrorID} - DevCode -> {DevCode} | Path '{FilePath}'\r\n{Color.ColorByIndex(ErrorMessage, 0, System.ConsoleColor.Yellow)}\r\nLn: '{lineC}' | ChLn: '{lenC}' | Ch: '{line.Substring(lenC, 1)}'\r\n{Color.ColorByIndex(line, lenC, 1, System.ConsoleColor.Red)}\r\n";
         }
 
         public static string Build(Error error)
         {
-            return $"BH#{(int)error.ErrorPathCode}#{error.ErrorID} - DevCode -> {error.DevCode} | Path '{error.FilePath}'\r\n{Color.ColorByIndex(error.ErrorMessage, 0, System.ConsoleColor.Yellow)}\r\nLn: '{error.lineC}' | ChLn: '{error.lenC}' | Ch: '{error.line.Substring(error.lenC, 1)}'\r\n{Color.ColorByIndex(error.line, error.lenC, 1, System.ConsoleColor.Red)}\r\n";
+            return $"{$"BH#{(int)error.ErrorPathCode}#{error.ErrorID}".Color(ConsoleColor.Red)} - DevCode -> {error.DevCode} | Path '{error.FilePath}'\r\n{Color.ColorByIndex(error.ErrorMessage, 0, System.ConsoleColor.Yellow)}\r\nLn: '{error.lineC}' | ChLn: '{error.lenC}' | Ch: '{error.line.Substring(error.lenC, 1)}'\r\n{Color.ColorByIndex(error.line, error.lenC, 1, System.ConsoleColor.Red)}\r\n";
         }
 
         public static string BuildByStack(Error[] errors)
@@ -37,19 +35,18 @@ namespace BH.ErrorHandle
             StringBuilder ListedChar = new StringBuilder();
             //int currentLine = 0;
             List<int> lineCounts = new List<int>();
-            List<string> Lines = new List<string>();
             string ErrLine = "";
             int errLine = 0;
             int start = 0;
             int len = 0;
 
-            for (int i = 0; i < errors.Length;i++)
+            for (int i = 0; i < errors.Length; i++)
             {
                 Error err = errors[i];
 
                 ListedChar.Append(err.line.Substring(err.lenC, 1));
 
-                DevCode.Append(err.DevCode+"|");
+                DevCode.Append(err.DevCode + "|");
 
                 bool isFound = false;
                 foreach (int x in lineCounts)
@@ -60,21 +57,6 @@ namespace BH.ErrorHandle
                     }
                 }
                 if (!isFound) lineCounts.Add(err.lineC);
-
-                //BH#1#0 - DevCode -> 1 | Path 'C:\Users\GROOPHY\Desktop\BH.txt'
-                //Spilled out obscure object
-                //Ln: '1' | ChLn: '0' | Ch: 'e'
-                //err"title": "world",
-
-                //BH#1#0 - DevCode -> 1 | Path 'C:\Users\GROOPHY\Desktop\BH.txt'
-                //Spilled out obscure object
-                //Ln: '1' | ChLn: '1' | Ch: 'r'
-                //err"title": "world",
-
-                //BH#1#0 - DevCode -> 1 | Path 'C:\Users\GROOPHY\Desktop\BH.txt'
-                //Spilled out obscure object
-                //Ln: '1' | ChLn: '2' | Ch: 'r'
-                //err"title": "world",
 
 
                 if (i == 0)
@@ -89,10 +71,7 @@ namespace BH.ErrorHandle
 
                     //last
                     len++;
-                    Lines.Add(
-                        (err.lineC.ToString() + ": ").Color(ConsoleColor.Blue) +                  
-                        Color.ColorByIndex(ErrLine, start, len, System.ConsoleColor.Red).ToString()
-                        );
+                    ErrLine = (err.lineC.ToString() + ": ").Color(ConsoleColor.Blue) + Color.ColorByIndex(ErrLine, start, len, ConsoleColor.Blue, System.ConsoleColor.Red).ToString();
                 }
                 else
                 {
@@ -104,35 +83,24 @@ namespace BH.ErrorHandle
                         }
                         else
                         {
-                            Lines.Add(
-                        (err.lineC.ToString() + ": ").Color(ConsoleColor.Blue) +
-                        Color.ColorByIndex(ErrLine, start, len, System.ConsoleColor.Red).ToString()
-                        );
-
+                            ErrLine = (err.lineC.ToString() + ": ").Color(ConsoleColor.Blue) + Color.ColorByIndex(ErrLine, start, len, ConsoleColor.Blue, System.ConsoleColor.Red).ToString();
                         }
                     }
                 }
-
-
-
-
-
-
-
             }
-
-            
 
             string lns = "";
             foreach (var x in lineCounts)
             {
-                lns += x + ", ";
-            } lns = lns.Substring(0, lns.Length - 2);
+                lns += x + ",";
+            }
+            lns = lns.Substring(0, lns.Length - 1);
 
-            return $@"BH#{(int)errors[0].ErrorPathCode}#{errors[0].ErrorID} - DevCode -> {DevCode.ToString().Substring(0, DevCode.Length-1)} | Path '{errors[0].FilePath}'
+            return $@"{$"BH#{(int)errors[0].ErrorPathCode}#{errors[0].ErrorID}".Color(ConsoleColor.Red)} - DevCode -> {DevCode.ToString().Substring(0, DevCode.Length - 1)} | Path '{errors[0].FilePath}'
 {Color.ColorByIndex(errors[0].ErrorMessage, 0, System.ConsoleColor.Yellow)}
-Ln: '{lns}' | ChLn: '{start}-{start + len}' | Ch: '{ListedChar.ToString()}'
-{Lines[0]}";
+Ln: '{lns}' | ChLn: '{start}-{start + len}' | Ch: '{ListedChar.ToString().Color(ConsoleColor.Magenta)}'
+{ErrLine}
+";
         }
     }
 }
