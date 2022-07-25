@@ -11,10 +11,10 @@ namespace BH
             ErrorHandle.LogSystem.DEBUG = true;
             if (!ANSIInitializer.Init(false)) ANSIInitializer.Enabled = false;
 
-            Console.WriteLine(System.IO.File.ReadAllText(@"C:\Users\GROOPHY\Desktop\BH.txt") + "\r\n | \r\n\\_/ \r\n");
+            Console.WriteLine(System.IO.File.ReadAllText(@"C:\Users\GROOPHY\Desktop\test.txt") + "\r\n | \r\n\\_/ \r\n");
 
 
-            Parser.Parse.ParseMasterPage("", @"C:\Users\GROOPHY\Desktop\BH.txt", new string[] { });
+            Parser.Parse.ParseMasterPage("", @"C:\Users\GROOPHY\Desktop\test.txt", new string[] { });
             Console.ReadKey();
             /*
             if (args.Length == 0) args = new string[] { @"C:\Users\GROOPHY\Desktop\desktop\Code\Batch\BH_2\src", @"C:\Users\GROOPHY\Desktop\desktop\Code\Batch\BH_2\src\Master.gui", "/t" };

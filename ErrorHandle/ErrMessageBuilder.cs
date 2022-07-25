@@ -71,7 +71,7 @@ namespace BH.ErrorHandle
 
                     //last
                     len++;
-                    ErrLine = (err.lineC.ToString() + ": ").Color(ConsoleColor.Blue) + Color.ColorByIndex(ErrLine, start, len, ConsoleColor.Blue, System.ConsoleColor.Red).ToString();
+                    ErrLine = ("Ln"+err.lineC.ToString() + ": ").Color(ConsoleColor.Blue) + Color.ColorByIndex(ErrLine, start, len, ConsoleColor.Blue, System.ConsoleColor.Red).ToString();
                 }
                 else
                 {
@@ -83,7 +83,7 @@ namespace BH.ErrorHandle
                         }
                         else
                         {
-                            ErrLine = (err.lineC.ToString() + ": ").Color(ConsoleColor.Blue) + Color.ColorByIndex(ErrLine, start, len, ConsoleColor.Blue, System.ConsoleColor.Red).ToString();
+                            ErrLine = ("Ln" + err.lineC.ToString() + ": ").Color(ConsoleColor.Blue) + Color.ColorByIndex(ErrLine, start, len, ConsoleColor.Blue, System.ConsoleColor.Red).ToString();
                         }
                     }
                 }

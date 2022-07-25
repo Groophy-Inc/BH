@@ -42,6 +42,7 @@ namespace BH.Parser
             var Attributes = new System.Collections.Generic.Dictionary<string, string>();
             int LineLen = 0;
             bool isSkipSecondCheck = false;
+            bool isSkipThisLine = false; //syntax error or comment flag
 
             bool isErrorStack = false;
             var errors = new System.Collections.Generic.List<Error>();
@@ -77,6 +78,8 @@ namespace BH.Parser
                     string word = words[j].Trim();
                     string wordLower = word.Replace("ı", "i").Replace("I", "i").ToLower();
 
+                    int LineC = i;
+                    int LenC = LineLen + j;
 
                     //For each word of line start
 
@@ -119,8 +122,8 @@ namespace BH.Parser
                                 bool isError = false;
                                 Error error = new Error();
 
-                                int LineC = i;
-                                int LenC = LineLen + j;
+                                
+                                
 
                                 if (p + 1 < word.Length) c_ = word[p + 1];
                                 if (p - 1 < word.Length && p-1>=0) _c = word[p - 1];
@@ -146,8 +149,6 @@ namespace BH.Parser
                                         {
                                             isAttributeBuildContent = true;
                                             isSkipSecondCheck = true;
-                                            //LineLen++;
-                                            //continue;
                                         }
                                         else
                                         {
@@ -199,7 +200,6 @@ namespace BH.Parser
                                                             isAttributeBuild = false;
                                                             Attributes.Add(AttributeBuildName, AttributeBuildContent);
                                                             LogSystem.log("New Attribute - '" + AttributeBuildName + "': " + AttributeBuildContent, ConsoleColor.Green);
-                                                            //Console.WriteLine(("attr: " + AttributeBuildName + ": " + AttributeBuildContent).Color(ConsoleColor.Green));
                                                             AttributeBuildName = "";
                                                             AttributeBuildContent = "";
                                                             isNewAttributeWaiting = true;
@@ -235,7 +235,6 @@ namespace BH.Parser
                                                     };
                                                     isError = true;
                                                     error = err;
-                                                    //ErrorHandle.ErrMessageBuilder.Build(err).Print();
                                                 }
                                             }
                                         }
@@ -261,7 +260,7 @@ namespace BH.Parser
                                             Attributes = Attributes
                                         });
 
-                                        LogSystem.log("New attribute added to element list name of $" + Attributes["name"].Color(ConsoleColor.Magenta), ConsoleColor.DarkGreen);
+                                        LogSystem.log("New element added to element list name of $" + Attributes["name"].Color(ConsoleColor.Magenta), ConsoleColor.DarkGreen);
 
                                         isProgress = false;
                                         ProgressSyntax = "";
@@ -293,7 +292,6 @@ namespace BH.Parser
                                         };
                                         isError = true;
                                         error = err;
-                                        //ErrorHandle.ErrMessageBuilder.Build(err).Print();
                                     }
                                 }
 
@@ -345,13 +343,43 @@ namespace BH.Parser
                             isProgress = true;
                             ProgressSyntax = "set";
                             isWaitingName = true;
-                        }                        
+                        }                
+                        else
+                        {
+                            List<Error> errs = new List<Error>();
+                            string getClosest = APF.Find_Probabilities.GetClosest(wordLower, Keys.getKeyWordsAsArray());
+                            for (int y = 0;y < word.Length;y++)
+                            {
+                                Error err = new Error()
+                                {
+                                    ErrorPathCode = ErrorPathCodes.Parser,
+                                    ErrorID = 1,
+                                    DevCode = 0,
+                                    ErrorMessage = "Invalid syntax! this might be what you're looking for: '" + getClosest.Color(ConsoleColor.Green)+"'.".Color(ConsoleColor.Yellow),
+                                    FilePath = masterPagePath,
+                                    line = line,
+                                    lineC = LineC,
+                                    lenC = LenC + y
+                                };
+                                errs.Add(err);
+                                
+                            }
+                            isSkipThisLine = true;
+                            ErrorStack.PrintStack(errs.ToArray());
+                        }
                     }
 
                     //For each word of line end
+                    if (isSkipThisLine)
+                    {
+                        isSkipThisLine = false;
+                        break;
+                    }
                 }
 
                 //For each line end
+
+
             }
 
             return new AllElements() { ElementList = allofelements.ToArray() };
