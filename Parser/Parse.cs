@@ -87,9 +87,18 @@ namespace BH.Parser
                     {
                         AttributeBuildContent += " ";
                     }
+
+                    if (!isAttributeBuild)
+                    {
+                        //Comment
+                        if (wordLower.StartsWith("//"))
+                        {
+                            isSkipThisLine = true;
+                        }
+                    }
                    
 
-                    if (isProgress)
+                    if (isProgress && !isSkipThisLine)
                     {
                         //Continue to progress
                         
@@ -338,34 +347,37 @@ namespace BH.Parser
                     {
                         //New progress
 
-                        if (wordLower == "set")
+                        if (!isSkipThisLine)
                         {
-                            isProgress = true;
-                            ProgressSyntax = "set";
-                            isWaitingName = true;
-                        }                
-                        else
-                        {
-                            List<Error> errs = new List<Error>();
-                            string getClosest = APF.Find_Probabilities.GetClosest(wordLower, Keys.getKeyWordsAsArray());
-                            for (int y = 0;y < word.Length;y++)
+                            if (wordLower == "set")
                             {
-                                Error err = new Error()
-                                {
-                                    ErrorPathCode = ErrorPathCodes.Parser,
-                                    ErrorID = 1,
-                                    DevCode = 0,
-                                    ErrorMessage = "Invalid syntax! this might be what you're looking for: '" + getClosest.Color(ConsoleColor.Green)+"'.".Color(ConsoleColor.Yellow),
-                                    FilePath = masterPagePath,
-                                    line = line,
-                                    lineC = LineC,
-                                    lenC = LenC + y
-                                };
-                                errs.Add(err);
-                                
+                                isProgress = true;
+                                ProgressSyntax = "set";
+                                isWaitingName = true;
                             }
-                            isSkipThisLine = true;
-                            ErrorStack.PrintStack(errs.ToArray());
+                            else
+                            {
+                                List<Error> errs = new List<Error>();
+                                string getClosest = APF.Find_Probabilities.GetClosest(wordLower, Keys.getKeyWordsAsArray());
+                                for (int y = 0; y < word.Length; y++)
+                                {
+                                    Error err = new Error()
+                                    {
+                                        ErrorPathCode = ErrorPathCodes.Parser,
+                                        ErrorID = 1,
+                                        DevCode = 0,
+                                        ErrorMessage = "Invalid syntax! this might be what you're looking for: '" + getClosest.Color(ConsoleColor.Green) + "'.".Color(ConsoleColor.Yellow),
+                                        FilePath = masterPagePath,
+                                        line = line,
+                                        lineC = LineC,
+                                        lenC = LenC + y
+                                    };
+                                    errs.Add(err);
+
+                                }
+                                isSkipThisLine = true;
+                                ErrorStack.PrintStack(errs.ToArray());
+                            }
                         }
                     }
 
