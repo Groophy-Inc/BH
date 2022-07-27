@@ -21,10 +21,8 @@ namespace BH.Parser
         public enum KeyWords
         {
             set,
-            create,
-            update,
-            delete,
-            insert
+            msg,
+            system
         }
     }
 }

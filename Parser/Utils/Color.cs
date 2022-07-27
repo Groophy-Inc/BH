@@ -51,6 +51,14 @@ namespace BH.Parser.Utils
             return new ANSIString(before + after.ToString());
         }
 
+        static public ANSIString ColorByIndex(string text, int Index, string defualtHEXcolor, string HEXcolor)
+        {
+            if (string.IsNullOrEmpty(text)) return new ANSIString("");
+            var before = text.Substring(0, Index).Color(defualtHEXcolor);
+            var after = text.Substring(Index).Color(HEXcolor);
+            return new ANSIString(before.ToString() + after.ToString());
+        }
+
         static public ANSIString ColorByIndex(string text, int Index, int Len, string HEXcolor)
         {
             if (string.IsNullOrEmpty(text)) return new ANSIString("");
@@ -58,6 +66,15 @@ namespace BH.Parser.Utils
             var mid = text.Substring(Index, Len).Color(HEXcolor);
             var after = text.Substring(Index + Len);
             return new ANSIString(before + mid.ToString() + after);
+        }
+
+        static public ANSIString ColorByIndex(string text, int Index, int Len, string defualtHEXcolor, string HEXcolor)
+        {
+            if (string.IsNullOrEmpty(text)) return new ANSIString("");
+            var before = text.Substring(0, Index).Color(defualtHEXcolor);
+            var mid = text.Substring(Index, Len).Color(HEXcolor);
+            var after = text.Substring(Index + Len).Color(defualtHEXcolor);
+            return new ANSIString(before.ToString() + mid.ToString() + after.ToString());
         }
     }
 }

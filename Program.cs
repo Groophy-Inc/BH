@@ -11,21 +11,13 @@ namespace BH
             ErrorHandle.LogSystem.DEBUG = true;
             if (!ANSIInitializer.Init(false)) ANSIInitializer.Enabled = false;
 
-            Console.WriteLine(System.IO.File.ReadAllText(@"C:\Users\GROOPHY\Desktop\test.txt") + "\r\n | \r\n\\_/ \r\n");
+            //Console.WriteLine(System.IO.File.ReadAllText(@"C:\Users\GROOPHY\Desktop\msgtest.txt") + "\r\n | \r\n\\_/ \r\n");
 
 
-            Parser.Parse.ParseMasterPage("", @"C:\Users\GROOPHY\Desktop\test.txt", new string[] { });
+            Parser.Parse.ParseMasterPage("", @"C:\Users\GROOPHY\Desktop\msgtest.txt", new string[] { });
+
+            ErrorHandle.DebugLogSystem.WriteAllText(@"C:\Users\GROOPHY\Desktop\logs.txt");
             Console.ReadKey();
-            /*
-            if (args.Length == 0) args = new string[] { @"C:\Users\GROOPHY\Desktop\desktop\Code\Batch\BH_2\src", @"C:\Users\GROOPHY\Desktop\desktop\Code\Batch\BH_2\src\Master.gui", "/t" };
-
-            string srcPath = args[0];
-            string masterPagePath = args[1];
-            string[] Options = args[2..];
-
-            Parser.Parse.ParseMasterPage(srcPath, masterPagePath, Options);
-            
-            */
         }
     }
 }

@@ -1,21 +1,21 @@
-﻿using System;
-using ANSIConsole;
+﻿using ANSIConsole;
+
 namespace BH.ErrorHandle
 {
-    internal class ErrorStack
+    internal class WarnStack
     {
-        public static void PrintStack(Error[] errors)
+        public static void PrintStack(ADVLog[] warns)
         {
-            ErrMessageBuilder.BuildByStack(errors).Print();
+            LogSystem.BuildByStack(warns).Print();
         }
     }
-
-    public class Error
+    
+    public class ADVLog
     {
         public ErrorPathCodes ErrorPathCode { get; set; }
-        public int ErrorID { get; set; }
+        public int WarnID { get; set; }
         public int DevCode { get; set; }
-        public string ErrorMessage { get; set; }
+        public string LogMessage { get; set; }
         public string FilePath { get; set; }
         public int lineC { get; set; } //Ln
         public int lenC { get; set; } //ChLn

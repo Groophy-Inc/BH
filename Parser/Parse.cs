@@ -15,6 +15,55 @@ namespace BH.Parser
         public static string masterPagePath { get; set; }
         public static string[] Options { get; set; }
 
+        //General
+        public static bool isProgress = false;
+        public static string ProgressSyntax = "";
+        public static int LineLen = 0;
+        public static bool isSkipSecondCheck = false;
+        public static bool isSkipThisLine = false; //syntax error or comment flag
+        public static string line = "";
+        public static string lineLower = "";
+        public static string word = "";
+        public static string wordLower = "";
+        public static int LineC = 0;
+        public static int LenC = 0;
+        public static int wordNumber = 0;
+        public static bool isBackslashableContent = false;
+        public static int TotalIndexOfLineWords = 0;
+
+        //General Handle
+        public static bool isErrorStack = false;
+        public static System.Collections.Generic.List<Error> errors = new System.Collections.Generic.List<Error>();
+        public static int StackErrorID = -1;
+
+        //Set
+        public static bool Set_isWaitingName = false;
+        public static bool Set_isWaitingGenre = false;
+        public static bool Set_isWaitingAttributes = false;
+        public static bool Set_isAttributeBuild = false;
+        public static bool Set_isAttributeBuildName = false;
+        public static string Set_AttributeBuildName = "";
+        public static bool Set_isAttributeBuildContentStart = false;
+        public static bool Set_isAttributeBackSlash = false;
+        public static bool Set_isAttributeBuildContent = false;
+        public static string Set_AttributeBuildContent = "";
+        public static bool Set_isNewAttributeWaiting = false;
+        public static System.Collections.Generic.Dictionary<string, string> Set_Attributes = new System.Collections.Generic.Dictionary<string, string>();
+
+        //Msg
+        public static bool Msg_isWaitingContentStart = false;
+        public static bool Msg_isContentStart = false;
+        public static bool Msg_isBackSlash = false;
+        public static string Msg_Content = "";
+
+        //System
+        public static bool System_isPreloading = false; //waits Command
+        public static bool System_isWaitingValue = false;
+        public static Commands.SystemCommands System_Command = Commands.SystemCommands.NA;
+        public static List<string> System_value = new List<string>();
+
+        
+
         public static AllElements ParseMasterPage(string _srcPath, string _masterPagePath, string[] _Options)
         {
             
@@ -22,73 +71,40 @@ namespace BH.Parser
             masterPagePath = _masterPagePath;
             Options = _Options;
 
-            //GetElements.Get = JsonConvert.DeserializeObject<AllElements>(File.ReadAllText(masterPagePath)).ElementList;
-
             string[] lines = File.ReadAllLines(masterPagePath);
 
-            bool isProgress = false;
-            string ProgressSyntax = "";
-            bool isWaitingName = false;
-            bool isWaitingGenre = false;
-            bool isWaitingAttributes = false;
-            bool isAttributeBuild = false;
-            bool isAttributeBuildName = false;
-            string AttributeBuildName = "";
-            bool isAttributeBuildContentStart = false;
-            bool isAttributeBackSlash = false;
-            bool isAttributeBuildContent = false;
-            string AttributeBuildContent = "";
-            bool isNewAttributeWaiting = false;
-            var Attributes = new System.Collections.Generic.Dictionary<string, string>();
-            int LineLen = 0;
-            bool isSkipSecondCheck = false;
-            bool isSkipThisLine = false; //syntax error or comment flag
-
-            bool isErrorStack = false;
-            var errors = new System.Collections.Generic.List<Error>();
-            int StackErrorID = -1;
-
             List<Element> allofelements = new List<Element>();
-            
-            /*
-            
-            , veya ; kısımlarında bu özellikleri sıfırla
-
-             */
 
             for (int i = 0;i < lines.Length;i++)
             {
-                string line = lines[i].Trim();
+                line = lines[i].Trim();
 
                 if (string.IsNullOrEmpty(line)) continue;
 
-                string lineLower = line.Replace("ı", "i").Replace("I", "i").ToLower();
+                lineLower = line.Replace("ı", "i").Replace("I", "i").ToLower();
                 //For each line start
 
                 LineLen = 0;
+                TotalIndexOfLineWords = 0;
 
-                if (isAttributeBuildContent)
+                if (Set_isAttributeBuildContent)
                 {
-                    AttributeBuildContent += "\r\n";
+                    Set_AttributeBuildContent += "\r\n";
                 }
 
                 string[] words = line.Split(' ');
                 for (int j = 0; j < words.Length; j++)
                 {
-                    string word = words[j].Trim();
-                    string wordLower = word.Replace("ı", "i").Replace("I", "i").ToLower();
+                    word = words[j].Trim();
+                    wordLower = word.Replace("ı", "i").Replace("I", "i").ToLower();
 
-                    int LineC = i;
-                    int LenC = LineLen + j;
+                    LineC = i;
+                    LenC = LineLen + j;
+                    wordNumber = j;
 
                     //For each word of line start
 
-                    if (isAttributeBuildContent && j != 0)
-                    {
-                        AttributeBuildContent += " ";
-                    }
-
-                    if (!isAttributeBuild)
+                    if (!isBackslashableContent)
                     {
                         //Comment
                         if (wordLower.StartsWith("//"))
@@ -102,245 +118,19 @@ namespace BH.Parser
                     {
                         //Continue to progress
                         
-                        if (isWaitingName)
+                        if (ProgressSyntax == "set")
                         {
-                            string __name = word;
-                            if (word[0] == '$') __name = __name.Substring(1);
-                            Attributes.Add("name", __name);
-                            isWaitingName = false;
-                            isWaitingGenre = true;
-                            LogSystem.log("New Attribute - '" + "name" + "': " + __name, ConsoleColor.Green);
+                            Tuple<bool, Element> retenv = Parser.Commands.Set.Decompose();
+
+                            if (retenv.Item1) allofelements.Add(retenv.Item2);
                         }
-                        else if (isWaitingGenre)
+                        else if (ProgressSyntax == "msg")
                         {
-                            string __genre = wordLower.TrimEnd(':').Trim().TrimEnd(')').TrimStart('(');
-                            Attributes.Add("genre", __genre);
-                            isWaitingGenre = false;
-                            isWaitingAttributes = true;
-                            LogSystem.log("New Attribute - '" + "genre" + "': " + __genre, ConsoleColor.Green);
+                            Parser.Commands.Msg.Decompose();
                         }
-                        else if (isWaitingAttributes)
+                        else if (ProgressSyntax == "system")
                         {
-                            for (int p =0;p <word.Length;p++)
-                            {
-                                //For each char of word
-                                char _c = ' ';
-                                char c = word[p];
-                                char c_ = ' '; //second char
-
-                                bool isError = false;
-                                Error error = new Error();
-
-                                
-                                
-
-                                if (p + 1 < word.Length) c_ = word[p + 1];
-                                if (p - 1 < word.Length && p-1>=0) _c = word[p - 1];
-
-                                if (isAttributeBuild)
-                                {
-                                    if (isAttributeBuildName)
-                                    {
-                                        //key
-                                        if (c == '"')
-                                        {
-                                            isAttributeBuildName = false;
-                                            
-                                        }
-                                        else
-                                        {
-                                            AttributeBuildName += c;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (c == ':')
-                                        {
-                                            isAttributeBuildContent = true;
-                                            isSkipSecondCheck = true;
-                                        }
-                                        else
-                                        {
-                                            if (isAttributeBuildName)
-                                            {
-
-                                                Error err = new Error()
-                                                {
-                                                    ErrorPathCode = ErrorPathCodes.Parser,
-                                                    ErrorID = 0,
-                                                    DevCode = 2,
-                                                    ErrorMessage = "Spilled out obscure object",
-                                                    FilePath = masterPagePath,
-                                                    line = line,
-                                                    lineC = LineC,
-                                                    lenC = LenC
-                                                };
-                                                isError = true;
-                                                error = err;
-                                            }
-                                        }
-                                        
-                                        //value
-                                        if (isSkipSecondCheck)
-                                        {
-                                            isSkipSecondCheck = false;
-                                        }
-                                        else
-                                        {
-                                            if (isAttributeBuildContentStart)
-                                            {
-                                                if (c == '\\')
-                                                {
-                                                    isAttributeBackSlash = true;
-                                                }
-                                                else
-                                                {
-                                                    if (isAttributeBackSlash)
-                                                    {
-                                                        AttributeBuildContent += c;
-                                                        isAttributeBackSlash = false;
-                                                    }
-                                                    else
-                                                    {
-                                                        if (c == '"')
-                                                        {
-                                                            isAttributeBuildContentStart = false;
-                                                            isAttributeBuildContent = false;
-                                                            isAttributeBuild = false;
-                                                            Attributes.Add(AttributeBuildName, AttributeBuildContent);
-                                                            LogSystem.log("New Attribute - '" + AttributeBuildName + "': " + AttributeBuildContent, ConsoleColor.Green);
-                                                            AttributeBuildName = "";
-                                                            AttributeBuildContent = "";
-                                                            isNewAttributeWaiting = true;
-                                                        }
-                                                        else
-                                                        {
-                                                            AttributeBuildContent += c;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                if (c == '"')
-                                                {
-                                                    if (isAttributeBuildContent)
-                                                    {
-                                                        isAttributeBuildContentStart = true;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    Error err = new Error()
-                                                    {
-                                                        ErrorPathCode = ErrorPathCodes.Parser,
-                                                        ErrorID = 0,
-                                                        DevCode = 0,
-                                                        ErrorMessage = "Spilled out obscure object",
-                                                        FilePath = masterPagePath,
-                                                        line = line,
-                                                        lineC = LineC,
-                                                        lenC = LenC
-                                                    };
-                                                    isError = true;
-                                                    error = err;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    //new attribute or end
-                                    if (c == '"')
-                                    {
-                                        isAttributeBuild = true;
-                                        isAttributeBuildName = true;
-                                    }
-                                    else if (c == ',')
-                                    {
-                                        isAttributeBuild = false;
-                                    }
-                                    else if (c == ';')
-                                    {
-                                        allofelements.Add(new Element()
-                                        {
-                                            Genre = Attributes["genre"],
-                                            Attributes = Attributes
-                                        });
-
-                                        LogSystem.log("New element added to element list name of $" + Attributes["name"].Color(ConsoleColor.Magenta), ConsoleColor.DarkGreen);
-
-                                        isProgress = false;
-                                        ProgressSyntax = "";
-                                        isWaitingName = false;
-                                        isWaitingGenre = false;
-                                        isWaitingAttributes = false;
-                                        isAttributeBuild = false;
-                                        isAttributeBuildName = false;
-                                        AttributeBuildName = "";
-                                        isAttributeBuildContentStart = false;
-                                        isAttributeBackSlash = false;
-                                        isAttributeBuildContent = false;
-                                        AttributeBuildContent = "";
-                                        isNewAttributeWaiting = false;
-                                        Attributes = new System.Collections.Generic.Dictionary<string, string>();
-                                    }
-                                    else
-                                    {
-                                        Error err = new Error()
-                                        {
-                                            ErrorPathCode = ErrorPathCodes.Parser,
-                                            ErrorID = 0,
-                                            DevCode = 1,
-                                            ErrorMessage = "Spilled out obscure object",
-                                            FilePath = masterPagePath,
-                                            line = line,
-                                            lineC = LineC,
-                                            lenC = LenC
-                                        };
-                                        isError = true;
-                                        error = err;
-                                    }
-                                }
-
-                                //Check error stack
-                                if (isErrorStack)
-                                {
-                                    if (isError)
-                                    {
-                                        if (error.ErrorID == StackErrorID)
-                                        {
-                                            errors.Add(error);
-                                        }
-                                        else //new error stack
-                                        {
-                                            ErrorStack.PrintStack(errors.ToArray());
-                                            isErrorStack = true;
-                                            errors = new System.Collections.Generic.List<Error>();
-                                            StackErrorID = error.ErrorID;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        ErrorStack.PrintStack(errors.ToArray());
-                                        isErrorStack = false;
-                                        errors = new System.Collections.Generic.List<Error>();
-                                        StackErrorID = -1;
-                                    }
-                                }
-                                else
-                                {
-                                    if (isError)
-                                    {
-                                        isErrorStack = true;
-                                        StackErrorID = error.ErrorID;
-                                        errors.Add(error);
-                                    }
-                                }
-
-                                LineLen++;
-                            }
+                            Parser.Commands.system.Decompose();
                         }
                     }
                     else
@@ -353,7 +143,19 @@ namespace BH.Parser
                             {
                                 isProgress = true;
                                 ProgressSyntax = "set";
-                                isWaitingName = true;
+                                Set_isWaitingName = true;
+                            }
+                            else if (wordLower == "msg")
+                            {
+                                isProgress = true;
+                                ProgressSyntax = "msg";
+                                Msg_isWaitingContentStart = true;
+                            }
+                            else if (wordLower == "system")
+                            {
+                                isProgress = true;
+                                ProgressSyntax = "system";
+                                System_isPreloading = true;
                             }
                             else
                             {
@@ -380,6 +182,8 @@ namespace BH.Parser
                             }
                         }
                     }
+
+                    TotalIndexOfLineWords += word.Length + 1;
 
                     //For each word of line end
                     if (isSkipThisLine)
