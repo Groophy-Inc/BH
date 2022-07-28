@@ -48,7 +48,31 @@ namespace ANSIConsole
         /// <param name="text"></param>
         /// <returns></returns>
         public static ANSIString Clear(this ANSIString text) => text.AddFormatting(ANSIFormatting.Clear);
-        
+
+        public static string ClearANSII(this string text)
+        {
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            bool isANSII = false;
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (text[i] == '')
+                {
+                    isANSII = true;
+                    continue;
+                }
+                else if (text[i] == 'm')
+                {
+                    if (isANSII) isANSII = false;
+                    else sb.Append(text[i]);
+                }
+                else
+                {
+                    if (!isANSII) sb.Append(text[i]);
+                }
+            }
+            return sb.ToString();
+        }
+
         public static ANSIString Color(this string text, ConsoleColor color) => Color(ToANSI(text), color);
         public static ANSIString Color(this ANSIString text, ConsoleColor color) => text.SetForegroundColor(color);
         public static ANSIString Color(this string text, Color color) => Color(ToANSI(text), color);

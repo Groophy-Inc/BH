@@ -13,7 +13,7 @@ namespace BH.ErrorHandle
 
         static public void log(string text, ConsoleColor c = ConsoleColor.White)
         {
-            text.Insert(0, "DBG - ");
+            text = text.Insert(0, "DBG - ");
 
             DebugLogSystem.Log(text);
 

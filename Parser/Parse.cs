@@ -30,6 +30,7 @@ namespace BH.Parser
         public static int wordNumber = 0;
         public static bool isBackslashableContent = false;
         public static int TotalIndexOfLineWords = 0;
+        public static string logErrMsg = "";
 
         //General Handle
         public static bool isErrorStack = false;
@@ -72,6 +73,7 @@ namespace BH.Parser
             Options = _Options;
 
             string[] lines = File.ReadAllLines(masterPagePath);
+            logErrMsg = "";
 
             List<Element> allofelements = new List<Element>();
 

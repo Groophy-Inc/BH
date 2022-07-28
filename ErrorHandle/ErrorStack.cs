@@ -6,7 +6,9 @@ namespace BH.ErrorHandle
     {
         public static void PrintStack(Error[] errors)
         {
-            ErrMessageBuilder.BuildByStack(errors).Print();
+            string err = ErrMessageBuilder.BuildByStack(errors);
+            Parser.Parse.logErrMsg += err.ClearANSII();
+            err.Print();
         }
     }
 

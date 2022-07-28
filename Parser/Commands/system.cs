@@ -52,6 +52,9 @@ namespace BH.Parser.Commands
                     Parse.System_isWaitingValue = false;
                     Parse.System_Command = SystemCommands.NA;
                     Parse.System_value = new List<string>();
+                    Parse.isProgress = false;
+                    Parse.ProgressSyntax = "";
+                    Parse.isBackslashableContent = false;
                 }
                 else
                 {
