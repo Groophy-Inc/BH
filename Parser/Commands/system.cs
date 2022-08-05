@@ -9,7 +9,8 @@ namespace BH.Parser.Commands
     public enum SystemCommands
     {
         NA,
-        OutputEncoding
+        OutputEncoding,
+        Title
     }
     internal class system
     {
@@ -24,13 +25,18 @@ namespace BH.Parser.Commands
                         Parse.System_isPreloading = false;
                         Parse.System_isWaitingValue = true;
                         break;
+                    case "title":
+                        Parse.System_Command = SystemCommands.Title;
+                        Parse.System_isPreloading = false;
+                        Parse.System_isWaitingValue = true;
+                        break;
                 }
             }
             else if (Parse.System_isWaitingValue)
             {
                 if (Parse.word.EndsWith(';'))
                 {
-                    Parse.System_value.Add(Parse.word.Substring(0, Parse.word.Length-1));
+                    Parse.System_value.Add(Varriables.FixContent(Parse.word.Substring(0, Parse.word.Length - 1)));
 
                     //end
                     switch (Parse.System_Command)
@@ -46,6 +52,9 @@ namespace BH.Parser.Commands
                                 //Make more option here
                             }
                             break;
+                        case SystemCommands.Title:
+                            Console.Title = String.Join(' ', Parse.System_value.ToArray());
+                            break;
                     }
 
                     Parse.System_isPreloading = false;
@@ -58,7 +67,7 @@ namespace BH.Parser.Commands
                 }
                 else
                 {
-                    Parse.System_value.Add(Parse.word);
+                    Parse.System_value.Add(Varriables.FixContent(Parse.word));
                 }
             }
         }

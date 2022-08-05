@@ -1,0 +1,2 @@
+Dotnet
+Microsoft.NETCore.App 5

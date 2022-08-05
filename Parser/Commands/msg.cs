@@ -121,10 +121,10 @@ namespace BH.Parser.Commands
 
                         if (!Parse.isProgress)
                         {
-                            LogSystem.log("The parameter persists even after the content has expired, this is not an error cause but an unnecessary use. Ln: "+Parse.LineC+", ChLn: " + (Parse.TotalIndexOfLineWords + p).ToString());
+                            LogSystem.log("The parameter persists even after the content has expired, this is not an error cause but an unnecessary use. Ln: "+Parse.LineC+", ChLn: " + (Parse.TotalIndexOfLineWords + p).ToString()+"\r\nLine: " + Parse.line);
                         }
 
-                        if (c == '\\')
+                        if (c == '\\' && c_ != '$')
                         {
                             Parse.Msg_isBackSlash = true;
                             Parse.LineLen++;
@@ -140,9 +140,11 @@ namespace BH.Parser.Commands
                             }
                             else
                             {
+
+
                                 LogSystem.log("msg end: '" + Parse.Msg_Content + "'");
 
-                                ANSIIConsole.Gecho.Print(Parse.Msg_Content);
+                                ANSIIConsole.Gecho.Print(Varriables.FixContent(Parse.Msg_Content));
 
                                 Parse.Msg_Content = "";
                                 Parse.Msg_isBackSlash = false;
@@ -156,7 +158,15 @@ namespace BH.Parser.Commands
                         }
                         else
                         {
-                            Parse.Msg_Content += c;
+                            if (Parse.Msg_isBackSlash)
+                            {
+                                Parse.Msg_Content += c;
+                                Parse.Msg_isBackSlash = false;
+                            }
+                            else
+                            {
+                                Parse.Msg_Content += c;
+                            }
                         }
 
 

@@ -50,7 +50,8 @@ namespace BH.Server
                 {
                     if (s == "parse")
                     {
-                        Parser.Parse.ParseMasterPage("", queue[s], new string[] { });
+                        Parser.Parse.masterPagePath = queue[s];
+                        Parser.Parse.ParseMasterPage();
                         responseString = Parser.Parse.logErrMsg;
                     }
                 }

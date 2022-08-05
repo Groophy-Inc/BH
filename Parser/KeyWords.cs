@@ -22,7 +22,9 @@ namespace BH.Parser
         {
             set,
             msg,
-            system
+            system,
+            ums,
+            var
         }
     }
 }

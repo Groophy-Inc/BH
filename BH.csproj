@@ -3,16 +3,16 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+    <ErrorReport>none</ErrorReport>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="Builder\" />
-    <Folder Include="Varriables\" />
     <Folder Include="Script\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <ProjectReference Include="..\BH.CmdFunc\BH.CmdFunc.csproj" />
   </ItemGroup>
 
 </Project>

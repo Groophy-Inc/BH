@@ -9,8 +9,15 @@ namespace BH.Parser.Commands
 {
     internal class Set
     {
+     
+        public static void AddorUpdate(string key, string value)
+        {
+            if (!Parse.Set_Attributes.TryAdd(key, value)) Parse.Set_Attributes[key] = value;
+        }
+
         public static Tuple<bool, Element> Decompose()
         {
+
             if (Parse.Set_isAttributeBuildContent && Parse.wordNumber != 0)
             {
                 Parse.Set_AttributeBuildContent += " ";
@@ -20,7 +27,7 @@ namespace BH.Parser.Commands
             {
                 string __name = Parse.word;
                 if (Parse.word[0] == '$') __name = __name.Substring(1);
-                Parse.Set_Attributes.Add("name", __name);
+                AddorUpdate("name", __name);
                 Parse.Set_isWaitingName = false;
                 Parse.Set_isWaitingGenre = true;
                 LogSystem.log("New Attribute - '" + "name" + "': " + __name, ConsoleColor.Green);
@@ -28,10 +35,12 @@ namespace BH.Parser.Commands
             else if (Parse.Set_isWaitingGenre)
             {
                 string __genre = Parse.wordLower.TrimEnd(':').Trim().TrimEnd(')').TrimStart('(');
-                Parse.Set_Attributes.Add("genre", __genre);
+                AddorUpdate("genre", __genre);
                 Parse.Set_isWaitingGenre = false;
                 Parse.Set_isWaitingAttributes = true;
                 LogSystem.log("New Attribute - '" + "genre" + "': " + __genre, ConsoleColor.Green);
+
+                if (__genre == "window") AddorUpdate("title", "NoThing"); //Defualt title 26.3.2022 || Sad but life is never said will be easy
             }
             else if (Parse.Set_isWaitingAttributes)
             {
@@ -122,8 +131,8 @@ namespace BH.Parser.Commands
                                                 Parse.Set_isAttributeBuildContent = false;
                                                 Parse.Set_isAttributeBuild = false;
                                                 Parse.isBackslashableContent = false;
-                                                Parse.Set_Attributes.Add(Parse.Set_AttributeBuildName, Parse.Set_AttributeBuildContent);
-                                                LogSystem.log("New Attribute - '" + Parse.Set_AttributeBuildName + "': " + Parse.Set_AttributeBuildContent, ConsoleColor.Green);
+                                                AddorUpdate(Parse.Set_AttributeBuildName, Varriables.FixContent(Parse.Set_AttributeBuildContent));
+                                                LogSystem.log("New Attribute - '" + Parse.Set_AttributeBuildName + "': " + Varriables.FixContent(Parse.Set_AttributeBuildContent), ConsoleColor.Green);
                                                 Parse.Set_AttributeBuildName = "";
                                                 Parse.Set_AttributeBuildContent = "";
                                                 Parse.Set_isNewAttributeWaiting = true;

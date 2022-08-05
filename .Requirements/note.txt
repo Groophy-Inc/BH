@@ -1,0 +1,12 @@
+Check netcore5
+
+	dotnet --list-runtimes
+
+
+create sln
+
+	dotnet new slnName
+
+add new file
+
+	dotnet slnName add <filename> 
