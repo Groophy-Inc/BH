@@ -118,7 +118,25 @@ namespace BH.Parser.Commands
 
                 if (Parse.Var_ASLang != "cf" || Parse.Var_ASLang != "ps" || Parse.Var_ASLang != "s+" || Parse.Var_ASLang != "c#")
                 {
-                    //error
+                    string getClosest = APF.Find_Probabilities.GetClosest(Parse.Var_ASLang, new string[]{ "cf", "ps", "s+", "c#"} );
+                    Error err = new Error()
+                    {
+                        ErrorPathCode = ErrorPathCodes.Parser,
+                        ErrorID = 5,
+                        DevCode = 0,
+                        ErrorMessage = "Lang not found, this might be what you're looking for: '" + getClosest.Color(ConsoleColor.Green) + "'.",
+                        FilePath = Parse.masterPagePath,
+                        line = Parse.line,
+                        lineC = Parse.LineC,
+                        lenC = Parse.TotalIndexOfLineWords
+                    };
+                    ErrorHandle.ErrorStack.PrintStack(new Error[] { err });
+                    Parse.isProgress = false;
+                    Parse.ProgressSyntax = "";
+                    Parse.isBackslashableContent = false;
+                    Parse.Var_isWaitingVarName = false;
+                    Parse.Var_VarName = "";
+                    Parse.isSkipThisLine = true;
                 }
             }
             else if (Parse.Var_ContentStart)
@@ -148,10 +166,45 @@ namespace BH.Parser.Commands
                 else if (Parse.word.StartsWith(';'))
                 {
                     //error
+                    Error err = new Error()
+                    {
+                        ErrorPathCode = ErrorPathCodes.Parser,
+                        ErrorID = 6,
+                        DevCode = 0,
+                        ErrorMessage = "End key not found. You should leave a space after ';' because of the word by word parse.",
+                        FilePath = Parse.masterPagePath,
+                        line = Parse.line,
+                        lineC = Parse.LineC,
+                        lenC = Parse.TotalIndexOfLineWords
+                    };
+                    ErrorHandle.ErrorStack.PrintStack(new Error[] { err });
+                    Parse.isProgress = false;
+                    Parse.ProgressSyntax = "";
+                    Parse.isBackslashableContent = false;
+                    Parse.Var_isWaitingVarName = false;
+                    Parse.Var_VarName = "";
+                    Parse.isSkipThisLine = true;
                 }
                 else
                 {
-                    //error
+                    Error err = new Error()
+                    {
+                        ErrorPathCode = ErrorPathCodes.Parser,
+                        ErrorID = 6,
+                        DevCode = 0,
+                        ErrorMessage = "End key not found. #*#",
+                        FilePath = Parse.masterPagePath,
+                        line = Parse.line,
+                        lineC = Parse.LineC,
+                        lenC = Parse.TotalIndexOfLineWords
+                    };
+                    ErrorHandle.ErrorStack.PrintStack(new Error[] { err });
+                    Parse.isProgress = false;
+                    Parse.ProgressSyntax = "";
+                    Parse.isBackslashableContent = false;
+                    Parse.Var_isWaitingVarName = false;
+                    Parse.Var_VarName = "";
+                    Parse.isSkipThisLine = true;
                 }
             }
         }
@@ -202,6 +255,28 @@ namespace BH.Parser.Commands
                 {
                     if (c == ';')
                     {
+                        if (c_ != ' ')
+                        {
+                            Error err = new Error()
+                            {
+                                ErrorPathCode = ErrorPathCodes.Parser,
+                                ErrorID = 6,
+                                DevCode = 1,
+                                ErrorMessage = "End key not found. You should leave a space after ';' because of the word by word parse.",
+                                FilePath = Parse.masterPagePath,
+                                line = Parse.line,
+                                lineC = Parse.LineC,
+                                lenC = Parse.TotalIndexOfLineWords
+                            };
+                            ErrorHandle.ErrorStack.PrintStack(new Error[] { err });
+                            Parse.isProgress = false;
+                            Parse.ProgressSyntax = "";
+                            Parse.isBackslashableContent = false;
+                            Parse.Var_isWaitingVarName = false;
+                            Parse.Var_VarName = "";
+                            Parse.isSkipThisLine = true;
+                            continue;
+                        }
                         //end
                         Parse.isProgress = false;
                         Parse.ProgressSyntax = "";

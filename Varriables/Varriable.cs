@@ -58,6 +58,7 @@ namespace BH
 
         public static bool JustTryGet(string key)
         {
+            if (key.ToLower() == "thingno") return false;
             try
             {
                 var x = Vars[key];
@@ -71,6 +72,7 @@ namespace BH
 
         public static IVarriable TryGet(string key)
         {
+            if (key.ToLower() == "thingno") return null;
             try
             {
                 return Vars[key];
@@ -81,9 +83,37 @@ namespace BH
             }
         }
 
-        public static void AddorUpdate(string key, string value)
+        public static bool AddorUpdate(string key, string value)
         {
-            var val = new IVarriable()
+            if (key.ToLower() == "thingno") return false;
+            try
+            {
+                var val = new IVarriable()
+                {
+                    Obj = value,
+                    Packet_Type = "Null"
+                };
+                if (!Vars.TryAdd(key, val))
+                {
+                    val = Vars[key];
+
+                    Vars[key] = new IVarriable()
+                    {
+                        Obj = value,
+                        Packet_Type = val.Packet_Type
+                    };
+                }
+                return false;
+            }
+            catch { return false; }
+        }
+
+        public static bool AddorUpdate(string key, object value)
+        {
+            if (key.ToLower() == "thingno") return false;
+            try
+            {
+                var val = new IVarriable()
             {
                 Obj = value,
                 Packet_Type = "Null"
@@ -98,30 +128,17 @@ namespace BH
                     Packet_Type = val.Packet_Type
                 };
             }
-        }
-
-        public static void AddorUpdate(string key, object value)
-        {
-            var val = new IVarriable()
-            {
-                Obj = value,
-                Packet_Type = "Null"
-            };
-            if (!Vars.TryAdd(key, val))
-            {
-                val = Vars[key];
-
-                Vars[key] = new IVarriable()
-                {
-                    Obj = value,
-                    Packet_Type = val.Packet_Type
-                };
+                return true;
             }
+            catch { return false; }
         }
 
-        public static void AddorUpdate(string key, string value, string packet_Type)
+        public static bool AddorUpdate(string key, string value, string packet_Type)
         {
-            var val = new IVarriable()
+            if (key.ToLower() == "thingno") return false;
+            try
+            {
+                var val = new IVarriable()
             {
                 Obj = value,
                 Packet_Type = packet_Type
@@ -134,10 +151,16 @@ namespace BH
                     Packet_Type = packet_Type
                 };
             }
+                return true;
+            }
+            catch { return false; }
         }
-        public static void AddorUpdate(string key, object value, string packet_Type)
+        public static bool AddorUpdate(string key, object value, string packet_Type)
         {
-            var val = new IVarriable()
+            if (key.ToLower() == "thingno") return false;
+            try
+            {
+                var val = new IVarriable()
             {
                 Obj = value,
                 Packet_Type = packet_Type
@@ -150,10 +173,15 @@ namespace BH
                     Packet_Type = packet_Type
                 };
             }
+                return true;
+            }
+            catch { return false; }
+
         }
 
         public static bool UpdatePacketType(string key, string packet_Type)
         {
+            if (key.ToLower() == "thingno") return false;
             try
             {
                 var val = Vars[key];

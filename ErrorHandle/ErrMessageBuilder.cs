@@ -76,7 +76,7 @@ namespace BH.ErrorHandle
             }
             lns = lns.Substring(0, lns.Length - 1);
 
-            return $@"{$"BH#{(int)errors[0].ErrorPathCode}#{errors[0].ErrorID}".Color(ConsoleColor.Red)} - DevCode -> {DevCode.ToString().Substring(0, DevCode.Length - 1)} | Path '{errors[0].FilePath}'
+            return $@"{$"BH#{(int)errors[0].ErrorPathCode}#{errors[0].ErrorID}".Color(ConsoleColor.Red)} - DevCode -> {DevCode.ToString().Substring(0, DevCode.Length - 1)} | Path '{Parser.Parse.ErrPath}'
 {Color.ColorByIndex(errors[0].ErrorMessage, 0, System.ConsoleColor.Yellow)}
 Ln: '{lns}' | ChLn: '{start}-{start + len}' | Ch: '{ListedChar.ToString().Color(ConsoleColor.Magenta)}'
 {ErrLine}

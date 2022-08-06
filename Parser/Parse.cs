@@ -17,6 +17,7 @@ namespace BH.Parser
         //General
         public static bool isProgress = false;
         public static string ProgressSyntax = "";
+        public static string ErrPath = "";
         public static int LineLen = 0;
         public static bool isSkipSecondCheck = false;
         public static bool isSkipThisLine = false; //syntax error or comment flag
@@ -80,12 +81,13 @@ namespace BH.Parser
         public static AllElements ParseMasterPage()
         {
             string[] lines = File.ReadAllLines(masterPagePath);
-
+            Parse.ErrPath = masterPagePath;
             return ParseLines(lines);
         }
 
         public static AllElements ParseLine(string line)
         {
+            Parse.ErrPath = "Custom Input";
             return ParseLines(new string[] { line });
         }
 
@@ -98,7 +100,7 @@ namespace BH.Parser
 
             for (int i = 0; i < lines.Length; i++)
             {
-                line = lines[i].Trim();
+                line = lines[i];
 
                 if (string.IsNullOrEmpty(line) || line.StartsWith("//")) continue;
 
@@ -190,7 +192,7 @@ namespace BH.Parser
                                 ProgressSyntax = "ums";
                                 UMS_isWaitingHaveVarriableSaveOrNot = true;
                             }
-                            else if (wordLower == "var") //UnManagement Script
+                            else if (wordLower == "var") 
                             {
                                 isProgress = true;
                                 ProgressSyntax = "var";
