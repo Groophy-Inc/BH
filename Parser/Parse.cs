@@ -31,6 +31,7 @@ namespace BH.Parser
         public static bool isBackslashableContent = false;
         public static int TotalIndexOfLineWords = 0;
         public static string logErrMsg = "";
+        public static bool isAnyContent = false;
 
         //General Handle
         public static bool isErrorStack = false;
@@ -85,6 +86,9 @@ namespace BH.Parser
         public static bool Ankita_DEBUGBoolean = false;
         public static bool Ankita_isWaitingEndKey = false;
 
+        //Version
+        public static bool Version_isWaitingEndKey = false;
+
         public static AllElements ParseMasterPage()
         {
             string[] lines = File.ReadAllLines(masterPagePath);
@@ -109,6 +113,8 @@ namespace BH.Parser
             {
                 line = lines[i];
 
+                if (!isAnyContent) line += " ";
+
                 if (string.IsNullOrEmpty(line) || line.StartsWith("//")) continue;
 
                 lineLower = line.Replace("ı", "i").Replace("I", "i").ToLower();
@@ -125,6 +131,11 @@ namespace BH.Parser
                 {
                     word = words[j].Trim();
                     wordLower = word.Replace("ı", "i").Replace("I", "i").ToLower();
+
+                    if (!isAnyContent)
+                    {
+                        if (string.IsNullOrEmpty(word)) { TotalIndexOfLineWords += word.Length + 1; continue; }
+                    }
 
                     LineC = i;
                     LenC = LineLen + j;
@@ -172,6 +183,10 @@ namespace BH.Parser
                         {
                             Parser.Commands.Ankita.Decompose();
                         }
+                        else if (ProgressSyntax == "version")
+                        {
+                            Parser.Commands.version.Decompose();
+                        }
                     }
                     else
                     {
@@ -215,28 +230,30 @@ namespace BH.Parser
                                 ProgressSyntax = "ankita";
                                 Ankita_isWaitingDEBUG = true;
                             }
+                            else if (wordLower == "version;")
+                            {
+                                Console.WriteLine(Program.Ver);
+                            }
+                            else if (wordLower == "version")
+                            {
+                                isProgress = true;
+                                ProgressSyntax = "version";
+                                Version_isWaitingEndKey = true;
+                            }
                             else
                             {
-                                List<Error> errs = new List<Error>();
                                 string getClosest = APF.Find_Probabilities.GetClosest(wordLower, Keys.getKeyWordsAsArray());
-                                for (int y = 0; y < word.Length; y++)
+                                Error err = new Error()
                                 {
-                                    Error err = new Error()
-                                    {
-                                        ErrorPathCode = ErrorPathCodes.Parser,
-                                        ErrorID = 1,
-                                        DevCode = 0,
-                                        ErrorMessage = "Invalid syntax! this might be what you're looking for: '" + getClosest.Color(ConsoleColor.Green) + "'.".Color(ConsoleColor.Yellow),
-                                        FilePath = masterPagePath,
-                                        line = line,
-                                        lineC = LineC,
-                                        lenC = LenC + y
-                                    };
-                                    errs.Add(err);
-
-                                }
+                                    ErrorPathCode = ErrorPathCodes.Parser,
+                                    ErrorID = 1,
+                                    DevCode = 0,
+                                    ErrorMessage = "Invalid syntax! this might be what you're looking for: '" + getClosest.Color(ConsoleColor.Green) + "'.".Color(ConsoleColor.Yellow),
+                                    line = line,
+                                    HighLightLen = word.Length
+                                };
                                 isSkipThisLine = true;
-                                ErrorStack.PrintStack(errs.ToArray());
+                                ErrorStack.PrintStack(err);
                             }
                         }
                     }

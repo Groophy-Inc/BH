@@ -9,6 +9,7 @@ namespace BH
 {
     internal class Program
     {
+        public static readonly string Ver = "0.1.5";
 
         static void Main(string[] args)
         {
@@ -44,11 +45,14 @@ namespace BH
 
             //BH.APF.ConsoleHelper.SetCurrentFont("Consolas", 24);
 
-            Parse.ParseLine("var $world -> \"off\";");
-            Parse.ParseLine("msg <red>hello $world ");
+            Parse.ParseLines(new string[]
+            {
+                "var     $hi       ->        \"Hello\"    ;      ",
+                "msg       $hi      "
+            });
             //Parser.Parse.ParseMasterPage();
 
-            Console.WriteLine("--\r\n" + Console_.ConsoleLogs.ToString());
+           // Console.WriteLine("--\r\n" + Console_.ConsoleLogs.ToString());
 
             ErrorHandle.DebugLogSystem.WriteAllText(@"C:\Users\GROOPHY\Desktop\logs.txt");
 

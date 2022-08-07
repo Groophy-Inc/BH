@@ -26,12 +26,10 @@ namespace BH.Parser.Commands
                         ErrorID = 8,
                         DevCode = 0,
                         ErrorMessage = "Ankita keyword is not found, this might be what you're looking for: 'Debug'.",
-                        FilePath = Parse.masterPagePath,
+                        HighLightLen = Parse.word.Length,
                         line = Parse.line,
-                        lineC = Parse.LineC,
-                        lenC = Parse.TotalIndexOfLineWords
                     };
-                    ErrorHandle.ErrorStack.PrintStack(new Error[] { err });
+                    ErrorHandle.ErrorStack.PrintStack(err);
                     
                     Parse.isProgress = false;
                     Parse.ProgressSyntax = "";
@@ -89,12 +87,10 @@ namespace BH.Parser.Commands
                         ErrorID = 9,
                         DevCode = 0,
                         ErrorMessage = "Ankita value is not found, this might be what you're looking for: 'On' or 'Off'.",
-                        FilePath = Parse.masterPagePath,
+                        HighLightLen = Parse.word.Length,
                         line = Parse.line,
-                        lineC = Parse.LineC,
-                        lenC = Parse.TotalIndexOfLineWords
                     };
-                    ErrorHandle.ErrorStack.PrintStack(new Error[] { err });
+                    ErrorHandle.ErrorStack.PrintStack(err);
                     Parse.Ankita_DEBUGBoolean = false;
                     Parse.Ankita_isWaitingDEBUG = false;
                     Parse.Ankita_isWaitingBoolean = false;
@@ -129,12 +125,10 @@ namespace BH.Parser.Commands
                         ErrorID = 6,
                         DevCode = 0,
                         ErrorMessage = "End key not found. You should leave a space after ';' because of the word by word parse.",
-                        FilePath = Parse.masterPagePath,
+                        HighLightLen = Parse.word.Length,
                         line = Parse.line,
-                        lineC = Parse.LineC,
-                        lenC = Parse.TotalIndexOfLineWords
                     };
-                    ErrorHandle.ErrorStack.PrintStack(new Error[] { err });
+                    ErrorHandle.ErrorStack.PrintStack(err);
                     Parse.Ankita_DEBUGBoolean = false;
                     Parse.Ankita_isWaitingDEBUG = false;
                     Parse.Ankita_isWaitingBoolean = false;

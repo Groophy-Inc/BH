@@ -26,13 +26,10 @@ namespace BH.Parser.Commands
                     //For each char of word
                     char c = Parse.word[p];
 
-                    bool isError = false;
-                    Error error = new Error();
-
-
                     if (c == '"')
                     {
                         Parse.Msg_isContentStart = true;
+                        Parse.isAnyContent = true;
                         Parse.Msg_isWaitingContentStart = false;
                         Parse.isBackslashableContent = true;
                         lastestIndex = p+1;
@@ -55,6 +52,7 @@ namespace BH.Parser.Commands
                         isError = true;
                         error = err;*/
                         Parse.Msg_ContentWithoutConKey = true;
+                        Parse.isAnyContent = true;
                         Parse.Msg_isWaitingContentStart = false;
                         Parse.isBackslashableContent = true;
                         lastestIndex = p + 1;
@@ -62,39 +60,6 @@ namespace BH.Parser.Commands
 
 
 
-                    if (Parse.isErrorStack)
-                    {
-                        if (isError)
-                        {
-                            if (error.ErrorID == Parse.StackErrorID)
-                            {
-                                Parse.errors.Add(error);
-                            }
-                            else //new error stack
-                            {
-                                ErrorStack.PrintStack(Parse.errors.ToArray());
-                                Parse.isErrorStack = true;
-                                Parse.errors = new System.Collections.Generic.List<Error>();
-                                Parse.StackErrorID = error.ErrorID;
-                            }
-                        }
-                        else
-                        {
-                            ErrorStack.PrintStack(Parse.errors.ToArray());
-                            Parse.isErrorStack = false;
-                            Parse.errors = new System.Collections.Generic.List<Error>();
-                            Parse.StackErrorID = -1;
-                        }
-                    }
-                    else
-                    {
-                        if (isError)
-                        {
-                            Parse.isErrorStack = true;
-                            Parse.StackErrorID = error.ErrorID;
-                            Parse.errors.Add(error);
-                        }
-                    }
 
                     Parse.LineLen++;
                 }
@@ -115,10 +80,6 @@ namespace BH.Parser.Commands
                         char _c = ' ';
                         char c = Parse.word[p];
                         char c_ = ' '; //second char
-
-                        bool isError = false;
-                        Error error = new Error();
-
 
                         if (p + 1 < Parse.word.Length) c_ = Parse.word[p + 1];
                         if (p - 1 < Parse.word.Length && p - 1 >= 0) _c = Parse.word[p - 1];
@@ -153,6 +114,7 @@ namespace BH.Parser.Commands
                                 Parse.Msg_Content = "";
                                 Parse.Msg_isBackSlash = false;
                                 Parse.Msg_isContentStart = false;
+                                Parse.isAnyContent = false;
                                 Parse.Msg_isWaitingContentStart = false;
                                 Parse.isProgress = false;
                                 Parse.ProgressSyntax = "";
@@ -173,41 +135,6 @@ namespace BH.Parser.Commands
                             }
                         }
 
-
-                        if (Parse.isErrorStack)
-                        {
-                            if (isError)
-                            {
-                                if (error.ErrorID == Parse.StackErrorID)
-                                {
-                                    Parse.errors.Add(error);
-                                }
-                                else //new error stack
-                                {
-                                    ErrorStack.PrintStack(Parse.errors.ToArray());
-                                    Parse.isErrorStack = true;
-                                    Parse.errors = new System.Collections.Generic.List<Error>();
-                                    Parse.StackErrorID = error.ErrorID;
-                                }
-                            }
-                            else
-                            {
-                                ErrorStack.PrintStack(Parse.errors.ToArray());
-                                Parse.isErrorStack = false;
-                                Parse.errors = new System.Collections.Generic.List<Error>();
-                                Parse.StackErrorID = -1;
-                            }
-                        }
-                        else
-                        {
-                            if (isError)
-                            {
-                                Parse.isErrorStack = true;
-                                Parse.StackErrorID = error.ErrorID;
-                                Parse.errors.Add(error);
-                            }
-                        }
-
                         Parse.LineLen++;
                     }
                 }
@@ -220,6 +147,7 @@ namespace BH.Parser.Commands
                     Parse.Msg_Content = "";
                     Parse.Msg_isBackSlash = false;
                     Parse.Msg_isContentStart = false;
+                    Parse.isAnyContent = false;
                     Parse.Msg_isWaitingContentStart = false;
                     Parse.isSkipThisLine = true;
                     Parse.isProgress = false;

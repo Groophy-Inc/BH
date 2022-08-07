@@ -4,16 +4,23 @@ namespace BH.ErrorHandle
 {
     internal class ErrorStack
     {
-        public static void PrintStack(Error[] errors)
+        public static void PrintStack(Error error)
         {
-            string err = ErrMessageBuilder.BuildByStack(errors);
+            DetailedError errdet = new DetailedError()
+            {
+                ErrorID = error.ErrorID,
+                DevCode = error.DevCode,
+                ErrorMessage = error.ErrorMessage,
+                ErrorPathCode = error.ErrorPathCode,
+                ErrPath = Parser.Parse.ErrPath,
+                HighLightLen = error.HighLightLen,
+                line = error.line,
+                LineC = Parser.Parse.LineC,
+                TotalIndexOfLineWords = Parser.Parse.TotalIndexOfLineWords
+            };
+            string err = ErrMessageBuilder.BuildByStack(errdet);
             Parser.Parse.logErrMsg += err.ClearANSII();
             err.Print();
-        }
-
-        public static void PrintStackAsWord(Error error, string word)
-        {
-
         }
     }
 
@@ -23,9 +30,21 @@ namespace BH.ErrorHandle
         public int ErrorID { get; set; }
         public int DevCode { get; set; }
         public string ErrorMessage { get; set; }
-        public string FilePath { get; set; }
-        public int lineC { get; set; } //Ln
-        public int lenC { get; set; } //ChLn
+        public int HighLightLen { get; set; }
         public string line { get; set; }
+    }
+
+    public class DetailedError
+    {
+        public ErrorPathCodes ErrorPathCode { get; set; }
+        public int ErrorID { get; set; }
+        public int DevCode { get; set; }
+        public string ErrorMessage { get; set; }
+        public int HighLightLen { get; set; }
+        public string line { get; set; }
+        public string ErrPath { get; set; }
+        public int TotalIndexOfLineWords { get; set; }
+        public int LineC { get; set; }
+
     }
 }

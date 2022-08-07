@@ -70,12 +70,10 @@ namespace BH.Parser.Commands
                                         ErrorID = 7,
                                         DevCode = 0,
                                         ErrorMessage = "Encoding is not found, this might be what you're looking for: '" + getClosest.Color(ConsoleColor.Green) + "'.",
-                                        FilePath = Parse.masterPagePath,
+                                        HighLightLen = Parse.word.Length,
                                         line = Parse.line,
-                                        lineC = Parse.LineC,
-                                        lenC = Parse.TotalIndexOfLineWords
                                     };
-                                    ErrorHandle.ErrorStack.PrintStack(new Error[] { err });
+                                    ErrorHandle.ErrorStack.PrintStack(err);
                                     Parse.System_isPreloading = false;
                                     Parse.System_isWaitingValue = false;
                                     Parse.System_Command = SystemCommands.NA;
