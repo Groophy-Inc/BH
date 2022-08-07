@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ANSIConsole;
+using System;
 using System.Runtime.InteropServices;
 namespace BH.APF
 {
@@ -62,7 +63,7 @@ namespace BH.APF
                 if (!SetCurrentConsoleFontEx(ConsoleOutputHandle, false, ref set))
                 {
                     var ex = Marshal.GetLastWin32Error();
-                    Console.WriteLine("Set error " + ex);
+                    Console_.WriteLine("Set error " + ex);
                     throw new System.ComponentModel.Win32Exception(ex);
                 }
 
@@ -77,7 +78,7 @@ namespace BH.APF
             else
             {
                 var er = Marshal.GetLastWin32Error();
-                Console.WriteLine("Get error " + er);
+                Console_.WriteLine("Get error " + er);
                 throw new System.ComponentModel.Win32Exception(er);
             }
         }

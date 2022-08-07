@@ -89,7 +89,7 @@ namespace ANSIConsole
         public static ANSIString Color(this ANSIString text, string nameOrHex) => Color(text, nameOrHex.StartsWith("#") ?
             System.Drawing.ColorTranslator.FromHtml(nameOrHex) :
             System.Drawing.Color.FromName(nameOrHex));
-        public static void Print(this string text) => Console.WriteLine(text);
+        public static void Print(this string text) => BH.Console_.WriteLine(text);
 
         public static ANSIString Background(this string text, ConsoleColor color) => Background(ToANSI(text), color);
         public static ANSIString Background(this ANSIString text, ConsoleColor color) => text.SetBackgroundColor(color);

@@ -56,6 +56,7 @@ namespace BH.Parser
         public static bool Msg_isContentStart = false;
         public static bool Msg_isBackSlash = false;
         public static string Msg_Content = "";
+        public static bool Msg_ContentWithoutConKey = false;
 
         //System
         public static bool System_isPreloading = false; //waits Command
@@ -77,6 +78,12 @@ namespace BH.Parser
         public static string Var_Content = "";
         public static bool Var_isAttributeBackSlash = false;
         public static bool Var_isWaitingSemiColon = false;
+
+        //Ankita
+        public static bool Ankita_isWaitingDEBUG = false;
+        public static bool Ankita_isWaitingBoolean = false;
+        public static bool Ankita_DEBUGBoolean = false;
+        public static bool Ankita_isWaitingEndKey = false;
 
         public static AllElements ParseMasterPage()
         {
@@ -161,6 +168,10 @@ namespace BH.Parser
                         {
                             Parser.Commands.Var.Decompose();
                         }
+                        else if (ProgressSyntax == "ankita")
+                        {
+                            Parser.Commands.Ankita.Decompose();
+                        }
                     }
                     else
                     {
@@ -197,6 +208,12 @@ namespace BH.Parser
                                 isProgress = true;
                                 ProgressSyntax = "var";
                                 Var_isWaitingVarName = true;
+                            }
+                            else if (wordLower == "ankita")
+                            {
+                                isProgress = true;
+                                ProgressSyntax = "ankita";
+                                Ankita_isWaitingDEBUG = true;
                             }
                             else
                             {

@@ -70,7 +70,7 @@ namespace BH.ANSIIConsole
                         //  Check for escape character '<'
                         if (tag[0] == '<')
                         {
-                            Console.Write(tag + '>');   //  We rebuild inital escaped tag because we previously remove the last '>'
+                            Console_.Write(tag + '>');   //  We rebuild inital escaped tag because we previously remove the last '>'
                             tag = "";
                             continue;
                         }
@@ -254,16 +254,16 @@ namespace BH.ANSIIConsole
 
                 if (isHyperLink) text = text.SetHyperlink(LastestHyperLink);
 
-                Console.Write(text);
+                Console_.Write(text);
 
 
-                if (isLog) Console.WriteLine("\r\nText: " + text_code[i] + ", IsPastel: " + isPastel.ToString() + ", hex: " + lastesthex + ", hexbg: " + lastesthexbg + ", opacity: " + Opacity + ", tag: " + tag + ", FullText: " + text);
+                if (isLog) Console_.WriteLine("\r\nText: " + text_code[i] + ", IsPastel: " + isPastel.ToString() + ", hex: " + lastesthex + ", hexbg: " + lastesthexbg + ", opacity: " + Opacity + ", tag: " + tag + ", FullText: " + text);
 
                 log += "\r\nText: " + text_code[i] + ", IsPastel: " + isPastel.ToString() + ", hex: " + lastesthex + ", hexbg: " + lastesthexbg + ", opacity: " + Opacity + ", tag: " + tag + ", FullText: " + text + "\r\n";
 
             }
 
-            //Console.Write(endwith);
+            //Console_.Write(endwith);
             return log;
         }
         /// <summary>

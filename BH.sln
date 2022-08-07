@@ -5,7 +5,9 @@ VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BH", "BH.csproj", "{24C2D360-3AE8-4D31-B7A7-1E44EB1132DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BH.CmdFunc", "..\BH.CmdFunc\BH.CmdFunc.csproj", "{2807304A-2060-4E01-BB5A-D444ADDE97E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BH.CmdFunc", "..\BH.CmdFunc\BH.CmdFunc.csproj", "{2807304A-2060-4E01-BB5A-D444ADDE97E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BH Pad", "..\BH Pad\BH Pad.csproj", "{A27D9BFF-3C36-47AC-8786-F4E358506420}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{2807304A-2060-4E01-BB5A-D444ADDE97E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2807304A-2060-4E01-BB5A-D444ADDE97E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2807304A-2060-4E01-BB5A-D444ADDE97E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A27D9BFF-3C36-47AC-8786-F4E358506420}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A27D9BFF-3C36-47AC-8786-F4E358506420}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A27D9BFF-3C36-47AC-8786-F4E358506420}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A27D9BFF-3C36-47AC-8786-F4E358506420}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

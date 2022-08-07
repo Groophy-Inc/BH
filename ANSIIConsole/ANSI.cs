@@ -34,5 +34,9 @@ namespace ANSIConsole
         public static string Foreground(Color color) => SGR(38, 2, color.R, color.G, color.B);
         public static string Background(Color color) => SGR(48, 2, color.R, color.G, color.B);
         public static string Hyperlink(string text, string link) => $"\u001b]8;;{link}\a{text}\u001b]8;;\a";
+
+        
     }
+
+    
 }

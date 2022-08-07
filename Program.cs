@@ -3,14 +3,15 @@ using ANSIConsole;
 using System.Threading;
 using BH.Parser;
 using BH.ErrorHandle;
+using System.Text;
 
 namespace BH
 {
     internal class Program
     {
+
         static void Main(string[] args)
         {
-
             if (args.Length <= 2)
             {
                 Parse.srcPath = "srcpath";
@@ -21,7 +22,7 @@ namespace BH
             {
                 if (args[0] != "FABLWONT")
                 {
-                    Console.WriteLine("You must " + "call BH.bat".Color(ConsoleColor.Yellow) + ", NOT BH.exe");
+                    Console_.WriteLine("You must " + "call BH.bat".Color(ConsoleColor.Yellow) + ", NOT BH.exe");
                     return;
                 }
                 Parse.srcPath = args[1];
@@ -31,7 +32,7 @@ namespace BH
             }
 
 
-            LogSystem.DEBUG = true;
+            //LogSystem.DEBUG = true;
 
 
 
@@ -39,17 +40,18 @@ namespace BH
             if (!ANSIInitializer.Init(false)) ANSIInitializer.Enabled = false;
             Console.Title = "BH - Varriable System";
 
-            //Console.WriteLine(System.IO.File.ReadAllText(Parse.masterPagePath) + "\r\n\r\n | \r\n\\_/ \r\n");
+            //Console_.WriteLine(System.IO.File.ReadAllText(Parse.masterPagePath) + "\r\n\r\n | \r\n\\_/ \r\n");
 
             //BH.APF.ConsoleHelper.SetCurrentFont("Consolas", 24);
 
+            Parse.ParseLine("var $world -> \"off\";");
+            Parse.ParseLine("msg <red>hello $world ");
+            //Parser.Parse.ParseMasterPage();
 
-            //Parse.ParseLine("system outputencoding ufp-8;");
-            Parser.Parse.ParseMasterPage();
+            Console.WriteLine("--\r\n" + Console_.ConsoleLogs.ToString());
 
             ErrorHandle.DebugLogSystem.WriteAllText(@"C:\Users\GROOPHY\Desktop\logs.txt");
 
-            Console.ReadKey();
         }
     }
 }

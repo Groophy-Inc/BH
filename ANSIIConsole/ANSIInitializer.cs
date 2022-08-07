@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BH;
+using System;
 using System.Runtime.InteropServices;
 
 namespace ANSIConsole
@@ -31,14 +32,14 @@ namespace ANSIConsole
             var iStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
             if (!GetConsoleMode(iStdOut, out uint outConsoleMode))
             {
-                if (printError) Console.WriteLine("failed to get output console mode");
+                if (printError) Console_.WriteLine("failed to get output console mode");
                 return false;
             }
 
             outConsoleMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING | DISABLE_NEWLINE_AUTO_RETURN;
             if (!SetConsoleMode(iStdOut, outConsoleMode))
             {
-                if (printError) Console.WriteLine($"failed to set output console mode, error code: {GetLastError()}");
+                if (printError) Console_.WriteLine($"failed to set output console mode, error code: {GetLastError()}");
                 return false;
             }
 

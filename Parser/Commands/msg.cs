@@ -41,7 +41,7 @@ namespace BH.Parser.Commands
                     else
                     {
 
-                        Error err = new Error()
+                        /*Error err = new Error()
                         {
                             ErrorPathCode = ErrorPathCodes.Parser,
                             ErrorID = 0,
@@ -53,7 +53,11 @@ namespace BH.Parser.Commands
                             lenC = Parse.TotalIndexOfLineWords + p
                         };
                         isError = true;
-                        error = err;
+                        error = err;*/
+                        Parse.Msg_ContentWithoutConKey = true;
+                        Parse.Msg_isWaitingContentStart = false;
+                        Parse.isBackslashableContent = true;
+                        lastestIndex = p + 1;
                     }
 
 
@@ -206,6 +210,21 @@ namespace BH.Parser.Commands
 
                         Parse.LineLen++;
                     }
+                }
+                else if (Parse.Msg_ContentWithoutConKey)
+                {
+                    LogSystem.log("msg end: '" + Parse.line.Substring(Parse.TotalIndexOfLineWords) + "'");
+
+                    ANSIIConsole.Gecho.Print(Varriables.FixContent(Parse.line.Substring(Parse.TotalIndexOfLineWords)));
+
+                    Parse.Msg_Content = "";
+                    Parse.Msg_isBackSlash = false;
+                    Parse.Msg_isContentStart = false;
+                    Parse.Msg_isWaitingContentStart = false;
+                    Parse.isSkipThisLine = true;
+                    Parse.isProgress = false;
+                    Parse.ProgressSyntax = "";
+                    Parse.isBackslashableContent = false;
                 }
             }
         }

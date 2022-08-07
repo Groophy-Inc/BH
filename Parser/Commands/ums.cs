@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace BH.Parser.Commands
 {
+   
+
     public enum IScriptTypes
     {
         CF, //Terminal input     a.k.a CmdFunc
@@ -33,5 +35,6 @@ namespace BH.Parser.Commands
 
     internal class ums
     {
+
     }
 }

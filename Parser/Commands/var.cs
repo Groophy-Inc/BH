@@ -79,8 +79,33 @@ namespace BH.Parser.Commands
             {
                 if (Parse.wordLower == "as")
                 {
+
+                    Error err = new Error()
+                    {
+                        ErrorPathCode = ErrorPathCodes.Parser,
+                        ErrorID = 10,
+                        DevCode = 0,
+                        ErrorMessage = "The as suffix was removed with version 0.1.1 of BH.".Color(ConsoleColor.Red).ToString(),
+                        FilePath = Parse.masterPagePath,
+                        line = Parse.line,
+                        lineC = Parse.LineC,
+                        lenC = Parse.TotalIndexOfLineWords
+                    };
+                    ErrorHandle.ErrorStack.PrintStack(new Error[] { err });
+                    Parse.isProgress = false;
+                    Parse.ProgressSyntax = "";
+                    Parse.isBackslashableContent = false;
+                    Parse.isSkipThisLine = true;
+                    Parse.Var_isWaitingVarName = false;
+                    Parse.Var_VarName = "";
+                    Parse.Var_isWaitingConKey = false;
                     Parse.Var_isWaitingASorContentStart = false;
-                    Parse.Var_isAS = true;
+                    Parse.Var_isAS = false;
+                    Parse.Var_ASLang = "";
+                    Parse.Var_ContentStart = false;
+                    Parse.Var_Content = "";
+                    Parse.Var_isAttributeBackSlash = false;
+                    Parse.Var_isWaitingSemiColon = false;
                 }
                 else if (Parse.wordLower.StartsWith("\""))
                 {

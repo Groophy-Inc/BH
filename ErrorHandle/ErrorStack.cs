@@ -10,6 +10,11 @@ namespace BH.ErrorHandle
             Parser.Parse.logErrMsg += err.ClearANSII();
             err.Print();
         }
+
+        public static void PrintStackAsWord(Error error, string word)
+        {
+
+        }
     }
 
     public class Error

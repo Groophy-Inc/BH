@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ANSIConsole;
+using System;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace BH.Server
             {
                 if (!HttpListener.IsSupported)
                 {
-                    Console.WriteLine("Windows XP SP2 or Server 2003 is required to use the HttpListener class.");
+                    Console_.WriteLine("Windows XP SP2 or Server 2003 is required to use the HttpListener class.");
                     return;
                 }
                 // URI prefixes are required,
@@ -38,7 +39,7 @@ namespace BH.Server
                     listener.Prefixes.Add(s);
                 }
                 listener.Start();
-                Console.WriteLine("Listening...");
+                Console_.WriteLine("Listening...");
                 // Note: The GetContext method blocks while waiting for a request.
                 HttpListenerContext context = listener.GetContext();
                 HttpListenerRequest request = context.Request;

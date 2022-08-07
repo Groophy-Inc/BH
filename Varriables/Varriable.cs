@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace BH
 {
-    internal class Varriables
+    public class Varriables
     {
-        private static Dictionary<string, IVarriable> Vars = new Dictionary<string, IVarriable>();
+        public static Dictionary<string, IVarriable> Vars = new Dictionary<string, IVarriable>();
 
         public static string FixContent(string content)
         {
@@ -27,7 +27,8 @@ namespace BH
                     if (refuse) { refuse = false; continue; }
 
                     string repName = FindKey(keys[i].Split(' ')[0]);
-                    string repValue = Varriables.TryGet(repName).Obj.ToString();
+                    var ClosestVar = Varriables.TryGet(repName);
+                    string repValue = ClosestVar.Obj.ToString();
 
                     keys[i] = keys[i].Replace(repName, repValue);
 
