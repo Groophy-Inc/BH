@@ -6,6 +6,7 @@ namespace ANSIConsole
 {
     public static class StringExtensions
     {
+        
         public static ANSIString ToANSI(this string text) => new ANSIString(text);
         public static ANSIString AddFormatting(this string text, ANSIFormatting formatting) => AddFormatting(ToANSI(text), formatting);
         public static ANSIString AddFormatting(this ANSIString text, ANSIFormatting formatting) => text.AddFormatting(formatting);
@@ -72,6 +73,8 @@ namespace ANSIConsole
             }
             return sb.ToString();
         }
+
+
 
         public static ANSIString Color(this string text, ConsoleColor color) => Color(ToANSI(text), color);
         public static ANSIString Color(this ANSIString text, ConsoleColor color) => text.SetForegroundColor(color);

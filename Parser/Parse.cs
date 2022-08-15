@@ -5,6 +5,7 @@ using System.Linq;
 using ANSIConsole;
 using BH.ErrorHandle;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace BH.Parser
 {
@@ -12,7 +13,6 @@ namespace BH.Parser
     {
         public static string srcPath { get; set; }
         public static string masterPagePath { get; set; }
-        public static string[] Options { get; set; }
 
         //General
         public static bool isProgress = false;
@@ -32,6 +32,7 @@ namespace BH.Parser
         public static int TotalIndexOfLineWords = 0;
         public static string logErrMsg = "";
         public static bool isAnyContent = false;
+        public static bool isCommentBlock = false;
 
         //General Handle
         public static bool isErrorStack = false;
@@ -93,7 +94,7 @@ namespace BH.Parser
         {
             string[] lines = File.ReadAllLines(masterPagePath);
             Parse.ErrPath = masterPagePath;
-            return ParseLines(lines);
+            return _ParseLines(lines);
         }
 
         public static AllElements ParseLine(string line)
@@ -104,6 +105,23 @@ namespace BH.Parser
 
         public static AllElements ParseLines(string[] lines)
         {
+            Parse.ErrPath = "Custom Input";
+            return _ParseLines(lines);
+        }
+
+        public static void EndProcess()
+        {
+            Parse.isProgress = false;
+            Parse.ProgressSyntax = "";
+            Parse.isBackslashableContent = false;
+            Logs.isTab = false;
+        }
+
+        private static AllElements _ParseLines(string[] lines)
+        {
+            Logs.Log("--------------------------------------------------------\r\nParse started.\r\n");
+            Logs.Log(string.Join("\r\n", lines));
+            Logs.Log("--------------------------------------------------------");
             ReGen();
             logErrMsg = "";
 
@@ -115,10 +133,21 @@ namespace BH.Parser
 
                 if (!isAnyContent) line += " ";
 
-                if (string.IsNullOrEmpty(line) || line.StartsWith("//")) continue;
+                if ((string.IsNullOrEmpty(line) || line.StartsWith("//")) && !isAnyContent) continue;
+
+                if (line.Trim().StartsWith("/*") && !isAnyContent) isCommentBlock = true;
+
+                if (isCommentBlock)
+                {
+                    if (line.Trim().EndsWith("*/")) isCommentBlock = false;
+
+                    continue;
+                }
 
                 lineLower = line.Replace("ı", "i").Replace("I", "i").ToLower();
                 //For each line start
+
+                Logs.Log("\r\nNew Line: '" + line + "'");
 
                 LineLen = 0;
                 TotalIndexOfLineWords = 0;
@@ -137,6 +166,8 @@ namespace BH.Parser
                         if (string.IsNullOrEmpty(word)) { TotalIndexOfLineWords += word.Length + 1; continue; }
                     }
 
+                    Logs.Log($"New word: '{word}'");
+
                     LineC = i;
                     LenC = LineLen + j;
                     wordNumber = j;
@@ -149,6 +180,7 @@ namespace BH.Parser
                         if (wordLower.StartsWith("//"))
                         {
                             isSkipThisLine = true;
+                            Logs.Log("Comment line.");
                         }
                     }
 
@@ -194,6 +226,7 @@ namespace BH.Parser
 
                         if (!isSkipThisLine)
                         {
+                            bool isAccept = true;
                             if (wordLower == "set")
                             {
                                 isProgress = true;
@@ -223,6 +256,7 @@ namespace BH.Parser
                                 isProgress = true;
                                 ProgressSyntax = "var";
                                 Var_isWaitingVarName = true;
+                               
                             }
                             else if (wordLower == "ankita")
                             {
@@ -232,16 +266,32 @@ namespace BH.Parser
                             }
                             else if (wordLower == "version;")
                             {
-                                Console.WriteLine(Program.Ver);
+                                Console_.WriteLine(Program.Ver);
+                                Logs.Log($"Syntax: '{ProgressSyntax}' [{DateTime.Now.ToString("HH:mm:ss")}]\r\n");
+                                Logs.isTab = true;
+
+                                Logs.OnPropertyChanged("isProgress", "version");
+                                Logs.OnPropertyChanged("ProgressSyntax", false);
+                                Logs.OnPropertyChanged("Version_isWaitingEndKey", true);
+
+                                Logs.Log("Version printed.");
+                                Logs.Log("Process end;");
+
+                                Logs.isTab = false;
+                                isAccept = false;
                             }
                             else if (wordLower == "version")
                             {
                                 isProgress = true;
                                 ProgressSyntax = "version";
                                 Version_isWaitingEndKey = true;
+                                Logs.OnPropertyChanged("isProgress", "version");
+                                Logs.OnPropertyChanged("ProgressSyntax", false);
+                                Logs.OnPropertyChanged("Version_isWaitingEndKey", true);
                             }
                             else
                             {
+                                isAccept = false;
                                 string getClosest = APF.Find_Probabilities.GetClosest(wordLower, Keys.getKeyWordsAsArray());
                                 Error err = new Error()
                                 {
@@ -254,6 +304,12 @@ namespace BH.Parser
                                 };
                                 isSkipThisLine = true;
                                 ErrorStack.PrintStack(err);
+                            }
+
+                            if (isAccept) //if syntax accepted
+                            {
+                                Logs.Log($"Syntax: '{ProgressSyntax}' [{DateTime.Now.ToString("HH:mm:ss")}]\r\n");
+                                Logs.isTab = true;
                             }
                         }
                     }

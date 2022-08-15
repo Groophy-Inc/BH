@@ -30,10 +30,8 @@ namespace BH.Parser.Commands
                         line = Parse.line,
                     };
                     ErrorHandle.ErrorStack.PrintStack(err);
-                    
-                    Parse.isProgress = false;
-                    Parse.ProgressSyntax = "";
-                    Parse.isBackslashableContent = false;
+
+                    Parse.EndProcess();
                     Parse.Ankita_DEBUGBoolean = false;
                     Parse.Ankita_isWaitingDEBUG = false;
                     Parse.Ankita_isWaitingBoolean = false;
@@ -54,12 +52,12 @@ namespace BH.Parser.Commands
                     Parse.Ankita_DEBUGBoolean = true;
                     Parse.Ankita_isWaitingBoolean = false;
 
-                    LogSystem.DEBUG = Parse.Ankita_DEBUGBoolean;
+                    Logs.DEBUG = Parse.Ankita_DEBUGBoolean;
                     Parse.Ankita_DEBUGBoolean = false;
                     Parse.Ankita_isWaitingDEBUG = false;
                     Parse.Ankita_isWaitingBoolean = false;
                     Parse.Ankita_isWaitingEndKey = false;
-                    LogSystem.log("debug mode enabled, Now you can see logs.", ConsoleColor.Green);
+                    Logs.Log("debug mode enabled, Now you can see logs.", ConsoleColor.Green);
                 }
                 else if (Parse.wordLower == "off")
                 {
@@ -72,12 +70,12 @@ namespace BH.Parser.Commands
                     Parse.Ankita_DEBUGBoolean = false;
                     Parse.Ankita_isWaitingBoolean = false;
 
-                    LogSystem.DEBUG = Parse.Ankita_DEBUGBoolean;
+                    Logs.DEBUG = Parse.Ankita_DEBUGBoolean;
                     Parse.Ankita_DEBUGBoolean = false;
                     Parse.Ankita_isWaitingDEBUG = false;
                     Parse.Ankita_isWaitingBoolean = false;
                     Parse.Ankita_isWaitingEndKey = false;
-                    LogSystem.log("debug mode disabled, Now you can't see logs.", ConsoleColor.Green);
+                    Logs.Log("debug mode disabled, Now you can't see logs.", ConsoleColor.Green);
                 }
                 else
                 {
@@ -95,9 +93,7 @@ namespace BH.Parser.Commands
                     Parse.Ankita_isWaitingDEBUG = false;
                     Parse.Ankita_isWaitingBoolean = false;
                     Parse.Ankita_isWaitingEndKey = false;
-                    Parse.isProgress = false;
-                    Parse.ProgressSyntax = "";
-                    Parse.isBackslashableContent = false;
+                    Parse.EndProcess();
                     Parse.isSkipThisLine = true;
                 }
             }
@@ -105,17 +101,15 @@ namespace BH.Parser.Commands
             {
                 if (Parse.word == ";")
                 {
-                    LogSystem.DEBUG = Parse.Ankita_DEBUGBoolean;
+                    Logs.DEBUG = Parse.Ankita_DEBUGBoolean;
 
                     Parse.Ankita_DEBUGBoolean = false;
                     Parse.Ankita_isWaitingDEBUG = false;
                     Parse.Ankita_isWaitingBoolean = false;
                     Parse.Ankita_isWaitingEndKey = false;
-                    Parse.isProgress = false;
-                    Parse.ProgressSyntax = "";
-                    Parse.isBackslashableContent = false;
-                    if (LogSystem.DEBUG) LogSystem.log("debug mode enabled, Now you can see logs.", ConsoleColor.Green);
-                    else LogSystem.log("debug mode disabled, Now you can't see logs.", ConsoleColor.Green);
+                    Parse.EndProcess();
+                    if (Logs.DEBUG) Logs.Log("debug mode enabled, Now you can see logs.", ConsoleColor.Green);
+                    else Logs.Log("debug mode disabled, Now you can't see logs.", ConsoleColor.Green);
                 }
                 else
                 {
@@ -133,9 +127,7 @@ namespace BH.Parser.Commands
                     Parse.Ankita_isWaitingDEBUG = false;
                     Parse.Ankita_isWaitingBoolean = false;
                     Parse.Ankita_isWaitingEndKey = false;
-                    Parse.isProgress = false;
-                    Parse.ProgressSyntax = "";
-                    Parse.isBackslashableContent = false;
+                    Parse.EndProcess();
                 }
             }
         }

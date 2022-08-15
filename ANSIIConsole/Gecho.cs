@@ -44,6 +44,7 @@ namespace BH.ANSIIConsole
             bool isInverted = false; //ters
             bool isStrikeThrough = false; //ortadan çizgili
             bool isOverlined = false; //üstü çizgili
+            bool isBackSlash = false;
 
             bool isHyperLink = false; //clickable link for new console
             string LastestHyperLink = string.Empty;
@@ -53,7 +54,13 @@ namespace BH.ANSIIConsole
 
             for (int i = 0; i < text_code.Length; i++)
             {
-                if (parsing_tag)
+                if (text_code[i] == '\\')
+                {
+                    isBackSlash = true;
+                    continue;
+                }
+
+                if (parsing_tag && !isBackSlash)
                 {
 
                     if (text_code[i] == '>')
@@ -226,7 +233,7 @@ namespace BH.ANSIIConsole
                     continue;
                 }
 
-                if (text_code[i] == '<')
+                if (text_code[i] == '<' && !isBackSlash)
                 {
                     parsing_tag = true;
                     tag += "<";
@@ -256,6 +263,7 @@ namespace BH.ANSIIConsole
 
                 Console_.Write(text);
 
+                if (isBackSlash) isBackSlash = false;
 
                 if (isLog) Console_.WriteLine("\r\nText: " + text_code[i] + ", IsPastel: " + isPastel.ToString() + ", hex: " + lastesthex + ", hexbg: " + lastesthexbg + ", opacity: " + Opacity + ", tag: " + tag + ", FullText: " + text);
 

@@ -26,11 +26,21 @@ namespace BH.Parser.Commands
                         Parse.System_Command = SystemCommands.OutputEncoding;
                         Parse.System_isPreloading = false;
                         Parse.System_isWaitingValue = true;
+                        Logs.Log(@"
+Parse.System_Command = SystemCommands.OutputEncoding;
+Parse.System_isPreloading = false;
+Parse.System_isWaitingValue = true;
+");
                         break;
                     case "title":
                         Parse.System_Command = SystemCommands.Title;
                         Parse.System_isPreloading = false;
                         Parse.System_isWaitingValue = true;
+                        Logs.Log(@"
+Parse.System_Command = SystemCommands.Title;
+Parse.System_isPreloading = false;
+Parse.System_isWaitingValue = true;
+");
                         break;
                 }
             }
@@ -49,15 +59,15 @@ namespace BH.Parser.Commands
                                 case "uft-8":
                                 case "uft8":
                                     Console.OutputEncoding = Encoding.UTF8;
-                                    BH.ErrorHandle.LogSystem.log("New outputencoding: " + Parse.System_value[0].ToLower());
+                                    BH.ErrorHandle.Logs.Log("New outputencoding: " + Parse.System_value[0].ToLower());
                                     break;
                                 case "ascii":
                                     Console.OutputEncoding = Encoding.ASCII;
-                                    BH.ErrorHandle.LogSystem.log("New outputencoding: " + Parse.System_value[0].ToLower());
+                                    BH.ErrorHandle.Logs.Log("New outputencoding: " + Parse.System_value[0].ToLower());
                                     break;
                                 case "unicode":
                                     Console.OutputEncoding = Encoding.Unicode;
-                                    BH.ErrorHandle.LogSystem.log("New outputencoding: " + Parse.System_value[0].ToLower());
+                                    BH.ErrorHandle.Logs.Log("New outputencoding: " + Parse.System_value[0].ToLower());
                                     break;
                                 //Make more option here
                                 default:
@@ -78,15 +88,22 @@ namespace BH.Parser.Commands
                                     Parse.System_isWaitingValue = false;
                                     Parse.System_Command = SystemCommands.NA;
                                     Parse.System_value = new List<string>();
-                                    Parse.isProgress = false;
-                                    Parse.ProgressSyntax = "";
-                                    Parse.isBackslashableContent = false;
+                                    Parse.EndProcess();
+
+                                    Logs.Log(@"
+Parse.System_isPreloading = false;
+Parse.System_isWaitingValue = false;
+Parse.System_Command = SystemCommands.NA;
+Parse.System_value = new List<string>();
+Parse.EndProcess();
+");
 
                                     break;
                             }
                             break;
                         case SystemCommands.Title:
                             Console.Title = String.Join(' ', Parse.System_value.ToArray());
+                            Logs.Log("New title: " + Console.Title);
                             break;
                     }
 
@@ -94,9 +111,14 @@ namespace BH.Parser.Commands
                     Parse.System_isWaitingValue = false;
                     Parse.System_Command = SystemCommands.NA;
                     Parse.System_value = new List<string>();
-                    Parse.isProgress = false;
-                    Parse.ProgressSyntax = "";
-                    Parse.isBackslashableContent = false;
+                    Parse.EndProcess();
+                    Logs.Log(@"
+Parse.System_isPreloading = false;
+Parse.System_isWaitingValue = false;
+Parse.System_Command = SystemCommands.NA;
+Parse.System_value = new List<string>();
+Parse.EndProcess();
+");
                 }
                 else
                 {

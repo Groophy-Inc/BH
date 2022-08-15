@@ -18,11 +18,14 @@ namespace BH.Parser.Commands
 
             if (Parse.Var_isWaitingVarName)
             {
+                Logs.Log("DEVLOG - Var_isWaitingVarName\r\n");
                 if (Parse.wordLower.StartsWith("$"))
                 {
                     Parse.Var_isWaitingVarName = false;
                     Parse.Var_VarName = Parse.wordLower.Substring(1);
                     Parse.Var_isWaitingConKey = true;
+                    Logs.Log($"VarriableName: '{Parse.Var_VarName}'");
+                    Logs.Log("DEVLOG - Var_isWaitingConKey");
                 }
                 else
                 {
@@ -36,9 +39,7 @@ namespace BH.Parser.Commands
                         line = Parse.line,
                     };
                     ErrorHandle.ErrorStack.PrintStack(err);
-                    Parse.isProgress = false;
-                    Parse.ProgressSyntax = "";
-                    Parse.isBackslashableContent = false;
+                    Parse.EndProcess();
                     Parse.Var_isWaitingVarName = false;
                     Parse.Var_VarName = "";
                     Parse.isSkipThisLine = true;
@@ -50,6 +51,7 @@ namespace BH.Parser.Commands
                 {
                     Parse.Var_isWaitingConKey = false;
                     Parse.Var_isWaitingASorContentStart = true;
+                    Logs.Log("ConKey found.");
                 }
                 else
                 {
@@ -63,9 +65,7 @@ namespace BH.Parser.Commands
                         line = Parse.line,
                     };
                     ErrorHandle.ErrorStack.PrintStack(err);
-                    Parse.isProgress = false;
-                    Parse.ProgressSyntax = "";
-                    Parse.isBackslashableContent = false;
+                    Parse.EndProcess();
                     Parse.Var_isWaitingVarName = false;
                     Parse.Var_VarName = "";
                     Parse.isSkipThisLine = true;
@@ -86,9 +86,7 @@ namespace BH.Parser.Commands
                         line = Parse.line,
                     };
                     ErrorHandle.ErrorStack.PrintStack(err);
-                    Parse.isProgress = false;
-                    Parse.ProgressSyntax = "";
-                    Parse.isBackslashableContent = false;
+                    Parse.EndProcess();
                     Parse.isSkipThisLine = true;
                     Parse.Var_isWaitingVarName = false;
                     Parse.Var_VarName = "";
@@ -106,6 +104,7 @@ namespace BH.Parser.Commands
                     Parse.Var_isWaitingASorContentStart = false;
                     Parse.Var_ContentStart = true;
                     Parse.isAnyContent = true;
+                    Logs.Log("isAnyContent TRUE");
                     ContentSearch(Parse.word.Substring(1), Parse.wordLower.Substring(1));
 
                 }
@@ -121,9 +120,7 @@ namespace BH.Parser.Commands
                         line = Parse.line,
                     };
                     ErrorHandle.ErrorStack.PrintStack(err);
-                    Parse.isProgress = false;
-                    Parse.ProgressSyntax = "";
-                    Parse.isBackslashableContent = false;
+                    Parse.EndProcess();
                     Parse.Var_isWaitingVarName = false;
                     Parse.Var_VarName = "";
                     Parse.isSkipThisLine = true;
@@ -147,9 +144,7 @@ namespace BH.Parser.Commands
                         line = Parse.line,
                     };
                     ErrorHandle.ErrorStack.PrintStack(err);
-                    Parse.isProgress = false;
-                    Parse.ProgressSyntax = "";
-                    Parse.isBackslashableContent = false;
+                    Parse.EndProcess();
                     Parse.Var_isWaitingVarName = false;
                     Parse.Var_VarName = "";
                     Parse.isSkipThisLine = true;
@@ -163,11 +158,11 @@ namespace BH.Parser.Commands
             {
                 if (Parse.word == ";")
                 {
-                    Parse.isProgress = false;
-                    Parse.ProgressSyntax = "";
-                    Parse.isBackslashableContent = false;
+                    Parse.EndProcess();
+                   
                     Varriables.AddorUpdate(Parse.Var_VarName, Parse.Var_Content, "S:"+Parse.Var_ASLang);
-                    LogSystem.log("New varriable as $" + Parse.Var_VarName + "\r\nCont -> '" + Parse.Var_Content + "'\r\nLang -> '" + Parse.Var_ASLang + "'");
+                    Logs.Log("New varriable as $" + Parse.Var_VarName + "\r\nCont -> '" + Parse.Var_Content + "'\r\nLang -> '" + Parse.Var_ASLang + "'");
+                    Logs.Log("Process end;");
                     Parse.Var_isWaitingVarName = false;
                     Parse.Var_VarName = "";
                     Parse.Var_isWaitingConKey = false;
@@ -193,9 +188,7 @@ namespace BH.Parser.Commands
                         line = Parse.line,
                     };
                     ErrorHandle.ErrorStack.PrintStack(err);
-                    Parse.isProgress = false;
-                    Parse.ProgressSyntax = "";
-                    Parse.isBackslashableContent = false;
+                    Parse.EndProcess();
                     Parse.Var_isWaitingVarName = false;
                     Parse.Var_VarName = "";
                     Parse.isSkipThisLine = true;
@@ -212,9 +205,7 @@ namespace BH.Parser.Commands
                         line = Parse.line,
                     };
                     ErrorHandle.ErrorStack.PrintStack(err);
-                    Parse.isProgress = false;
-                    Parse.ProgressSyntax = "";
-                    Parse.isBackslashableContent = false;
+                    Parse.EndProcess();
                     Parse.Var_isWaitingVarName = false;
                     Parse.Var_VarName = "";
                     Parse.isSkipThisLine = true;
@@ -224,6 +215,7 @@ namespace BH.Parser.Commands
 
         private static void ContentSearch(string word,string wordLower)
         {
+            Logs.LogW("      | ");
             for (int p = 0; p < word.Length; p++)
             {
                 //For each char of word
@@ -233,6 +225,7 @@ namespace BH.Parser.Commands
 
                 if (p + 1 < word.Length) c_ = word[p + 1];
                 if (p - 1 < word.Length && p - 1 >= 0) _c = word[p - 1];
+              
 
                 if (Parse.Var_ContentStart)
                 {
@@ -245,6 +238,7 @@ namespace BH.Parser.Commands
                         if (Parse.Var_isAttributeBackSlash)
                         {
                             Parse.Var_Content += c;
+                            Logs.LogW(c);
                             Parse.Var_isAttributeBackSlash = false;
                         }
                         else
@@ -253,11 +247,15 @@ namespace BH.Parser.Commands
                             {
                                 Parse.Var_ContentStart = false;
                                 Parse.isAnyContent = false;
+                                Logs.Log("\r\n");
+                                Logs.Log("isAnyContent FALSE");
                                 Parse.Var_isWaitingSemiColon = true;
+                                Logs.Log("DEVLOG - Var_isWaitingSemiColon");
                             }
                             else
                             {
-                                Parse.Var_Content += c;
+                                Parse.Var_Content += c; 
+                                Logs.LogW(c);
                             }
                         }
                     }
@@ -278,20 +276,17 @@ namespace BH.Parser.Commands
                                 line = Parse.line,
                             };
                             ErrorHandle.ErrorStack.PrintStack(err);
-                            Parse.isProgress = false;
-                            Parse.ProgressSyntax = "";
-                            Parse.isBackslashableContent = false;
+                            Parse.EndProcess();
                             Parse.Var_isWaitingVarName = false;
                             Parse.Var_VarName = "";
                             Parse.isSkipThisLine = true;
                             continue;
                         }
                         //end
-                        Parse.isProgress = false;
-                        Parse.ProgressSyntax = "";
-                        Parse.isBackslashableContent = false;
+                        Parse.EndProcess();
                         Varriables.AddorUpdate(Parse.Var_VarName, Parse.Var_Content, "S:" + Parse.Var_ASLang);
-                        LogSystem.log("New varriable as $" + Parse.Var_VarName + "\r\nCont -> '" + Parse.Var_Content + "'\r\nLang -> '" + Parse.Var_ASLang + "'");
+                        Logs.Log("New varriable as $" + Parse.Var_VarName + "\r\nCont -> '" + Parse.Var_Content + "'\r\nLang -> '" + Parse.Var_ASLang + "'");
+                        Logs.Log("Process end;");
                         Parse.Var_isWaitingVarName = false;
                         Parse.Var_VarName = "";
                         Parse.Var_isWaitingConKey = false;

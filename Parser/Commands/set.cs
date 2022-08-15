@@ -30,7 +30,7 @@ namespace BH.Parser.Commands
                 AddorUpdate("name", __name);
                 Parse.Set_isWaitingName = false;
                 Parse.Set_isWaitingGenre = true;
-                LogSystem.log("New Attribute - '" + "name" + "': " + __name, ConsoleColor.Green);
+                Logs.Log("New Attribute - '" + "name" + "': " + __name, ConsoleColor.Green);
             }
             else if (Parse.Set_isWaitingGenre)
             {
@@ -38,7 +38,7 @@ namespace BH.Parser.Commands
                 AddorUpdate("genre", __genre);
                 Parse.Set_isWaitingGenre = false;
                 Parse.Set_isWaitingAttributes = true;
-                LogSystem.log("New Attribute - '" + "genre" + "': " + __genre, ConsoleColor.Green);
+                Logs.Log("New Attribute - '" + "genre" + "': " + __genre, ConsoleColor.Green);
 
                 if (__genre == "window") AddorUpdate("title", "NoThing"); //Defualt title 26.3.2022 || Sad but life is never said will be easy
             }
@@ -125,7 +125,7 @@ namespace BH.Parser.Commands
                                                 Parse.isAnyContent = false;
                                                 Parse.isBackslashableContent = false;
                                                 AddorUpdate(Parse.Set_AttributeBuildName, Varriables.FixContent(Parse.Set_AttributeBuildContent));
-                                                LogSystem.log("New Attribute - '" + Parse.Set_AttributeBuildName + "': " + Varriables.FixContent(Parse.Set_AttributeBuildContent), ConsoleColor.Green);
+                                                Logs.Log("New Attribute - '" + Parse.Set_AttributeBuildName + "': " + Varriables.FixContent(Parse.Set_AttributeBuildContent), ConsoleColor.Green);
                                                 Parse.Set_AttributeBuildName = "";
                                                 Parse.Set_AttributeBuildContent = "";
                                                 Parse.Set_isNewAttributeWaiting = true;
@@ -188,11 +188,9 @@ namespace BH.Parser.Commands
                                 Attributes = Parse.Set_Attributes
                             };
 
-                            LogSystem.log("New element added to element list name of $" + Parse.Set_Attributes["name"].Color(ConsoleColor.Magenta), ConsoleColor.DarkGreen);
+                            Logs.Log("New element added to element list name of $" + Parse.Set_Attributes["name"].Color(ConsoleColor.Magenta), ConsoleColor.DarkGreen);
 
-                            Parse.isProgress = false;
-                            Parse.ProgressSyntax = "";
-                            Parse.isBackslashableContent = false;
+                            Parse.EndProcess();
                             Parse.Set_isWaitingName = false;
                             Parse.Set_isWaitingGenre = false;
                             Parse.Set_isWaitingAttributes = false;

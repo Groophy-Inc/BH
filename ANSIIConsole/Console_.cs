@@ -1,5 +1,6 @@
 ﻿using BH.ErrorHandle;
 using System.Text;
+using ANSIConsole;
 
 namespace BH
 {
@@ -11,14 +12,14 @@ namespace BH
         {
             System.Console.Write(text);
 
-            ConsoleLogs.Append(DebugLogSystem.ClearANSII(text.ToString()));
+            ConsoleLogs.Append(text.ToString().ClearANSII());
         }
 
         public static void WriteLine(object text)
         {
             System.Console.WriteLine(text);
 
-            ConsoleLogs.Append(DebugLogSystem.ClearANSII(text.ToString()) + "\r\n");
+            ConsoleLogs.Append(text.ToString().ClearANSII() + "\r\n");
         }
     }
 }

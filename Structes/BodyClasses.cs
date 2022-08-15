@@ -17,12 +17,17 @@ namespace BH.Structes.BodyClasses
     public class _Class
     {
         public string Name { get; set; }
-        public _Void Voides { get; set; }
+        public List<_Void> Voides { get; set; }
     }
 
     public class _Void
     {
+        public string Access { get; set; }
+        public List<string> Args { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
+        public bool isField { get; set; } = false;
+        public string ReturnType { get; set; } = "void";
+        public string FieldDefualt { get; set; }
     }
 }

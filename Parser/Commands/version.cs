@@ -1,5 +1,6 @@
 ﻿using BH.ErrorHandle;
 using System;
+using ANSIConsole;
 
 namespace BH.Parser.Commands
 {
@@ -11,12 +12,11 @@ namespace BH.Parser.Commands
             {
                 if (Parse.word == ";")
                 {
-                    Console.WriteLine(Program.Ver);
+                    Console_.WriteLine(Program.Ver);
 
                     Parse.Version_isWaitingEndKey = false;
-                    Parse.isProgress = false;
-                    Parse.ProgressSyntax = "";
-                    Parse.isBackslashableContent = false;
+                    Logs.OnPropertyChanged("Version_isWaitingEndKey", false);
+                    Parse.EndProcess();
                 }
                 else
                 {
@@ -31,9 +31,8 @@ namespace BH.Parser.Commands
                     };
                     ErrorHandle.ErrorStack.PrintStack(err);
                     Parse.Version_isWaitingEndKey = false;
-                    Parse.isProgress = false;
-                    Parse.ProgressSyntax = "";
-                    Parse.isBackslashableContent = false;
+                    Logs.OnPropertyChanged("Version_isWaitingEndKey", false);
+                    Parse.EndProcess();
                 }
             }
         }

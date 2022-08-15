@@ -76,7 +76,7 @@ namespace BH
             if (key.ToLower() == "thingno") return null;
             try
             {
-                return Vars[key];
+                return Vars[key.ToLower()];
             }
             catch
             {

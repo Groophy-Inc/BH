@@ -86,7 +86,7 @@ namespace BH.Parser.Commands
 
                         if (!Parse.isProgress)
                         {
-                            LogSystem.log("The parameter persists even after the content has expired, this is not an error cause but an unnecessary use. Ln: "+Parse.LineC+", ChLn: " + (Parse.TotalIndexOfLineWords + p).ToString()+"\r\nLine: " + Parse.line);
+                            Logs.Log("The parameter persists even after the content has expired, this is not an error cause but an unnecessary use. Ln: "+Parse.LineC+", ChLn: " + (Parse.TotalIndexOfLineWords + p).ToString()+"\r\nLine: " + Parse.line);
                         }
 
                         if (c == '\\' && c_ != '$')
@@ -107,7 +107,7 @@ namespace BH.Parser.Commands
                             {
 
 
-                                LogSystem.log("msg end: '" + Parse.Msg_Content + "'");
+                                Logs.Log("msg end: '" + Parse.Msg_Content + "'");
 
                                 ANSIIConsole.Gecho.Print(Varriables.FixContent(Parse.Msg_Content));
 
@@ -116,9 +116,7 @@ namespace BH.Parser.Commands
                                 Parse.Msg_isContentStart = false;
                                 Parse.isAnyContent = false;
                                 Parse.Msg_isWaitingContentStart = false;
-                                Parse.isProgress = false;
-                                Parse.ProgressSyntax = "";
-                                Parse.isBackslashableContent = false;
+                                Parse.EndProcess();
                                 //content end
                             }
                         }
@@ -140,7 +138,7 @@ namespace BH.Parser.Commands
                 }
                 else if (Parse.Msg_ContentWithoutConKey)
                 {
-                    LogSystem.log("msg end: '" + Parse.line.Substring(Parse.TotalIndexOfLineWords) + "'");
+                    Logs.Log("msg end: '" + Parse.line.Substring(Parse.TotalIndexOfLineWords) + "'");
 
                     ANSIIConsole.Gecho.Print(Varriables.FixContent(Parse.line.Substring(Parse.TotalIndexOfLineWords)));
 
@@ -150,9 +148,7 @@ namespace BH.Parser.Commands
                     Parse.isAnyContent = false;
                     Parse.Msg_isWaitingContentStart = false;
                     Parse.isSkipThisLine = true;
-                    Parse.isProgress = false;
-                    Parse.ProgressSyntax = "";
-                    Parse.isBackslashableContent = false;
+                    Parse.EndProcess();
                 }
             }
         }

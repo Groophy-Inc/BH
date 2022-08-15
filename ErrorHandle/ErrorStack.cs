@@ -16,10 +16,12 @@ namespace BH.ErrorHandle
                 HighLightLen = error.HighLightLen,
                 line = error.line,
                 LineC = Parser.Parse.LineC,
-                TotalIndexOfLineWords = Parser.Parse.TotalIndexOfLineWords
+                TotalIndexOfLineWords = Parser.Parse.TotalIndexOfLineWords,
+                Date = DateTime.Now.ToString("HH:mm:ss")
             };
             string err = ErrMessageBuilder.BuildByStack(errdet);
             Parser.Parse.logErrMsg += err.ClearANSII();
+            Logs.Log("\r\n"+err+"\r\n");
             err.Print();
         }
     }
@@ -46,5 +48,6 @@ namespace BH.ErrorHandle
         public int TotalIndexOfLineWords { get; set; }
         public int LineC { get; set; }
 
+        public string Date { get; set; }
     }
 }

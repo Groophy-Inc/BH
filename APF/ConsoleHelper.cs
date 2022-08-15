@@ -39,7 +39,7 @@ namespace BH.APF
 
         public static FontInfo[] SetCurrentFont(string font, short fontSize = 0)
         {
-            ErrorHandle.LogSystem.log("Set Current Font: " + font, ConsoleColor.Yellow);
+            ErrorHandle.Logs.Log("Set Current Font: " + font, ConsoleColor.Yellow);
 
             FontInfo before = new FontInfo
             {
