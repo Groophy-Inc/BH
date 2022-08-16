@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BH.ErrorHandle.Error;
+using System;
 using System.Collections.Generic;
 
 namespace BH.ErrorHandle

@@ -6,15 +6,214 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BH.Parser.Utils;
+using System.IO;
 
 namespace BH.Builder
 {
     internal class Build
     {
+        public static void CreateFiles(string ProjectName)
+        {
+            string tempPath = APF.Helper.AssemblyDirectory + "\\Temp\\";
+            if (!Directory.Exists(tempPath)) Directory.CreateDirectory(tempPath);
+
+            CreateCSPROJ(tempPath, ProjectName);
+            CreateASSEMBLY(tempPath);
+            CreateApp_Xaml(tempPath, ProjectName);
+            CreateApp_Xaml_CS(tempPath, ProjectName);
+            CreateMainWindow_Xaml(tempPath, ProjectName);
+            CreateMainWindow_Xaml_CS(tempPath, ProjectName);
+            //CmdFunc.OneTimeInput("dotnet run", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, tempPath);
+        }
+
+        private static void CreateMainWindow_Xaml_CS(string tempPath, string ProjectName)
+        {
+            Structes.BodyClasses._Namespace ns = new Structes.BodyClasses._Namespace()
+            {
+                //using System;
+                //using System.Collections.Generic;
+                //            using System.Configuration;
+                //            using System.Data;
+                //            using System.Linq;
+                //            using System.Threading.Tasks;
+                //            using System.Windows;
+                Using = new System.Collections.Generic.List<string>(new string[] { "System.Collections.Generic", "System.Linq", "System.Text", "System.Threading.Tasks", "System.Windows", "System.Windows.Controls", "System.Windows.Data",
+                "System.Windows.Documents","System.Windows.Input","System.Windows.Media","System.Windows.Media.Imaging","System.Windows.Navigation","System.Windows.Shapes"}),
+                Name = ProjectName,
+                Classes = new List<Structes.BodyClasses._Class>()
+            {
+                new Structes.BodyClasses._Class()
+                {
+                    Name = "MainWindow",
+                    isConjunction = true,
+                    Conjunction = ": Window",
+                    Access = "public partial",
+                    Voides = new List<Structes.BodyClasses._Void>()
+                    {
+                        new Structes.BodyClasses._Void()
+                        {
+                            Access="public",
+                            Args=new List<string>(),
+                            Code = "InitializeComponent();",
+                            Name = "MainWindow",
+                            ReturnType = ""
+        }
+                    }
+                }
+            }
+            };
+            string code = JustFixBracket(Init(ns));
+            File.WriteAllText(tempPath + "MainWindow.xaml.cs", code);
+        }
+
+        private static void CreateMainWindow_Xaml(string tempPath, string ProjectName)
+        {
+            //            <Window x:Class="CleanTemp.MainWindow"
+            //        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            //        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            //        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            //        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            //        xmlns:local="clr-namespace:CleanTemp"
+            //        mc:Ignorable="d"
+            //        Title="MainWindow" Height="450" Width="800">
+            //    <Grid>
+
+            //    </Grid>
+            //</Window>
+            File.WriteAllText(tempPath + "MainWindow.xaml", $"<Window x:Class=\"{ProjectName}.MainWindow\"\r\n" +
+                            "        xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"\r\n" +
+                            "        xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"\r\n" +
+                            "        xmlns:d=\"http://schemas.microsoft.com/expression/blend/2008\"\r\n" +
+                            "        xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\"\r\n" +
+                            $"       xmlns:local=\"clr-namespace:{ProjectName}\"\r\n" +
+                            "        mc:Ignorable=\"d\"\r\n" +
+                            $"        Title=\"{ProjectName}\" Height=\"450\" Width=\"800\">\r\n" +  
+                            "    <Grid>\r\n" +
+                            "    </Grid>\r\n" +
+                            "</Window>\r\n");
+
+        }
+
+        private static void CreateCSPROJ(string tempPath, string ProjectName)
+        {
+            //<Project Sdk="Microsoft.NET.Sdk">
+
+            //  <PropertyGroup>
+            //    <OutputType>WinExe</OutputType>
+            //    <TargetFramework>net5.0-windows</TargetFramework>
+            //    <Nullable>enable</Nullable>
+            //    <UseWPF>true</UseWPF>
+            //  </PropertyGroup>
+
+            //</Project>
+
+            File.WriteAllText(tempPath + $"{ProjectName}.csproj", "<Project Sdk=\"Microsoft.NET.Sdk\">" + @"
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+</Project>
+");
+        }
+
+        private static void CreateApp_Xaml(string tempPath, string ProjectName)
+        {
+            //            <Application x:Class="CleanTemp.App"
+            //             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            //             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            //             xmlns:local="clr-namespace:CleanTemp"
+            //             StartupUri="MainWindow.xaml">
+            //    <Application.Resources>
+
+            //    </Application.Resources>
+            //</Application>
+
+            File.WriteAllText(tempPath + "App.xaml", $"<Application x:Class=\"{ProjectName}.App\"\r\n" +
+                "             xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"\r\n" +
+                "             xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"\r\n" +
+                $"             xmlns:local=\"clr-namespace:{ProjectName}\"\r\n" +
+                "             StartupUri=\"MainWindow.xaml\">\r\n" +
+                "    <Application.Resources>\r\n" +
+                "    </Application.Resources>\r\n" +
+                "</Application>\r\n");
+        }
+
+        private static void CreateApp_Xaml_CS(string tempPath, string ProjectName)
+        {
+            Structes.BodyClasses._Namespace ns = new Structes.BodyClasses._Namespace()
+            {
+                //using System;
+                //using System.Collections.Generic;
+                //            using System.Configuration;
+                //            using System.Data;
+                //            using System.Linq;
+                //            using System.Threading.Tasks;
+                //            using System.Windows;
+                Using = new List<string>(new string[] { "System.Collections.Generic", "System.Configuration", "System.Data", "System.Linq", "System.Threading.Tasks", "System.Windows" }),
+                Name = ProjectName,
+                Classes = new List<Structes.BodyClasses._Class>()
+            {
+                new Structes.BodyClasses._Class()
+                {
+                    Name = "App",
+                    isConjunction = true,
+                    Conjunction = ": Application",
+                    Access = "public partial"
+                }
+            }
+            };
+            string code = JustFixBracket(Init(ns));
+            File.WriteAllText(tempPath + "App.xaml.cs", code);
+        }
+
+        private static void CreateASSEMBLY(string tempPath)
+        {
+            //            using System.Windows;
+
+            //[assembly: ThemeInfo(
+            //    ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located
+            //                                     //(used if a resource is not found in the page,
+            //                                     // or application resource dictionaries)
+            //    ResourceDictionaryLocation.SourceAssembly //where the generic resource dictionary is located
+            //                                              //(used if a resource is not found in the page,
+            //                                              // app, or any theme specific resource dictionaries)
+            //)]
+
+            File.WriteAllText(tempPath + "AssemblyInfo.cs", @"using System.Windows;
+
+[assembly: ThemeInfo(
+    ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located
+                                     //(used if a resource is not found in the page,
+                                     // or application resource dictionaries)
+    ResourceDictionaryLocation.SourceAssembly //where the generic resource dictionary is located
+                                              //(used if a resource is not found in the page,
+                                              // app, or any theme specific resource dictionaries)
+)]
+");
+
+        }
+
+        public static Builder.HightLightPack[] hl = new Builder.HightLightPack[]
+            {
+                new Builder.HightLightPack()
+                {
+                    KeyWords = new string[]{"class", "string", "namespace", "using"},
+                    HexColor = "0096FF"//84dcfa
+                },
+                new Builder.HightLightPack()
+                {
+                    KeyWords = new string[]{"public" },
+                    HexColor = "5800FF"//1f3065
+                }
+            };
+
         public static string Init(Structes.BodyClasses._Namespace _Namespace)
         {
-            string Using = @"
-using System;
+            string Using = @"using System;
 "; //using
 
             foreach (var x in _Namespace.Using)
@@ -34,7 +233,8 @@ using System;
             _Namespace.Classes.Sort();
             foreach (var x in _Namespace.Classes)
             {
-                InNamespace += $"public class {x.Name}\r\n" + "{\r\n";
+                if (x.isConjunction) InNamespace += $"{x.Access} class {x.Name} {x.Conjunction}\r\n" + "{\r\n";
+                else InNamespace += $"{x.Access} class {x.Name}\r\n" + "{\r\n";
 
                 foreach (var y in x.Voides)
                 {
@@ -62,6 +262,54 @@ using System;
             }
             InNamespace += "\r\n}";
             return InNamespace;
+        }
+
+        public static string JustFixBracket(string text)
+        {
+            StringBuilder sb = new StringBuilder();
+            Random r = new Random();
+
+            int tabcount = 0;
+
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                char c = text[i];
+
+                if (c == '{')
+                {
+                    sb.Append(c.ToString());
+                    tabcount++;
+                }
+                else if (c == '}')
+                {
+                    sb.Append("[0m" + c.ToString());
+                    tabcount--;
+                }
+                else
+                {
+                    sb.Append(c);
+                    if (c == '\n') sb.Append(new String(' ', tabcount * 4));
+
+                }
+            }
+
+            string[] lines = sb.ToString().Split('\n');
+            sb.Clear();
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string line = lines[i];
+                int startIndex = line.IndexOf('');
+                int index = line.IndexOf("}");
+                if (index != -1 && startIndex != -1)
+                {
+                    if (line.Substring(startIndex - 4, 4) == "    ")
+                        lines[i] = line.Remove(startIndex - 4, 4);
+                }
+            }
+
+
+            return String.Join('\n', lines).ClearANSII();
         }
 
         public static string HighLightBracket(string text, HightLightPack[] pack)
@@ -107,11 +355,11 @@ using System;
                 string line = lines[i];
                 int startIndex = line.IndexOf('');
                 int index = line.IndexOf("}");
-                if (index != -1)
+                if (index != -1 && startIndex != -1)
                 {
-                    if (line.Substring(startIndex - 4, 4) == "    ")
-                        lines[i] = line.Remove(startIndex - 4, 4);
-                }
+					if (line.Substring(startIndex - 4, 4) == "    ")
+						lines[i] = line.Remove(startIndex - 4, 4);
+				}
 
                 string[] parts = line.Split(' ');
                 int ndx = 0;
@@ -129,7 +377,9 @@ using System;
                                 {
                                     string a = "";
                                 }
-                                lines[i] = Parser.Utils.Color.ColorByIndex(lines[i], ndx, key.Length, (pack[p].HexColor.StartsWith('#') ? pack[p].HexColor : "#"+pack[p].HexColor)).ToString();
+                                int Increase = 0;
+                                lines[i] = Parser.Utils.Color.ColorByIndex(lines[i], ndx, key.Length, (pack[p].HexColor.StartsWith('#') ? pack[p].HexColor : "#"+pack[p].HexColor), ref Increase).ToString();
+                                ndx += Increase;
                             }
                         }
                     }

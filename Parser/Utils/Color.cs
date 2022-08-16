@@ -65,7 +65,22 @@ namespace BH.Parser.Utils
             var before = text.Substring(0, Index);
             var mid = text.Substring(Index, Len).Color(HEXcolor);
             var after = text.Substring(Index + Len);
-            return new ANSIString(before + mid.ToString() + after);
+            var retenv = new ANSIString(before + mid.ToString() + after);
+
+            return retenv;
+        }
+
+        static public ANSIString ColorByIndex(string text, int Index, int Len, string HEXcolor, ref int Increase)
+        {
+            if (string.IsNullOrEmpty(text)) return new ANSIString("");
+            var before = text.Substring(0, Index);
+            int bf = text.Substring(Index, Len).Length;
+            var mid = text.Substring(Index, Len).Color(HEXcolor);
+            int af = mid.ToString().Length;
+            var after = text.Substring(Index + Len);
+            var retenv = new ANSIString(before + mid.ToString() + after);
+            Increase = af - bf;
+            return retenv;
         }
 
         static public ANSIString ColorByIndex(string text, int Index, int Len, string defualtHEXcolor, string HEXcolor)

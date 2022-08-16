@@ -1,4 +1,5 @@
 ﻿using BH.ErrorHandle;
+using BH.ErrorHandle.Error;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorHandle.ErrorStack.PrintStack(err);
+                    ErrorStack.PrintStack(err);
 
                     Parse.EndProcess();
                     Parse.Ankita_DEBUGBoolean = false;
@@ -88,7 +89,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorHandle.ErrorStack.PrintStack(err);
+                    ErrorStack.PrintStack(err);
                     Parse.Ankita_DEBUGBoolean = false;
                     Parse.Ankita_isWaitingDEBUG = false;
                     Parse.Ankita_isWaitingBoolean = false;
@@ -122,7 +123,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorHandle.ErrorStack.PrintStack(err);
+                    ErrorStack.PrintStack(err);
                     Parse.Ankita_DEBUGBoolean = false;
                     Parse.Ankita_isWaitingDEBUG = false;
                     Parse.Ankita_isWaitingBoolean = false;

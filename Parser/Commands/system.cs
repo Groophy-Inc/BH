@@ -1,5 +1,6 @@
 ﻿using ANSIConsole;
 using BH.ErrorHandle;
+using BH.ErrorHandle.Error;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,7 +84,7 @@ Parse.System_isWaitingValue = true;
                                         HighLightLen = Parse.word.Length,
                                         line = Parse.line,
                                     };
-                                    ErrorHandle.ErrorStack.PrintStack(err);
+                                    ErrorStack.PrintStack(err);
                                     Parse.System_isPreloading = false;
                                     Parse.System_isWaitingValue = false;
                                     Parse.System_Command = SystemCommands.NA;

@@ -12,10 +12,12 @@ namespace BH
 {
     internal class Program
     {
-        public static readonly string Ver = "0.1.6";
+        public static readonly string Ver = "0.1.7";
 
         static void Main(string[] args)
         {
+            Builder.Build.CreateFiles("Test");
+            return;
             args = new string[]
             {
                 "--save",
@@ -63,7 +65,7 @@ namespace BH
                 return;
             }
 
-            if (args.Length == 0)
+            if (args.Length == 0 || args.Length == 1)
             {
                 ANSIIConsole.Gecho.Print(@"<#2f2f8a>BH <w>[-s|--save <#af916d>\<SAVE PATH\><w>] <#18cff2>[--debug] <w>[-p|--parse <#af916d>\<MASTER PAGE PATH\><w>] <w>[-src|--srcpath <#af916d>\<SRCPATH WHERE HAVE YOUR TOOLS\><w>] <#18cff2>[--fablwont]");
             }
@@ -73,19 +75,7 @@ namespace BH
             if (!ANSIInitializer.Init(false)) ANSIInitializer.Enabled = false;
             Console.Title = "BH - Varriable System";
 
-            Builder.HightLightPack[] hl = new Builder.HightLightPack[]
-            {
-                new Builder.HightLightPack()
-                {
-                    KeyWords = new string[]{"class", "string", "namespace", "using"},
-                    HexColor = "84dcfa"
-                },
-                new Builder.HightLightPack()
-                {
-                    KeyWords = new string[]{"public" },
-                    HexColor = "1f3065"
-                }
-            };
+            
             var ns = new Structes.BodyClasses._Namespace()
             {
                 Name = "Test",
@@ -111,7 +101,7 @@ namespace BH
                                 Access = "public",
                                 Args = new System.Collections.Generic.List<string>(),
                                 Code = @"
-Console.WriteLine(" + "Hello World" + @");
+Console.WriteLine(" + "\"Hello World\"" + @");
 ",
                                 Name = "Say"
                             }
@@ -120,13 +110,13 @@ Console.WriteLine(" + "Hello World" + @");
                 }
             };
 
-            //Console.WriteLine(Builder.Build.Init(ns) + "\r\n-----------------------");
+            Console.WriteLine(Builder.Build.Init(ns) + "\r\n-----------------------");
 
-            //Console.WriteLine(Builder.Build.HighLightBracket(Builder.Build.Init(ns), hl));
+            Console.WriteLine(Builder.Build.HighLightBracket(Builder.Build.Init(ns), Builder.Build.hl).ClearANSII());
 
-            APF.ParalelPrint.Print(Builder.Build.Init(ns), Builder.Build.HighLightBracket(Builder.Build.Init(ns), hl));
+            //APF.ParalelPrint.Print(Builder.Build.Init(ns), Builder.Build.HighLightBracket(Builder.Build.Init(ns), hl));
 
-            //File.WriteAllText("save.txt", Builder.Build.HighLightBracket(Builder.Build.Init(ns), hl));
+            File.WriteAllText("save.txt", Builder.Build.HighLightBracket(Builder.Build.Init(ns), Builder.Build.hl).ClearANSII());
             //Parser.Parse.ParseMasterPage();
 
             //Save();

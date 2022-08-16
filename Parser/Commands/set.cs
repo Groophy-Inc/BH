@@ -4,6 +4,7 @@ using BH.Structes;
 using BH.Parser;
 using BH.ErrorHandle;
 using ANSIConsole;
+using BH.ErrorHandle.Error;
 
 namespace BH.Parser.Commands
 {

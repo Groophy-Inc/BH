@@ -1,6 +1,7 @@
 ﻿using BH.ErrorHandle;
 using System;
 using ANSIConsole;
+using BH.ErrorHandle.Error;
 
 namespace BH.Parser.Commands
 {
@@ -29,7 +30,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorHandle.ErrorStack.PrintStack(err);
+                    ErrorStack.PrintStack(err);
                     Parse.Version_isWaitingEndKey = false;
                     Logs.OnPropertyChanged("Version_isWaitingEndKey", false);
                     Parse.EndProcess();

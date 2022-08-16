@@ -1,6 +1,8 @@
 ﻿using System;
 using ANSIConsole;
-namespace BH.ErrorHandle
+using BH.ErrorHandle.Error;
+
+namespace BH.ErrorHandle.Error
 {
     internal class ErrorStack
     {
@@ -21,7 +23,7 @@ namespace BH.ErrorHandle
             };
             string err = ErrMessageBuilder.BuildByStack(errdet);
             Parser.Parse.logErrMsg += err.ClearANSII();
-            Logs.Log("\r\n"+err+"\r\n");
+            Logs.Log("\r\n" + err + "\r\n");
             err.Print();
         }
     }

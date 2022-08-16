@@ -6,6 +6,7 @@ using ANSIConsole;
 using BH.ErrorHandle;
 using System.Collections.Generic;
 using System.ComponentModel;
+using BH.ErrorHandle.Error;
 
 namespace BH.Parser
 {
