@@ -12,7 +12,7 @@ namespace BH
 {
     internal class Program
     {
-        public static readonly string Ver = "0.1.8";
+        public static readonly string Ver = "0.1.9";
         public static bool isCheckHashForFastBuild = false;
         public static string LastestHash = "NaN";
 
