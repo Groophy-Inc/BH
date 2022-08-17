@@ -23,7 +23,7 @@ namespace BH.Parser.Commands
                 if (Parse.wordLower.StartsWith("$"))
                 {
                     Parse.Var_isWaitingVarName = false;
-                    Parse.Var_VarName = Parse.wordLower.Substring(1);
+                    Parse.Var_VarName = Parse.word.Substring(1);
                     Parse.Var_isWaitingConKey = true;
                     Logs.Log($"VarriableName: '{Parse.Var_VarName}'");
                     Logs.Log("DEVLOG - Var_isWaitingConKey");

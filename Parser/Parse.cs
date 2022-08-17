@@ -34,6 +34,7 @@ namespace BH.Parser
         public static string logErrMsg = "";
         public static bool isAnyContent = false;
         public static bool isCommentBlock = false;
+        public static string ProjectName = "";
 
         //General Handle
         public static bool isErrorStack = false;
@@ -90,6 +91,9 @@ namespace BH.Parser
 
         //Version
         public static bool Version_isWaitingEndKey = false;
+
+        //Show
+        public static bool Show_isWaitingVarriable = false;
 
         public static AllElements ParseMasterPage()
         {
@@ -194,7 +198,11 @@ namespace BH.Parser
                         {
                             Tuple<bool, Element> retenv = Parser.Commands.Set.Decompose();
 
-                            if (retenv.Item1) allofelements.Add(retenv.Item2);
+                            if (retenv.Item1)
+                            {
+                                allofelements.Add(retenv.Item2);
+                                Varriables.AddorUpdate(retenv.Item2.Attributes["name"], retenv.Item2);
+                            }
                         }
                         else if (ProgressSyntax == "msg")
                         {
@@ -219,6 +227,10 @@ namespace BH.Parser
                         else if (ProgressSyntax == "version")
                         {
                             Parser.Commands.version.Decompose();
+                        }
+                        else if (ProgressSyntax == "show")
+                        {
+                            Parser.Commands.Show.Decompose();
                         }
                     }
                     else
@@ -289,6 +301,15 @@ namespace BH.Parser
                                 Logs.OnPropertyChanged("isProgress", "version");
                                 Logs.OnPropertyChanged("ProgressSyntax", false);
                                 Logs.OnPropertyChanged("Version_isWaitingEndKey", true);
+                            }
+                            else if (wordLower == "show")
+                            {
+                                isProgress = true;
+                                ProgressSyntax = "show";
+                                Show_isWaitingVarriable = true;
+                                Logs.OnPropertyChanged("isProgress", "show");
+                                Logs.OnPropertyChanged("ProgressSyntax", false);
+                                Logs.OnPropertyChanged("Show_isWaitingVarriable", true);
                             }
                             else
                             {

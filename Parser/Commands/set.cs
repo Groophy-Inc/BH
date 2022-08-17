@@ -19,7 +19,7 @@ namespace BH.Parser.Commands
         public static Tuple<bool, Element> Decompose()
         {
 
-            if (Parse.Set_isAttributeBuildContent && Parse.wordNumber != 0)
+            if (Parse.Set_isAttributeBuildContent && !string.IsNullOrEmpty(Parse.Set_AttributeBuildContent))
             {
                 Parse.Set_AttributeBuildContent += " ";
             }
@@ -32,6 +32,7 @@ namespace BH.Parser.Commands
                 Parse.Set_isWaitingName = false;
                 Parse.Set_isWaitingGenre = true;
                 Logs.Log("New Attribute - '" + "name" + "': " + __name, ConsoleColor.Green);
+                Parse.ProjectName = __name;
             }
             else if (Parse.Set_isWaitingGenre)
             {
@@ -41,7 +42,7 @@ namespace BH.Parser.Commands
                 Parse.Set_isWaitingAttributes = true;
                 Logs.Log("New Attribute - '" + "genre" + "': " + __genre, ConsoleColor.Green);
 
-                if (__genre == "window") AddorUpdate("title", "NoThing"); //Defualt title 26.3.2022 || Sad but life is never said will be easy
+                if (__genre == "window") AddorUpdate("Title", "NoThing"); //Defualt title 26.3.2022 || Sad but life is never said will be easy
             }
             else if (Parse.Set_isWaitingAttributes)
             {

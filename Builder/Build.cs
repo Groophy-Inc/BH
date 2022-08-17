@@ -7,12 +7,38 @@ using System.Text;
 using System.Threading.Tasks;
 using BH.Parser.Utils;
 using System.IO;
+using BH.Structes;
+using BH.ErrorHandle.Error;
 
 namespace BH.Builder
 {
     internal class Build
     {
-        public static void CreateFiles(string ProjectName)
+        public static void Demo(object objwindow)
+        {
+            ClearTemp(APF.Helper.AssemblyDirectory + "\\Temp");
+            Element window = objwindow as Element;
+            if (window.Genre.Replace('I', 'i').ToLower() == "window")
+            {
+                CreateFiles(window.Attributes["name"], window.Attributes);
+                Script.Temp.RunAppByDotnet(true);
+            }
+            else
+            {
+                Console.WriteLine("genre is not window, what you try bro??");
+                return;
+            }
+        }
+
+        public static void ClearTemp(string temp)
+        {
+            if (Directory.Exists(temp))
+            {
+                Directory.Delete(temp, true);
+            }
+            Directory.CreateDirectory(temp);
+        }
+        public static void CreateFiles(string ProjectName, Dictionary<string, string> attr)
         {
             string tempPath = APF.Helper.AssemblyDirectory + "\\Temp\\";
             if (!Directory.Exists(tempPath)) Directory.CreateDirectory(tempPath);
@@ -21,7 +47,10 @@ namespace BH.Builder
             CreateASSEMBLY(tempPath);
             CreateApp_Xaml(tempPath, ProjectName);
             CreateApp_Xaml_CS(tempPath, ProjectName);
-            CreateMainWindow_Xaml(tempPath, ProjectName);
+            if (!CreateMainWindow_Xaml(tempPath, ProjectName, attr))
+            {
+                Environment.Exit(11);
+            }
             CreateMainWindow_Xaml_CS(tempPath, ProjectName);
             //CmdFunc.OneTimeInput("dotnet run", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, tempPath);
         }
@@ -66,7 +95,7 @@ namespace BH.Builder
             File.WriteAllText(tempPath + "MainWindow.xaml.cs", code);
         }
 
-        private static void CreateMainWindow_Xaml(string tempPath, string ProjectName)
+        private static bool CreateMainWindow_Xaml(string tempPath, string ProjectName, Dictionary<string, string> attrs)
         {
             //            <Window x:Class="CleanTemp.MainWindow"
             //        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -80,6 +109,34 @@ namespace BH.Builder
 
             //    </Grid>
             //</Window>
+            string tt = "";
+            foreach (var attr in attrs)
+            {
+                if (attr.Key.ToLower() == "name" || attr.Key.ToLower() == "genre")
+                {
+                    continue;
+                }
+                if (Builder.Components.Window.isHaveThisKey(attr.Key))
+                {
+                    tt += attr.Key + "=\"" + attr.Value + "\" ";
+                }
+                else
+                {
+                    string getClosest = Builder.Components.Window.getClosest(attr.Key);
+                    Error err = new Error()
+                    {
+                        ErrorPathCode = ErrorPathCodes.Parser,
+                        ErrorID = 11,
+                        DevCode = 0,
+                        ErrorMessage = "Invalid key! this might be what you're looking for: '" + getClosest.Color(ConsoleColor.Green) + "'.".Color(ConsoleColor.Yellow),
+                        line = "\""+attr.Key + "\"=\"" + attr.Value + "\"",
+                        HighLightLen = 1
+                    };
+
+                    ErrorStack.PrintStack(err);
+                    return false;
+                }
+            }
             File.WriteAllText(tempPath + "MainWindow.xaml", $"<Window x:Class=\"{ProjectName}.MainWindow\"\r\n" +
                             "        xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"\r\n" +
                             "        xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"\r\n" +
@@ -87,11 +144,11 @@ namespace BH.Builder
                             "        xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\"\r\n" +
                             $"       xmlns:local=\"clr-namespace:{ProjectName}\"\r\n" +
                             "        mc:Ignorable=\"d\"\r\n" +
-                            $"        Title=\"{ProjectName}\" Height=\"450\" Width=\"800\">\r\n" +  
+                            $"        {tt}>\r\n" +  
                             "    <Grid>\r\n" +
                             "    </Grid>\r\n" +
                             "</Window>\r\n");
-
+            return true;
         }
 
         private static void CreateCSPROJ(string tempPath, string ProjectName)
@@ -373,10 +430,6 @@ namespace BH.Builder
                             string key = pack[p].KeyWords[g];
                             if (word == key)
                             {
-                                if (word == "public" )
-                                {
-                                    string a = "";
-                                }
                                 int Increase = 0;
                                 lines[i] = Parser.Utils.Color.ColorByIndex(lines[i], ndx, key.Length, (pack[p].HexColor.StartsWith('#') ? pack[p].HexColor : "#"+pack[p].HexColor), ref Increase).ToString();
                                 ndx += Increase;

@@ -12,12 +12,12 @@ namespace BH
 {
     internal class Program
     {
-        public static readonly string Ver = "0.1.7";
+        public static readonly string Ver = "0.1.8";
+        public static bool isCheckHashForFastBuild = false;
+        public static string LastestHash = "NaN";
 
         static void Main(string[] args)
         {
-            Builder.Build.CreateFiles("Test");
-            return;
             args = new string[]
             {
                 "--save",
@@ -27,13 +27,11 @@ namespace BH
                 @"C:\Users\GROOPHY\Desktop\bigparsetest.txt",
                 "--srcPath",
                 @"C:\Users\GROOPHY\Desktop\",
-                "--fablwont"
+                "--checkhashforfastbuild",
             };
             var ParsedArgs = APF.ArgumentParser.Parse(args);
             if (APF.ArgumentParser.ParseFailed) return;
-            bool isFABLWONT = false;
 
-            //C:\\Users\\GROOPHY\\Desktop\\save.pdf
             foreach (var arg in ParsedArgs)
             {
                 var narg = new System.Collections.Generic.KeyValuePair<string, string>(arg.Key.Replace('I','i'), arg.Value);
@@ -45,10 +43,6 @@ namespace BH
                 {
                     Logs.DEBUG = true;
                 }
-                else if (narg.Key == "fablwont")
-                {
-                    isFABLWONT |= true;
-                }
                 else if (narg.Key == "parse" || narg.Key == "p")
                 {
                     Parse.masterPagePath = narg.Value;
@@ -57,13 +51,12 @@ namespace BH
                 {
                     Parse.srcPath = narg.Value;
                 }
+                else if (narg.Key == "checkhashforfastbuild" || narg.Key == "chffb")
+                {
+                    isCheckHashForFastBuild = true;
+                }
             }
 
-            if (!isFABLWONT)
-            {
-                Console_.WriteLine("You must " + "call BH.bat".Color(ConsoleColor.Yellow) + ", NOT BH.exe");
-                return;
-            }
 
             if (args.Length == 0 || args.Length == 1)
             {
@@ -73,53 +66,33 @@ namespace BH
 
 
             if (!ANSIInitializer.Init(false)) ANSIInitializer.Enabled = false;
-            Console.Title = "BH - Varriable System";
+            if (File.Exists(APF.Helper.AssemblyDirectory + "\\LastestHash.hash")) LastestHash = File.ReadAllText(APF.Helper.AssemblyDirectory + "\\LastestHash.hash");
+            if (File.Exists(APF.Helper.AssemblyDirectory + "\\LastestProjectName")) Parse.ProjectName = File.ReadAllText(APF.Helper.AssemblyDirectory + "\\LastestProjectName");
+            Console.Title = "BH - ThinkNo";
 
-            
-            var ns = new Structes.BodyClasses._Namespace()
+            //File.WriteAllText("save.txt", Builder.Build.HighLightBracket(Builder.Build.Init(ns), Builder.Build.hl).ClearANSII());
+            Console.WriteLine(File.ReadAllText(Parse.masterPagePath)+"\r\n-------------------------");
+
+            if (isCheckHashForFastBuild)
             {
-                Name = "Test",
-                Using = new System.Collections.Generic.List<string>(new string[] { "System.Collections.Generic", "System.Linq", "System.Text", "System.Threading.Tasks", "System.Windows", "System.Windows.Controls", "System.Windows.Data",
-                "System.Windows.Documents","System.Windows.Input","System.Windows.Media","System.Windows.Media.Imaging","System.Windows.Navigation","System.Windows.Shapes"}), 
-                Classes = new System.Collections.Generic.List<Structes.BodyClasses._Class>()
+                if (LastestHash == HashString(File.ReadAllText(Parse.masterPagePath)))
                 {
-                    new Structes.BodyClasses._Class()
-                    {
-                        Name = "ExampleClass",
-                        Voides = new System.Collections.Generic.List<Structes.BodyClasses._Void>()
-                        {
-                            new Structes.BodyClasses._Void()
-                            {
-                                isField = true,
-                                Access = "public",
-                                Name = "Name",
-                                ReturnType = "string",
-                                FieldDefualt = "{get;set;}"
-                            },
-                            new Structes.BodyClasses._Void()
-                            {
-                                Access = "public",
-                                Args = new System.Collections.Generic.List<string>(),
-                                Code = @"
-Console.WriteLine(" + "\"Hello World\"" + @");
-",
-                                Name = "Say"
-                            }
-                        }
-                    }
+                    Script.Temp.RunApp();
                 }
-            };
+                else
+                {
+                    Parser.Parse.ParseMasterPage();
+                }
+            }
+            else
+            {
+                Parser.Parse.ParseMasterPage();
+            }
 
-            Console.WriteLine(Builder.Build.Init(ns) + "\r\n-----------------------");
+            File.WriteAllText(APF.Helper.AssemblyDirectory + "\\LastestHash.hash", HashString(File.ReadAllText(Parse.masterPagePath)));
+            File.WriteAllText(APF.Helper.AssemblyDirectory + "\\LastestProjectName", Parse.ProjectName);
 
-            Console.WriteLine(Builder.Build.HighLightBracket(Builder.Build.Init(ns), Builder.Build.hl).ClearANSII());
-
-            //APF.ParalelPrint.Print(Builder.Build.Init(ns), Builder.Build.HighLightBracket(Builder.Build.Init(ns), hl));
-
-            File.WriteAllText("save.txt", Builder.Build.HighLightBracket(Builder.Build.Init(ns), Builder.Build.hl).ClearANSII());
-            //Parser.Parse.ParseMasterPage();
-
-            //Save();
+            Save();
         }
 
         public static string SavePath = "";
@@ -142,6 +115,29 @@ Console.WriteLine(" + "\"Hello World\"" + @");
 
             ClearCurrentConsoleLine(2); Console.WriteLine("Logs Saved.");
 
+        }
+
+        static string HashString(string text, string salt = "")
+        {
+            if (String.IsNullOrEmpty(text))
+            {
+                return String.Empty;
+            }
+
+            // Uses SHA256 to create the hash
+            using (var sha = new System.Security.Cryptography.SHA256Managed())
+            {
+                // Convert the string to a byte array first, to be processed
+                byte[] textBytes = System.Text.Encoding.UTF8.GetBytes(text + salt);
+                byte[] hashBytes = sha.ComputeHash(textBytes);
+
+                // Convert back to a string, removing the '-' that BitConverter adds
+                string hash = BitConverter
+                    .ToString(hashBytes)
+                    .Replace("-", String.Empty);
+
+                return hash;
+            }
         }
         public static void ClearCurrentConsoleLine(int DelLineCount = 0)
         {
