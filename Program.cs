@@ -12,22 +12,34 @@ namespace BH
 {
     internal class Program
     {
-        public static readonly string Ver = "0.1.9";
+        public static readonly string Ver = "0.2.3";
         public static bool isCheckHashForFastBuild = false;
         public static string LastestHash = "NaN";
+
+        static string GenWord(int len)
+        {
+            StringBuilder sb = new StringBuilder(len);
+            Random r = new Random();
+            for (int i = 0; i < len; i++)
+            {
+                sb.Append((char)(r.Next(65, 90)));
+            }
+
+            return sb.ToString();
+        }
 
         static void Main(string[] args)
         {
             args = new string[]
             {
-                "--save",
-                "C:\\Users\\GROOPHY\\Desktop\\save.pdf",
-                "--debug",
+                //"--save",
+                //"C:\\Users\\GROOPHY\\Desktop\\Logs.pdf",
+                //"--debug",
                 "--parse",
-                @"C:\Users\GROOPHY\Desktop\bigparsetest.txt",
+                @"C:\Users\GROOPHY\Desktop\umstest.txt",
                 "--srcPath",
                 @"C:\Users\GROOPHY\Desktop\",
-                "--checkhashforfastbuild",
+                //"--checkhashforfastbuild",
             };
             var ParsedArgs = APF.ArgumentParser.Parse(args);
             if (APF.ArgumentParser.ParseFailed) return;
@@ -63,8 +75,7 @@ namespace BH
                 ANSIIConsole.Gecho.Print(@"<#2f2f8a>BH <w>[-s|--save <#af916d>\<SAVE PATH\><w>] <#18cff2>[--debug] <w>[-p|--parse <#af916d>\<MASTER PAGE PATH\><w>] <w>[-src|--srcpath <#af916d>\<SRCPATH WHERE HAVE YOUR TOOLS\><w>] <#18cff2>[--fablwont]");
             }
             Logs.AllLogs = new StringBuilder();
-
-
+            Script.Types.CF.Terminal.Input("@echo off");
             if (!ANSIInitializer.Init(false)) ANSIInitializer.Enabled = false;
             if (File.Exists(APF.Helper.AssemblyDirectory + "\\LastestHash.hash")) LastestHash = File.ReadAllText(APF.Helper.AssemblyDirectory + "\\LastestHash.hash");
             if (File.Exists(APF.Helper.AssemblyDirectory + "\\LastestProjectName")) Parse.ProjectName = File.ReadAllText(APF.Helper.AssemblyDirectory + "\\LastestProjectName");
@@ -100,6 +111,7 @@ namespace BH
         {
             if (string.IsNullOrEmpty(SavePath)) return;
             Console.WriteLine("Logs saving...");
+            Logs.Log("Saving...");
 
             File.WriteAllText("Input.txt", Logs.AllLogs.ToString());
 
@@ -113,7 +125,7 @@ namespace BH
             p.Start();
             p.WaitForExit();
 
-            ClearCurrentConsoleLine(2); Console.WriteLine("Logs Saved.");
+            ClearCurrentConsoleLine(2); Console.WriteLine(Logs.AllLogs.Length+" length logs Saved.");
 
         }
 

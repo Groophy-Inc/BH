@@ -7,6 +7,7 @@ using BH.ErrorHandle;
 using System.Collections.Generic;
 using System.ComponentModel;
 using BH.ErrorHandle.Error;
+using BH.Parser.Commands;
 
 namespace BH.Parser
 {
@@ -70,6 +71,17 @@ namespace BH.Parser
 
         //UMS dispose ve regen'e ekle
         public static bool UMS_isWaitingHaveVarriableSaveOrNot = false;
+        public static bool UMS_isSaveAsVarriable = false;
+        public static string UMS_SaveAsVarriableName = "";
+        public static bool UMS_isWaitingAS = false;
+        public static bool UMS_isWaitingLang = false;
+        public static Commands.IScriptTypes UMS_Lang = IScriptTypes.Null;
+        public static bool UMS_isWaitingConKey = false;
+        public static bool UMS_isWaitingContentKey = false;
+        public static bool UMS_ContentStart = false;
+        public static bool UMS_isAttributeBackSlash = false;
+        public static bool UMS_isWaitingSemiColon = false;
+        public static string UMS_Content = "";
 
         //Var
         public static bool Var_isWaitingVarName = false;
@@ -159,6 +171,7 @@ namespace BH.Parser
 
                 if (Set_isAttributeBuildContent) Set_AttributeBuildContent += "\r\n";
                 if (Var_ContentStart) Var_Content += "\r\n";
+                if (UMS_ContentStart) UMS_Content += "\r\n";
 
                 string[] words = line.Split(' ');
                 for (int j = 0; j < words.Length; j++)
@@ -214,7 +227,7 @@ namespace BH.Parser
                         }
                         else if (ProgressSyntax == "ums")
                         {
-
+                            Parser.Commands.ums.Decompose();
                         }
                         else if (ProgressSyntax == "var")
                         {

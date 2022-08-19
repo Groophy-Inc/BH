@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using BH.ErrorHandle;
+using BH.Script.Types;
 
 namespace BH
 {
@@ -26,10 +28,23 @@ namespace BH
                 {
                     if (refuse) { refuse = false; continue; }
 
-                    string repName = FindKey(keys[i].Split(' ')[0]);
+                    bool hasCon = false;
+                    string suffix = "";
+                    string repName = FindKey(keys[i].Split(' ')[0], ref hasCon, ref suffix);
                     var ClosestVar = Varriables.TryGet(repName);
-                    string repValue = ClosestVar.Obj.ToString();
-
+                    string[] suffixs = suffix.Split('.');
+                    object lastObject = (hasCon)
+                        ? CF.GetFieldOfObject(ClosestVar.Obj, suffixs[0])
+                        : ClosestVar.Obj;
+                    for (int j = 1; j < suffixs.Length; j++)
+                    {
+                        lastObject = lastObject.GetType().GetProperty(suffixs[i]).GetValue(lastObject, null);
+                    }
+                    string repValue = lastObject.ToString();
+                    if (hasCon)
+                    {
+                        repName += "!" + suffix + "!";
+                    }
                     keys[i] = keys[i].Replace(repName, repValue);
 
                     if (keys[i].EndsWith('\\'))
@@ -41,16 +56,30 @@ namespace BH
             }
             string retenv = "";
             for (int i = 0; i < keys.Length; i++) retenv += keys[i].Replace("\\$", "$");
-
+            
+            Logs.Log($"ContentFix\r\nContent: {content}\r\nFixedContent: {retenv}");
             return retenv;
         }
 
-        private static string FindKey(string fullKey)
+        private static string FindKey(string fullKey, ref bool hasCon, ref string Suffix)
         {
+            hasCon = false;
             for (int i = 1; i < fullKey.Length; i++)
             {
                 if (JustTryGet(fullKey.Substring(0,i)))
                 {
+                    if (fullKey.Length > i + 1)
+                    {
+                        if (fullKey.Substring(i, 1) == "!")
+                        {
+                            hasCon = true;
+                            for (int j = i + 1; j < fullKey.Length; j++)
+                            {
+                                if (fullKey[j] == '!') break;
+                                Suffix += fullKey[j];
+                            }
+                        }
+                    }
                     return fullKey.Substring(0,i);
                 }
             }
