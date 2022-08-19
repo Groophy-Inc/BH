@@ -41,6 +41,7 @@ namespace BH
                 @"C:\Users\GROOPHY\Desktop\",
                 //"--checkhashforfastbuild",
             };
+            
             var ParsedArgs = APF.ArgumentParser.Parse(args);
             if (APF.ArgumentParser.ParseFailed) return;
 
