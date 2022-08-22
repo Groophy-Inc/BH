@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using BH.ErrorHandle.Error;
 using BH.Parser.Commands;
+using BH.Structes.ErrorStack;
 
 namespace BH.Parser
 {

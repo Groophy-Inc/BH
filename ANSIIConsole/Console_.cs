@@ -8,18 +8,20 @@ namespace BH
     {
         public static System.Text.StringBuilder ConsoleLogs = new StringBuilder();
 
+        public static bool CanWriteToConsole = true;
+
         public static void Write(object text)
         {
-            System.Console.Write(text);
-
             ConsoleLogs.Append(text.ToString().ClearANSII());
+            
+            if (!CanWriteToConsole) return;
+            
+            System.Console.Write(text);
         }
 
         public static void WriteLine(object text)
         {
-            System.Console.WriteLine(text);
-
-            ConsoleLogs.Append(text.ToString().ClearANSII() + "\r\n");
+            Write(text + "\r\n");
         }
     }
 }

@@ -5,6 +5,7 @@ using BH.Parser;
 using BH.ErrorHandle;
 using ANSIConsole;
 using BH.ErrorHandle.Error;
+using BH.Structes.ErrorStack;
 
 namespace BH.Parser.Commands
 {
@@ -285,7 +286,7 @@ namespace BH.Parser.Commands
                         }
                         //end
                         Parse.EndProcess();
-                        Varriables.AddorUpdate(Parse.Var_VarName, Parse.Var_Content, "S:" + Parse.Var_ASLang);
+                        Varriables.AddorUpdate(Parse.Var_VarName, Varriables.FixContent(Parse.Var_Content), "S:" + Parse.Var_ASLang);
                         Logs.Log("New varriable as $" + Parse.Var_VarName + "\r\nCont -> '" + Parse.Var_Content + "'\r\nLang -> '" + Parse.Var_ASLang + "'");
                         Logs.Log("Process end;");
                         Parse.Var_isWaitingVarName = false;

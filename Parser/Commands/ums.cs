@@ -8,6 +8,7 @@ using ANSIConsole;
 using BH.ErrorHandle;
 using BH.ErrorHandle.Error;
 using BH.Script.Types;
+using BH.Structes.ErrorStack;
 
 namespace BH.Parser.Commands
 {
@@ -15,7 +16,7 @@ namespace BH.Parser.Commands
     {
         Null, // null for waiting
         CF, //Terminal input     a.k.a CmdFunc
-        BF, //Batch Script       a.k.a BatchFile
+        PS, //PowerShell         a.k.a PowerShell
         SP, //Custom lang for BH a.k.a Script-Plus
         CS, //C# runtime parse   a.k.a C-Sharp[#]
     }
@@ -29,7 +30,7 @@ namespace BH.Parser.Commands
         /// 
         /// Work for 
         ///   - CF
-        ///   - BF
+        ///   - PS
         ///   - SP
         /// </summary>
         public bool isSaveable { get; set; }
@@ -41,7 +42,7 @@ namespace BH.Parser.Commands
     internal class ums
     {
         
-        private static string[] types = new string[] { "CF", "BF", "SP", "CS" };
+        private static string[] types = new string[] { "CF", "PS", "SP", "CS" };
         public static string GetClosest(string text) => APF.Find_Probabilities.GetClosest(text, types);
         public static bool isHaveLang(string text) => types.Any(x => x == text);
 
@@ -143,8 +144,8 @@ namespace BH.Parser.Commands
                         case "CF":
                             Parse.UMS_Lang = IScriptTypes.CF;
                             break;
-                        case "BF":
-                            Parse.UMS_Lang = IScriptTypes.BF;
+                        case "PS":
+                            Parse.UMS_Lang = IScriptTypes.PS;
                             break;
                         case "SP":
                             Parse.UMS_Lang = IScriptTypes.SP;
@@ -414,8 +415,12 @@ namespace BH.Parser.Commands
                         switch (Parse.UMS_Lang)
                         {
                             case IScriptTypes.CF:
-                                var value = Script.Types.CF.Execute(Parse.UMS_Content, 3000);
-                                Varriables.AddorUpdate(Parse.UMS_SaveAsVarriableName, value, "S:" + Parse.UMS_Lang);
+                                var CFOBJ = Script.Types.CF.Execute(Parse.UMS_Content, 3000);
+                                Varriables.AddorUpdate(Parse.UMS_SaveAsVarriableName, CFOBJ, "S:" + Parse.UMS_Lang);
+                                break;
+                            case IScriptTypes.PS:
+                                var PSOBJ = Script.Types.PS.Execute(Parse.UMS_Content, 3000);
+                                Varriables.AddorUpdate(Parse.UMS_SaveAsVarriableName, PSOBJ, "S:" + Parse.UMS_Lang);
                                 break;
                         }
                         Logs.Log("New varriable as $" + Parse.UMS_SaveAsVarriableName + "\r\nCont -> '" + Parse.UMS_Content + "'\r\nLang -> '" + Parse.UMS_Lang + "'");

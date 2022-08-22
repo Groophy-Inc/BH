@@ -9,6 +9,7 @@ using BH.Parser.Utils;
 using System.IO;
 using BH.Structes;
 using BH.ErrorHandle.Error;
+using BH.Structes.ErrorStack;
 
 namespace BH.Builder
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -9,118 +10,62 @@ namespace BH.APF
 {
     internal class ParalelPrint //TODO
     {
+        public static Dictionary<Point, char> table = new Dictionary<Point, char>();
 
-        public static string[] _Text { get; set; } 
-
+        private static int MaxX, MaxY = 0;
         public static void Inıt(int maxX, int maxY)
         {
-            string[] strings = new string[maxY];
-            for (int i = 0; i < strings.Length; i++)
+            MaxX = maxX;
+            MaxY = maxY;
+            for (int x = 0; x < maxX; x++)
             {
-                strings[i] = new string(' ', maxX);
-            }
-            _Text = strings;
-        }
-
-        public static void Insert(int x, int y, char c, int cc)
-        {
-            try
-            {
-                if (_Text[y].Length <= x)
+                for (int y = 0; y < maxY; y++)
                 {
-                    _Text[y] = _Text[y].Insert(x, c.ToString());
+                    table.TryAdd(new Point(x, y), ' ');
                 }
-                else
-                {
-                    _Text[y] = _Text[y].Remove(x, 1).Insert(x, c.ToString());
-                }
-            }
-            catch
-            {
-                Console.WriteLine(Get());
-                Environment.Exit(1);
             }
         }
 
-        public static string Get()
+        public static void Insert(int x, int y, char c)
         {
-            return string.Join('\n', _Text);
+            table[new Point(x, y)] = c;
         }
 
         public static void Print(string first, string second)
         {
-            Inıt(Console.WindowWidth, Console.WindowHeight+1);
-            Console.WriteLine("Paralel Print Test");
-            int Y = Console.CursorTop;
-            int p1 = 0;
-            int p2 = 0;
+            ClearCurrentConsoleLine(0);
+            ClearCurrentConsoleLine(1);
+            ClearCurrentConsoleLine(2);
+            int half = Console.WindowWidth / 2;
 
-            int left = Console.WindowWidth % 2;
-            if (left == 0)
-            {
-                p1 = Console.WindowWidth / 2;
-                p2 = Console.WindowWidth / 2 + 1;
-            }
-            else
-            {
-                p1 = Console.WindowWidth / 2;
-                p2 = Console.WindowWidth / 2;
-            }
+            half = (half % 2 == 0) ? half : half + 1;
 
-            int fc = Math.Max(first.Split('\n').Length, second.Split('\n').Length);
-            Console.SetBufferSize(Console.WindowWidth, fc + 50);
+            Console.SetBufferSize(Console.WindowWidth ,(first.Length >= second.Length) ? first.Length : second.Length);
 
-            for (int i = 0; i < fc; i++)
+            int ten = 0;
+            for (int i = 0; i < Console.WindowWidth; i++)
             {
-                Insert(p1, Y + i, '|', 0);
-                IncreaseY();
-            }
-
-            int newLine = 0;
-            int index = 0;
-            for (int i = 0;i < first.Length;i++)
-            {
-                
-                float leftMod = (index % (p1 - 1));
-                if (leftMod == 0 && index != 0)
+                if (i % 10 == 0 && i != 0)
                 {
-                    newLine++;
-                    index = 0;
+                    WriteCharAt(i, 1, (i / 10).ToString());
+                    
+                    ten = 0;
                 }
-                else
-                {
-                    char c = first[i];
-                    Insert(index, Y + newLine, c, 1);
-                    index++;
-                    if (c == '\n')
-                    {
-                        newLine++;
-                        index = 0;
-                    }
-                }
+                WriteCharAt(i, 0, ten.ToString());
+                ten++;
             }
+            Console.SetCursorPosition(0, 3);
+            
+        }
 
-            newLine = 0;
-            index = p2;
-            for (int i = 0; i < second.Length; i++)
+        private static void PrintTable()
+        {
+            Console.Clear();
+            for (int x = 0; x < MaxX; x++)
             {
-
-                float leftMod = (index % (p1 - 1));
-                if (leftMod == 0 && index != 0)
+                for (int y = 0; y < MaxY; y++)
                 {
-                    newLine++;
-                    index = p2;
-                }
-                else
-                {
-                    char c = second[i];
-                    Insert(index, Y + newLine, c, 2);
-                    index++;
-                    if (c == '\n')
-                    {
-                        newLine++;
-                        index = p2;
-                    }
+                    Console.Write(table[new Point(x, y)]);
                 }
             }
         }

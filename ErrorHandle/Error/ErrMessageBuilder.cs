@@ -3,14 +3,11 @@ using System.Text;
 using System.Collections.Generic;
 using System;
 using ANSIConsole;
+using BH.Structes.ErrorStack;
 
 namespace BH.ErrorHandle.Error
 {
-    public enum ErrorPathCodes
-    {
-        Program = 0,
-        Parser = 1
-    }
+    
     internal class ErrMessageBuilder
     {
         public static string BuildByStack(DetailedError error)

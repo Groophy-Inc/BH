@@ -1,15 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
 
 namespace BH.Script.Types
 {
-    public class CF
+    public class PS
     {
         public static BH.CmdFunc Terminal = new CmdFunc(System.IO.Path.GetTempPath(),
-            CF_Structes.ShellType.ChairmanandManagingDirector_CMD, false);
+            CF_Structes.ShellType.PowerShell_PS, false);
         
         public static object Execute(string script, int timeoutMS = 3000)
         {
@@ -18,24 +17,27 @@ namespace BH.Script.Types
             if (BeforeWrited)
             {
                 string fileName = Temp.HashTemp[hash];
-                var retenv = Terminal.Input("call \"" + "BH_" + fileName + ".bat\"", timeoutMS);
+                var retenv = Terminal.Input(".\\" + "BH_" + fileName + ".ps1", timeoutMS);
                 retenv.Stdin = script;
                 return retenv;
             }
             else
             {
-
-                string guid = GenWord(25);
-                while (File.Exists(Path.GetTempPath() + "BH_" + guid + ".bat"))
+                string guid = GenWord(40);
+                while (File.Exists(Path.GetTempPath() + "BH_" + guid + ".ps1"))
                 {
                     guid = GenWord(25);
                 }
 
-                var fileName = Path.GetTempPath() + "BH_" + guid + ".bat";
+                var fileName = Path.GetTempPath() + "BH_" + guid + ".ps1";
+
                 File.WriteAllText(fileName, script);
-                var retenv = Terminal.Input("call \"" + "BH_" + guid + ".bat\"", timeoutMS);
+
+                var retenv = Terminal.Input(".\\" + "BH_" + guid + ".ps1", timeoutMS);
+
                 retenv.Stdin = script;
-                Temp.HashTemp.Add(hash, "BH_" + guid + ".bat");
+                Temp.HashTemp.Add(hash, ".\\" + "BH_" + guid + ".ps1");
+
                 return retenv;
             }
         }

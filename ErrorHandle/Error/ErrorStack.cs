@@ -1,55 +1,44 @@
 ﻿using System;
+using System.Data;
+using System.Net;
 using ANSIConsole;
 using BH.ErrorHandle.Error;
+using BH.Parser;
+using BH.Structes.ErrorStack;
 
 namespace BH.ErrorHandle.Error
 {
     internal class ErrorStack
     {
-        public static void PrintStack(Error error)
+        public static void PrintStack(Structes.ErrorStack.Error error)
         {
-            DetailedError errdet = new DetailedError()
+            try
             {
-                ErrorID = error.ErrorID,
-                DevCode = error.DevCode,
-                ErrorMessage = error.ErrorMessage,
-                ErrorPathCode = error.ErrorPathCode,
-                ErrPath = Parser.Parse.ErrPath,
-                HighLightLen = error.HighLightLen,
-                line = error.line,
-                LineC = Parser.Parse.LineC,
-                TotalIndexOfLineWords = Parser.Parse.TotalIndexOfLineWords,
-                Date = DateTime.Now.ToString("HH:mm:ss")
-            };
-            string err = ErrMessageBuilder.BuildByStack(errdet);
-            Parser.Parse.logErrMsg += err.ClearANSII();
-            Logs.Log("\r\n" + err + "\r\n");
-            err.Print();
+                DetailedError errdet = new DetailedError()
+                {
+                    ErrorID = error.ErrorID,
+                    DevCode = error.DevCode,
+                    ErrorMessage = error.ErrorMessage,
+                    ErrorPathCode = error.ErrorPathCode,
+                    ErrPath = Parse.ErrPath,
+                    HighLightLen = error.HighLightLen,
+                    line = error.line,
+                    LineC = Parse.LineC,
+                    TotalIndexOfLineWords = Parse.TotalIndexOfLineWords,
+                    Date = DateTime.Now.ToString("HH:mm:ss")
+                };
+                string err = ErrMessageBuilder.BuildByStack(errdet);
+                Parse.logErrMsg += err.ClearANSII();
+                Logs.Log("\r\n" + err + "\r\n");
+                err.Print();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("This error was written manually because an error occurred in the error printing.".Color(ConsoleColor.Magenta));
+                Console.WriteLine($@"BH#2#0 - DevCode -> 0 | Path 'Unknown'
+Stderr: {e.Message}"); 
+                Environment.Exit(2);
+            }
         }
-    }
-
-    public class Error
-    {
-        public ErrorPathCodes ErrorPathCode { get; set; }
-        public int ErrorID { get; set; }
-        public int DevCode { get; set; }
-        public string ErrorMessage { get; set; }
-        public int HighLightLen { get; set; }
-        public string line { get; set; }
-    }
-
-    public class DetailedError
-    {
-        public ErrorPathCodes ErrorPathCode { get; set; }
-        public int ErrorID { get; set; }
-        public int DevCode { get; set; }
-        public string ErrorMessage { get; set; }
-        public int HighLightLen { get; set; }
-        public string line { get; set; }
-        public string ErrPath { get; set; }
-        public int TotalIndexOfLineWords { get; set; }
-        public int LineC { get; set; }
-
-        public string Date { get; set; }
     }
 }

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using ANSIConsole;
 using System.Threading;
 using BH.Parser;
@@ -12,9 +15,9 @@ namespace BH
 {
     internal class Program
     {
-        public static readonly string Ver = "0.2.3";
-        public static bool isCheckHashForFastBuild = false;
-        public static string LastestHash = "NaN";
+        public static readonly string Ver = "0.2.7";
+        private static bool isCheckHashForFastBuild = false;
+        private static string LastestHash = "NaN";
 
         static string GenWord(int len)
         {
@@ -30,6 +33,7 @@ namespace BH
 
         static void Main(string[] args)
         {
+            
             args = new string[]
             {
                 //"--save",
@@ -70,45 +74,47 @@ namespace BH
                 }
             }
 
-
             if (args.Length == 0 || args.Length == 1)
             {
                 ANSIIConsole.Gecho.Print(@"<#2f2f8a>BH <w>[-s|--save <#af916d>\<SAVE PATH\><w>] <#18cff2>[--debug] <w>[-p|--parse <#af916d>\<MASTER PAGE PATH\><w>] <w>[-src|--srcpath <#af916d>\<SRCPATH WHERE HAVE YOUR TOOLS\><w>] <#18cff2>[--fablwont]");
             }
             Logs.AllLogs = new StringBuilder();
             Script.Types.CF.Terminal.Input("@echo off");
+            Script.Temp.LoadHashTemp();
             if (!ANSIInitializer.Init(false)) ANSIInitializer.Enabled = false;
             if (File.Exists(APF.Helper.AssemblyDirectory + "\\LastestHash.hash")) LastestHash = File.ReadAllText(APF.Helper.AssemblyDirectory + "\\LastestHash.hash");
             if (File.Exists(APF.Helper.AssemblyDirectory + "\\LastestProjectName")) Parse.ProjectName = File.ReadAllText(APF.Helper.AssemblyDirectory + "\\LastestProjectName");
             Console.Title = "BH - ThinkNo";
 
-            //File.WriteAllText("save.txt", Builder.Build.HighLightBracket(Builder.Build.Init(ns), Builder.Build.hl).ClearANSII());
             Console.WriteLine(File.ReadAllText(Parse.masterPagePath)+"\r\n-------------------------");
 
-            if (isCheckHashForFastBuild)
+
+           
+            if (isCheckHashForFastBuild) runByCheck(); else Parser.Parse.ParseMasterPage();
+
+            File.WriteAllText(APF.Helper.AssemblyDirectory + "\\LastestHash.hash", HashString(File.ReadAllText(Parse.masterPagePath)));
+            File.WriteAllText(APF.Helper.AssemblyDirectory + "\\LastestProjectName", Parse.ProjectName);
+
+            Script.Temp.SaveHashTemp();
+            Save();
+        }
+
+        private static void runByCheck()
+        {
+            if (LastestHash == HashString(File.ReadAllText(Parse.masterPagePath)))
             {
-                if (LastestHash == HashString(File.ReadAllText(Parse.masterPagePath)))
-                {
-                    Script.Temp.RunApp();
-                }
-                else
-                {
-                    Parser.Parse.ParseMasterPage();
-                }
+                Script.Temp.RunApp();
             }
             else
             {
                 Parser.Parse.ParseMasterPage();
             }
-
-            File.WriteAllText(APF.Helper.AssemblyDirectory + "\\LastestHash.hash", HashString(File.ReadAllText(Parse.masterPagePath)));
-            File.WriteAllText(APF.Helper.AssemblyDirectory + "\\LastestProjectName", Parse.ProjectName);
-
-            Save();
         }
 
-        public static string SavePath = "";
-        public static void Save()
+        public static void ClearTemp() => Array.ForEach(new DirectoryInfo(Path.GetTempPath()).GetFiles("BH_*"), delegate(FileInfo x) { File.Delete(x.FullName); });
+
+        private static string SavePath = "";
+        private static void Save()
         {
             if (string.IsNullOrEmpty(SavePath)) return;
             Console.WriteLine("Logs saving...");
@@ -138,21 +144,19 @@ namespace BH
             }
 
             // Uses SHA256 to create the hash
-            using (var sha = new System.Security.Cryptography.SHA256Managed())
-            {
-                // Convert the string to a byte array first, to be processed
-                byte[] textBytes = System.Text.Encoding.UTF8.GetBytes(text + salt);
-                byte[] hashBytes = sha.ComputeHash(textBytes);
+            using var sha = new System.Security.Cryptography.SHA256Managed();
+            // Convert the string to a byte array first, to be processed
+            byte[] textBytes = System.Text.Encoding.UTF8.GetBytes(text + salt);
+            byte[] hashBytes = sha.ComputeHash(textBytes);
 
-                // Convert back to a string, removing the '-' that BitConverter adds
-                string hash = BitConverter
-                    .ToString(hashBytes)
-                    .Replace("-", String.Empty);
+            // Convert back to a string, removing the '-' that BitConverter adds
+            string hash = BitConverter
+                .ToString(hashBytes)
+                .Replace("-", String.Empty);
 
-                return hash;
-            }
+            return hash;
         }
-        public static void ClearCurrentConsoleLine(int DelLineCount = 0)
+        private static void ClearCurrentConsoleLine(int DelLineCount = 0)
         {
             for (int i = 1; i < DelLineCount; i++)
             {

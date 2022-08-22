@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BH.Structes.ErrorStack;
 
 namespace BH.Parser.Commands
 {
@@ -16,7 +17,8 @@ namespace BH.Parser.Commands
                 if (Parse.wordLower.StartsWith('$'))
                 {
                     var varName = Parse.word.Substring(1).TrimEnd(';');
-                    Builder.Build.Demo(Varriables.TryGet(varName).Obj);
+                    bool ishave = false;
+                    Builder.Build.Demo(Varriables.TryGet(varName, ref ishave).Obj);
                 }
                 else
                 {

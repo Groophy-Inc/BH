@@ -12,7 +12,7 @@ namespace BH.APF
         public static bool isHaveWinget()
         {
             CmdFunc.Grp getVer = tempcmd.Input("winget -v");
-            if (getVer.Std_Out.ToString().Trim().StartsWith("v"))
+            if (getVer.Stdout.ToString().Trim().StartsWith("v"))
             {
                 return true;
             }
@@ -42,7 +42,7 @@ namespace BH.APF
         public static bool isHaveDotnet()
         {
             CmdFunc.Grp getVer = tempcmd.Input("dotnet --version");
-            if (char.IsDigit(getVer.Std_Out.ToString().Trim(), 0))
+            if (char.IsDigit(getVer.Stdout.ToString().Trim(), 0))
             {
                 return true;
             }
@@ -68,7 +68,7 @@ namespace BH.APF
 
         public static bool isHaveNET5()
         {
-            string[] getRuntimes = tempcmd.Input("dotnet --list-runtimes").Std_Out.ToString().Trim().Split();
+            string[] getRuntimes = tempcmd.Input("dotnet --list-runtimes").Stdout.ToString().Trim().Split();
             bool isWaitingVersion = false;
             for (int i = 0;i < getRuntimes.Length;i++)
             {

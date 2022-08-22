@@ -5,6 +5,7 @@ using BH.Parser;
 using BH.ErrorHandle;
 using ANSIConsole;
 using BH.ErrorHandle.Error;
+using BH.Structes.ErrorStack;
 
 namespace BH.Parser.Commands
 {

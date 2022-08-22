@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using BH.ErrorHandle;
+using BH.ErrorHandle.Error;
+using BH.Parser;
 using BH.Script.Types;
+using BH.Structes.ErrorStack;
 
 namespace BH
 {
@@ -30,27 +33,64 @@ namespace BH
 
                     bool hasCon = false;
                     string suffix = "";
+                    bool isFound = false;
                     string repName = FindKey(keys[i].Split(' ')[0], ref hasCon, ref suffix);
-                    var ClosestVar = Varriables.TryGet(repName);
-                    string[] suffixs = suffix.Split('.');
-                    object lastObject = (hasCon)
-                        ? CF.GetFieldOfObject(ClosestVar.Obj, suffixs[0])
-                        : ClosestVar.Obj;
-                    for (int j = 1; j < suffixs.Length; j++)
-                    {
-                        lastObject = lastObject.GetType().GetProperty(suffixs[i]).GetValue(lastObject, null);
-                    }
-                    string repValue = lastObject.ToString();
-                    if (hasCon)
-                    {
-                        repName += "!" + suffix + "!";
-                    }
-                    keys[i] = keys[i].Replace(repName, repValue);
+                    var ClosestVar = Varriables.TryGet(repName, ref isFound);
 
-                    if (keys[i].EndsWith('\\'))
+                    if (isFound)
                     {
-                        refuse = true;
-                        keys[i] = keys[i] +"$";
+                        string[] suffixs = suffix.Split('.');
+                        object lastObject = (hasCon)
+                            ? CF.GetFieldOfObject(ClosestVar.Obj, suffixs[0])
+                            : ClosestVar.Obj;
+                        for (int j = 1; j < suffixs.Length; j++)
+                        {
+                            try
+                            {
+                                Logs.Log(ClosestVar + $" get propeties '{suffixs[j]}'");
+                                lastObject = lastObject.GetType().GetProperty(suffixs[j]).GetValue(lastObject, null);
+                                Logs.Log(ClosestVar + $" got propeties '{suffixs[j]}'");
+                            }
+                            catch 
+                            {
+                                Logs.Log(ClosestVar + $" can't get propeties '{suffixs[j]}'");
+                                try
+                                {
+                                    Logs.Log(ClosestVar + $" get field '{suffixs[j]}'");
+                                    lastObject = lastObject.GetType().GetField(suffixs[j]).GetValue(lastObject);
+                                    Logs.Log(ClosestVar + $" got propeties '{suffixs[j]}'");
+                                }
+                                catch
+                                {
+                                    Logs.Log(ClosestVar + $" can't get propeties '{suffixs[j]}'");
+                                }
+                            }
+                        }
+                        string repValue = lastObject.ToString();
+                        if (hasCon)
+                        {
+                            repName += "!" + suffix + "!";
+                        }
+                        keys[i] = keys[i].Replace(repName, repValue.Trim());
+
+                        if (keys[i].EndsWith('\\'))
+                        {
+                            refuse = true;
+                            keys[i] = keys[i] +"$";
+                        }
+                    }
+                    else
+                    {
+                        Error err = new Error()
+                        {
+                            ErrorPathCode = ErrorPathCodes.Varriables,
+                            ErrorID = 0,
+                            DevCode = 0,
+                            ErrorMessage = "The variable "+repName+" does not exist in the local variable system.",
+                            HighLightLen = Parse.word.Length,
+                            line = Parse.line,
+                        };
+                        ErrorStack.PrintStack(err);
                     }
                 }
             }
@@ -100,15 +140,17 @@ namespace BH
             }
         }
 
-        public static IVarriable TryGet(string key)
+        public static IVarriable TryGet(string key, ref bool isFound)
         {
             if (key.ToLower() == "thingno") return null;
+            isFound = true;
             try
             {
                 return Vars[key];
             }
             catch
             {
+                isFound = false;
                 return null;
             }
         }
