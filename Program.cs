@@ -16,13 +16,9 @@ namespace BH
 {
     internal class Program
     {
-        //0.2.9
-        //Classification of voids
-        //clearbhtemp argument
-        //CSharp(cs) Executing Added to UMS, Output Type (Less test so can have some bugs)
-        //Stdin, Stdout, Stderr, Stopwatch, isTimeout
-        public static readonly string Ver = "0.2.9";
-        static void Main(string[] args)
+        
+        public static readonly string Ver = "0.3.0";
+        static void Main(string[] args) 
         {
             
             /*args = new string[]
