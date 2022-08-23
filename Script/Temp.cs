@@ -10,7 +10,8 @@ namespace BH.Script
     internal class Temp
     {
         public static Dictionary<string, string> HashTemp { get; set; }
-
+        
+        public static void ClearTemp() {Array.ForEach(new DirectoryInfo(Path.GetTempPath()).GetFiles("BH_*"), delegate(FileInfo x) { File.Delete(x.FullName); }); LoadHashTemp();}
         public static void LoadHashTemp()
         {
             HashTemp = new Dictionary<string, string>();
@@ -47,14 +48,11 @@ namespace BH.Script
                 return String.Empty;
             }
     
-            // Uses SHA256 to create the hash
             using (var sha = new System.Security.Cryptography.SHA256Managed())
             {
-                // Convert the string to a byte array first, to be processed
                 byte[] textBytes = System.Text.Encoding.UTF8.GetBytes(text + salt);
                 byte[] hashBytes = sha.ComputeHash(textBytes);
         
-                // Convert back to a string, removing the '-' that BitConverter adds
                 string hash = BitConverter
                     .ToString(hashBytes)
                     .Replace("-", String.Empty);
@@ -67,12 +65,8 @@ namespace BH.Script
         {
             if (printMS)
             {
-                //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                //sw.Start();
                 var ot = CmdFunc.OneTimeInput("dotnet build", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, APF.Helper.AssemblyDirectory + "\\Temp\\");
                 RunApp();
-                //sw.Stop();
-                //Console.WriteLine("-" + sw.Elapsed.TotalMilliseconds + "ms-");
                 ErrorHandle.Logs.Log("Dotnet build Stdout - \r\n" + ot.Stdout.ToString());
             }
             else

@@ -10,31 +10,22 @@ using System.Text;
 using System.IO;
 using System.Linq;
 using System.Drawing;
+using CSScriptLib;
 
 namespace BH
 {
     internal class Program
     {
-        public static readonly string Ver = "0.2.7";
-        private static bool isCheckHashForFastBuild = false;
-        private static string LastestHash = "NaN";
-
-        static string GenWord(int len)
-        {
-            StringBuilder sb = new StringBuilder(len);
-            Random r = new Random();
-            for (int i = 0; i < len; i++)
-            {
-                sb.Append((char)(r.Next(65, 90)));
-            }
-
-            return sb.ToString();
-        }
-
+        //0.2.9
+        //Classification of voids
+        //clearbhtemp argument
+        //CSharp(cs) Executing Added to UMS, Output Type (Less test so can have some bugs)
+        //Stdin, Stdout, Stderr, Stopwatch, isTimeout
+        public static readonly string Ver = "0.2.9";
         static void Main(string[] args)
         {
             
-            args = new string[]
+            /*args = new string[]
             {
                 //"--save",
                 //"C:\\Users\\GROOPHY\\Desktop\\Logs.pdf",
@@ -44,128 +35,19 @@ namespace BH
                 "--srcPath",
                 @"C:\Users\GROOPHY\Desktop\",
                 //"--checkhashforfastbuild",
+            };*/
+            
+            
+            APF.ArgumentParser.ParseArgs(args);
+            if (APF.ArgumentParser.ParseFailed) return;
+           
+            Func<int> MainWorker = delegate()
+            {
+                Console.WriteLine(File.ReadAllText(Parse.masterPagePath)+"\r\n-------------------------");
+                return 0;
             };
             
-            var ParsedArgs = APF.ArgumentParser.Parse(args);
-            if (APF.ArgumentParser.ParseFailed) return;
-
-            foreach (var arg in ParsedArgs)
-            {
-                var narg = new System.Collections.Generic.KeyValuePair<string, string>(arg.Key.Replace('I','i'), arg.Value);
-                if (narg.Key == "s" || narg.Key == "save")
-                {
-                    SavePath = narg.Value;
-                }
-                else if (narg.Key == "debug")
-                {
-                    Logs.DEBUG = true;
-                }
-                else if (narg.Key == "parse" || narg.Key == "p")
-                {
-                    Parse.masterPagePath = narg.Value;
-                }
-                else if (narg.Key == "srcpath" || narg.Key == "src")
-                {
-                    Parse.srcPath = narg.Value;
-                }
-                else if (narg.Key == "checkhashforfastbuild" || narg.Key == "chffb")
-                {
-                    isCheckHashForFastBuild = true;
-                }
-            }
-
-            if (args.Length == 0 || args.Length == 1)
-            {
-                ANSIIConsole.Gecho.Print(@"<#2f2f8a>BH <w>[-s|--save <#af916d>\<SAVE PATH\><w>] <#18cff2>[--debug] <w>[-p|--parse <#af916d>\<MASTER PAGE PATH\><w>] <w>[-src|--srcpath <#af916d>\<SRCPATH WHERE HAVE YOUR TOOLS\><w>] <#18cff2>[--fablwont]");
-            }
-            Logs.AllLogs = new StringBuilder();
-            Script.Types.CF.Terminal.Input("@echo off");
-            Script.Temp.LoadHashTemp();
-            if (!ANSIInitializer.Init(false)) ANSIInitializer.Enabled = false;
-            if (File.Exists(APF.Helper.AssemblyDirectory + "\\LastestHash.hash")) LastestHash = File.ReadAllText(APF.Helper.AssemblyDirectory + "\\LastestHash.hash");
-            if (File.Exists(APF.Helper.AssemblyDirectory + "\\LastestProjectName")) Parse.ProjectName = File.ReadAllText(APF.Helper.AssemblyDirectory + "\\LastestProjectName");
-            Console.Title = "BH - ThinkNo";
-
-            Console.WriteLine(File.ReadAllText(Parse.masterPagePath)+"\r\n-------------------------");
-
-
-           
-            if (isCheckHashForFastBuild) runByCheck(); else Parser.Parse.ParseMasterPage();
-
-            File.WriteAllText(APF.Helper.AssemblyDirectory + "\\LastestHash.hash", HashString(File.ReadAllText(Parse.masterPagePath)));
-            File.WriteAllText(APF.Helper.AssemblyDirectory + "\\LastestProjectName", Parse.ProjectName);
-
-            Script.Temp.SaveHashTemp();
-            Save();
-        }
-
-        private static void runByCheck()
-        {
-            if (LastestHash == HashString(File.ReadAllText(Parse.masterPagePath)))
-            {
-                Script.Temp.RunApp();
-            }
-            else
-            {
-                Parser.Parse.ParseMasterPage();
-            }
-        }
-
-        public static void ClearTemp() => Array.ForEach(new DirectoryInfo(Path.GetTempPath()).GetFiles("BH_*"), delegate(FileInfo x) { File.Delete(x.FullName); });
-
-        private static string SavePath = "";
-        private static void Save()
-        {
-            if (string.IsNullOrEmpty(SavePath)) return;
-            Console.WriteLine("Logs saving...");
-            Logs.Log("Saving...");
-
-            File.WriteAllText("Input.txt", Logs.AllLogs.ToString());
-
-            ClearCurrentConsoleLine(2); Console.WriteLine("Logs printing to pdf.");
-
-            var p = new System.Diagnostics.Process();
-            p.StartInfo.FileName = "text2pdf/text2pdf.exe";
-            p.StartInfo.Arguments = $"\"{APF.Helper.AssemblyDirectory}\\Input.txt\" \"{SavePath}\"";
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.CreateNoWindow = true;
-            p.Start();
-            p.WaitForExit();
-
-            ClearCurrentConsoleLine(2); Console.WriteLine(Logs.AllLogs.Length+" length logs Saved.");
-
-        }
-
-        static string HashString(string text, string salt = "")
-        {
-            if (String.IsNullOrEmpty(text))
-            {
-                return String.Empty;
-            }
-
-            // Uses SHA256 to create the hash
-            using var sha = new System.Security.Cryptography.SHA256Managed();
-            // Convert the string to a byte array first, to be processed
-            byte[] textBytes = System.Text.Encoding.UTF8.GetBytes(text + salt);
-            byte[] hashBytes = sha.ComputeHash(textBytes);
-
-            // Convert back to a string, removing the '-' that BitConverter adds
-            string hash = BitConverter
-                .ToString(hashBytes)
-                .Replace("-", String.Empty);
-
-            return hash;
-        }
-        private static void ClearCurrentConsoleLine(int DelLineCount = 0)
-        {
-            for (int i = 1; i < DelLineCount; i++)
-            {
-                int currentLineCursor = Console.CursorTop;
-                Console.SetCursorPosition(0, Console.CursorTop - i);
-                Console.Write(new string(' ', Console.WindowWidth));
-                Console.SetCursorPosition(0, currentLineCursor);
-            }
-            Console.SetCursorPosition(0, Console.CursorTop - DelLineCount + 1);
+            Runner.Base.Run(MainWorker);
         }
     }
 }

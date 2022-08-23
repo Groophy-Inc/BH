@@ -15,4 +15,8 @@
     <ProjectReference Include="..\BH.CmdFunc\BH.CmdFunc.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CS-Script" Version="4.4.6" />
+  </ItemGroup>
+
 </Project>

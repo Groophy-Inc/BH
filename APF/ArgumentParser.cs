@@ -12,6 +12,51 @@ namespace BH.APF
     internal class ArgumentParser
     {
         public static bool ParseFailed = false;
+        public static bool isCheckHashForFastBuild = false;
+
+        public static bool isParsedMasterPage = false;
+        public static bool isParsedSrcPath = false;
+
+        public static void ParseArgs(string[] args)
+        {
+            var ParsedArgs = Parse(args);
+            foreach (var arg in ParsedArgs)
+            {
+                var narg = new System.Collections.Generic.KeyValuePair<string, string>(arg.Key.Replace('I','i').ToLower(), arg.Value);
+                
+                if (narg.Key == "s" || narg.Key == "save")
+                {
+                    APF.SaveSystem.SavePath = narg.Value;
+                }
+                else if (narg.Key == "debug")
+                {
+                    Logs.DEBUG = true;
+                }
+                else if (narg.Key == "parse" || narg.Key == "p")
+                {
+                    Parser.Parse.masterPagePath = narg.Value;
+                    isParsedMasterPage = true;
+                }
+                else if (narg.Key == "srcpath" || narg.Key == "src")
+                {
+                    Parser.Parse.srcPath = narg.Value;
+                    isParsedSrcPath = true;
+                }
+                else if (narg.Key == "checkhashforfastbuild" || narg.Key == "chffb")
+                {
+                    isCheckHashForFastBuild = true;
+                }
+                else if (narg.Key == "clearbhtemp" || narg.Key == "cbt")
+                {
+                    Script.Temp.ClearTemp();
+                }
+            }
+            
+            if (!APF.ArgumentParser.isParsedMasterPage && !APF.ArgumentParser.isParsedSrcPath)
+            {
+                ANSIIConsole.Gecho.Print(@"<#2f2f8a>BH <w>[-s|--save <#af916d>\<SAVE PATH\><w>] <#18cff2>[--debug] <r>!<w>[-p|--parse <#af916d>\<MASTER PAGE PATH\><w>] <r>!<w>[-src|--srcpath <#af916d>\<SRCPATH WHERE HAVE YOUR TOOLS\><w>] <#18cff2>[--checkhashforfastbuild|-chffb] <#18cff2>[--ClearBHTemp|-cbt]");
+            }
+        }
         public static Dictionary<string, string> Parse(string[] args)
         {
             Dictionary<string, string> result = new Dictionary<string, string>();

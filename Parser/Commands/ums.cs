@@ -139,7 +139,7 @@ namespace BH.Parser.Commands
             {
                 if (Parse.word.Length >= 2 && isHaveLang(Parse.word.Substring(0, 2)))
                 {
-                    switch (Parse.word.Substring(0,2))
+                    switch (Parse.word.Substring(0,2).ToUpper())
                     {
                         case "CF":
                             Parse.UMS_Lang = IScriptTypes.CF;
@@ -412,6 +412,7 @@ namespace BH.Parser.Commands
                         }
                         //end
                         Parse.EndProcess();
+                        Parse.UMS_Content = Varriables.FixContent(Parse.UMS_Content);
                         switch (Parse.UMS_Lang)
                         {
                             case IScriptTypes.CF:
@@ -421,6 +422,10 @@ namespace BH.Parser.Commands
                             case IScriptTypes.PS:
                                 var PSOBJ = Script.Types.PS.Execute(Parse.UMS_Content, 3000);
                                 Varriables.AddorUpdate(Parse.UMS_SaveAsVarriableName, PSOBJ, "S:" + Parse.UMS_Lang);
+                                break;
+                            case IScriptTypes.CS:
+                                var CSOBJ = Script.Types.CS.Execute(Parse.UMS_Content, 3000);
+                                Varriables.AddorUpdate(Parse.UMS_SaveAsVarriableName, CSOBJ, "S:" + Parse.UMS_Lang);
                                 break;
                         }
                         Logs.Log("New varriable as $" + Parse.UMS_SaveAsVarriableName + "\r\nCont -> '" + Parse.UMS_Content + "'\r\nLang -> '" + Parse.UMS_Lang + "'");

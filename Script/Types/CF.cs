@@ -18,7 +18,7 @@ namespace BH.Script.Types
             if (BeforeWrited)
             {
                 string fileName = Temp.HashTemp[hash];
-                var retenv = Terminal.Input("call \"" + "BH_" + fileName + ".bat\"", timeoutMS);
+                var retenv = Terminal.Input("call \"" + fileName, timeoutMS);
                 retenv.Stdin = script;
                 return retenv;
             }
