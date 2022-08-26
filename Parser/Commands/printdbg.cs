@@ -23,6 +23,7 @@ namespace BH.Parser.Commands
         {
             Runner.Run(ref command, ref left, ref isEnd);
 
+            
             if (isEnd)
             {
                 isEnd = false;
