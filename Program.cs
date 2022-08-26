@@ -20,7 +20,8 @@ namespace BH
 {
     internal class Program
     {
-        public static readonly string Ver = "0.3.5";
+        public static readonly string Ver = "0.3.6";
+        
         static async Task Main(string[] args) 
         {
             
