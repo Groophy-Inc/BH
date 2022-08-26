@@ -43,6 +43,7 @@ namespace BH
                         object lastObject = (hasCon)
                             ? CF.GetFieldOfObject(ClosestVar.Obj, suffixs[0])
                             : ClosestVar.Obj;
+                        
                         for (int j = 1; j < suffixs.Length; j++)
                         {
                             try
@@ -90,7 +91,7 @@ namespace BH
                             HighLightLen = Parse.word.Length,
                             line = Parse.line,
                         };
-                        ErrorStack.PrintStack(err);
+                        ErrorStack.PrintStack(err, "Varriables/Varriable.cs | 94");
                     }
                 }
             }

@@ -1,6 +1,7 @@
 ﻿using ANSIConsole;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -21,8 +22,11 @@ namespace BH.Builder
             Element window = objwindow as Element;
             if (window.Genre.Replace('I', 'i').ToLower() == "window")
             {
+                Stopwatch sw = Stopwatch.StartNew();
                 CreateFiles(window.Attributes["name"], window.Attributes);
                 Script.Temp.RunAppByDotnet(true);
+                sw.Stop();
+                window.Stopwatch = sw;
             }
             else
             {
@@ -134,7 +138,7 @@ namespace BH.Builder
                         HighLightLen = 1
                     };
 
-                    ErrorStack.PrintStack(err);
+                    ErrorStack.PrintStack(err, "Builder/Build.cs | 141");
                     return false;
                 }
             }

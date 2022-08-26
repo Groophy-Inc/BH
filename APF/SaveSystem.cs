@@ -11,6 +11,7 @@ namespace BH.APF
         public static void Save()
         {
             if (string.IsNullOrEmpty(SavePath)) return;
+            if (!File.Exists(SavePath)) File.Create(SavePath);
             Console_.WriteLine("Logs saving...");
             Logs.Log("Saving...");
 
@@ -19,7 +20,7 @@ namespace BH.APF
             ClearCurrentConsoleLine(2); Console.WriteLine("Logs printing to pdf.");
 
             var p = new System.Diagnostics.Process();
-            p.StartInfo.FileName = "text2pdf/text2pdf.exe";
+            p.StartInfo.FileName = $"{APF.Helper.AssemblyDirectory}\\text2pdf\\text2pdf.exe";
             p.StartInfo.Arguments = $"\"{APF.Helper.AssemblyDirectory}\\Input.txt\" \"{SavePath}\"";
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.CreateNoWindow = true;

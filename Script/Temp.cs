@@ -78,7 +78,10 @@ namespace BH.Script
 
         public static void RunApp()
         {
-            System.Diagnostics.Process.Start(APF.Helper.AssemblyDirectory + $"\\Temp\\bin\\Debug\\net5.0-windows\\{Parser.Parse.ProjectName}.exe");
+            string path = APF.Helper.AssemblyDirectory +
+                          $"\\Temp\\bin\\Debug\\net5.0-windows\\{Parser.Parse.ProjectName}.exe";
+            CmdFunc.OneTimeInput($"call {path}", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, "C:\\", false);
+            //System.Diagnostics.Process.Start(path);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using ANSIConsole;
 using BH.ErrorHandle;
 using BH.Parser;
@@ -11,7 +12,7 @@ namespace BH.Runner
     {
         private static string LastestHash = "NaN";
         
-        public static int Run(Func<int> act)
+        public static async Task<int> Run(Func<int> act)
         {
             Initialize.Inıt_All();
             if (!ANSIInitializer.Init(false)) ANSIInitializer.Enabled = false;

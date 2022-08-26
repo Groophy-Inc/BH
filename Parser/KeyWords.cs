@@ -26,7 +26,9 @@ namespace BH.Parser
             ums,
             var,
             ankita,
-            version
+            version,
+            printdbg,
+            show
         }
     }
 }
