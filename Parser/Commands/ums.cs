@@ -103,7 +103,7 @@ namespace BH.Parser.Commands
                             HighLightLen = Parse.word.Length,
                             line = Parse.line,
                         };
-                        ErrorStack.PrintStack(err);
+                        ErrorStack.PrintStack(err, "Parser/Commands/ums.cs | 106");
                         Parse.EndProcess();
                         Clear();
                         Parse.isSkipThisLine = true;
@@ -129,7 +129,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err);
+                    ErrorStack.PrintStack(err, "Parser/Commands/ums.cs | 132");
                     Parse.EndProcess();
                     Clear();
                     Parse.isSkipThisLine = true;
@@ -187,7 +187,7 @@ namespace BH.Parser.Commands
                                         HighLightLen = Parse.word.Length,
                                         line = Parse.line,
                                     };
-                                    ErrorStack.PrintStack(err);
+                                    ErrorStack.PrintStack(err,"Parser/Commands/ums.cs | 190");
                                     Parse.EndProcess();
                                     Clear();
                                     Parse.isSkipThisLine = true;
@@ -215,7 +215,7 @@ namespace BH.Parser.Commands
                                         HighLightLen = Parse.word.Length,
                                         line = Parse.line,
                                     };
-                                    ErrorStack.PrintStack(err);
+                                    ErrorStack.PrintStack(err,"Parser/Commands/ums.cs | 218");
                                     Parse.EndProcess();
                                     Clear();
                                     Parse.isSkipThisLine = true;
@@ -237,7 +237,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err);
+                    ErrorStack.PrintStack(err,"Parser/Commands/ums.cs | 240");
                     Parse.EndProcess();
                     Clear();
                     Parse.isSkipThisLine = true;
@@ -268,7 +268,7 @@ namespace BH.Parser.Commands
                                 HighLightLen = Parse.word.Length,
                                 line = Parse.line,
                             };
-                            ErrorStack.PrintStack(err);
+                            ErrorStack.PrintStack(err, "Parser/Commands/ums.cs | 271");
                             Parse.EndProcess();
                             Clear();
                             Parse.isSkipThisLine = true;
@@ -296,7 +296,7 @@ namespace BH.Parser.Commands
                                 HighLightLen = Parse.word.Length,
                                 line = Parse.line,
                             };
-                            ErrorStack.PrintStack(err);
+                            ErrorStack.PrintStack(err, "Parser/Commands/ums.cs | 299");
                             Parse.EndProcess();
                             Clear();
                             Parse.isSkipThisLine = true;
@@ -324,7 +324,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err);
+                    ErrorStack.PrintStack(err,"Parser/Commands/ums.cs | 327");
                     Parse.EndProcess();
                     Clear();
                     Parse.isSkipThisLine = true;
@@ -404,7 +404,7 @@ namespace BH.Parser.Commands
                                 HighLightLen = Parse.word.Length,
                                 line = Parse.line,
                             };
-                            ErrorStack.PrintStack(err);
+                            ErrorStack.PrintStack(err,"Parser/Commands/ums.cs | 407");
                             Parse.EndProcess();
                             Clear();
                             Parse.isSkipThisLine = true;
@@ -431,6 +431,7 @@ namespace BH.Parser.Commands
                         Logs.Log("New varriable as $" + Parse.UMS_SaveAsVarriableName + "\r\nCont -> '" + Parse.UMS_Content + "'\r\nLang -> '" + Parse.UMS_Lang + "'");
                         Logs.Log("Process end;");
                         Parse.isAnyContent = false;
+                        Clear();
                     }
                 }
 

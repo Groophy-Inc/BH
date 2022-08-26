@@ -31,7 +31,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err);
+                    ErrorStack.PrintStack(err,"Parser/Commands/version.cs | 34");
                     Parse.Version_isWaitingEndKey = false;
                     Logs.OnPropertyChanged("Version_isWaitingEndKey", false);
                     Parse.EndProcess();

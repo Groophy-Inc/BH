@@ -18,7 +18,7 @@ namespace BH.Script.Types
     {
         private static string LastestScript = "";
         private static Stopwatch LTsw = new Stopwatch();
-        public static object Execute(string script, int timeoutMS = 3000)
+        public static object Execute(string script, int timeoutMS = 10000)
         {
             LastestScript = script;
             CSGrp cs = new CSGrp();

@@ -10,7 +10,7 @@ namespace BH.ErrorHandle.Error
 {
     internal class ErrorStack
     {
-        public static void PrintStack(Structes.ErrorStack.Error error)
+        public static void PrintStack(Structes.ErrorStack.Error error, string where)
         {
             try
             {
@@ -27,7 +27,7 @@ namespace BH.ErrorHandle.Error
                     TotalIndexOfLineWords = Parse.TotalIndexOfLineWords,
                     Date = DateTime.Now.ToString("HH:mm:ss")
                 };
-                string err = ErrMessageBuilder.BuildByStack(errdet);
+                string err = ErrMessageBuilder.BuildByStack(errdet, where);
                 Parse.logErrMsg += err.ClearANSII();
                 Logs.Log("\r\n" + err + "\r\n");
                 err.Print();

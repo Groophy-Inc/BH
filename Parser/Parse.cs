@@ -37,6 +37,8 @@ namespace BH.Parser
         public static bool isAnyContent = false;
         public static bool isCommentBlock = false;
         public static string ProjectName = "";
+        public static List<CommandBuilder> Commands = new List<CommandBuilder>();
+        public static pbp_Command callit = new pbp_Command();
 
         //General Handle
         public static bool isErrorStack = false;
@@ -67,7 +69,7 @@ namespace BH.Parser
         //System
         public static bool System_isPreloading = false; //waits Command
         public static bool System_isWaitingValue = false;
-        public static Commands.SystemCommands System_Command = Commands.SystemCommands.NA;
+        public static Commands.SystemCommands System_Command = SystemCommands.NA;
         public static List<string> System_value = new List<string>();
 
         //UMS dispose ve regen'e ekle
@@ -246,6 +248,16 @@ namespace BH.Parser
                         {
                             Parser.Commands.Show.Decompose();
                         }
+
+                        bool isHaveInCommands = Commands.Any(x => x.Registery.CommandName == ProgressSyntax);
+                        if (isHaveInCommands)
+                        {
+                            var com = Commands.Where(x => x.Registery.CommandName == ProgressSyntax).First();
+
+                            
+                            com.Registery.Delegate(callit);
+                        }
+
                     }
                     else
                     {
@@ -327,19 +339,39 @@ namespace BH.Parser
                             }
                             else
                             {
-                                isAccept = false;
-                                string getClosest = APF.Find_Probabilities.GetClosest(wordLower, Keys.getKeyWordsAsArray());
-                                Error err = new Error()
+                                bool isHaveInCommands = Commands.Any(x => x.Registery.CommandName == wordLower);
+                                if (isHaveInCommands)
                                 {
-                                    ErrorPathCode = ErrorPathCodes.Parser,
-                                    ErrorID = 1,
-                                    DevCode = 0,
-                                    ErrorMessage = "Invalid syntax! this might be what you're looking for: '" + getClosest.Color(ConsoleColor.Green) + "'.".Color(ConsoleColor.Yellow),
-                                    line = line,
-                                    HighLightLen = word.Length
-                                };
-                                isSkipThisLine = true;
-                                ErrorStack.PrintStack(err);
+                                    isProgress = true;
+                                    ProgressSyntax = wordLower;
+                                    var com = Commands.Where(x => x.Registery.CommandName == wordLower).FirstOrDefault();
+                                    callit = new pbp_Command();
+                                    callit.CommandName = com.Registery.CommandName;
+                                    callit.Commands = new List<Command>();
+                                    foreach (var _command in com.Registery.Commands)
+                                    {
+                                        Command c = new Command();
+                                        c.Type = _command.Type;
+                                        c.Value = _command.Value;
+                                        callit.Commands.Add(c);
+                                    }
+                                }
+                                else
+                                {
+                                    isAccept = false;
+                                    string getClosest = APF.Find_Probabilities.GetClosest(wordLower, Keys.getKeyWordsAsArray());
+                                    Error err = new Error()
+                                    {
+                                        ErrorPathCode = ErrorPathCodes.Parser,
+                                        ErrorID = 1,
+                                        DevCode = 0,
+                                        ErrorMessage = "Invalid syntax! this might be what you're looking for: '" + getClosest.Color("#"+Config.Parser.Config.Read("Suggestion","Error")) + "'.".Color(ConsoleColor.Yellow),
+                                        line = line,
+                                        HighLightLen = word.Length
+                                    };
+                                    isSkipThisLine = true;
+                                    ErrorStack.PrintStack(err,"Parser/Parse.cs | 360");
+                                }
                             }
 
                             if (isAccept) //if syntax accepted
@@ -408,7 +440,7 @@ namespace BH.Parser
             Msg_Content = null;
             System_isPreloading = false;
             System_isWaitingValue = false;
-            System_Command = Commands.SystemCommands.NA;
+            System_Command = SystemCommands.NA;
             System_value = null;
         }
 
@@ -450,7 +482,7 @@ namespace BH.Parser
             Msg_Content = "";
             System_isPreloading = false;
             System_isWaitingValue = false;
-            System_Command = Commands.SystemCommands.NA;
+            System_Command = SystemCommands.NA;
             System_value = new List<string>();
         }
     }

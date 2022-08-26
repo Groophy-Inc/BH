@@ -19,6 +19,8 @@ namespace BH.Parser.Commands
                     var varName = Parse.word.Substring(1).TrimEnd(';');
                     bool ishave = false;
                     Builder.Build.Demo(Varriables.TryGet(varName, ref ishave).Obj);
+                    Parse.EndProcess();
+                    Parse.Show_isWaitingVarriable = false;
                 }
                 else
                 {
@@ -31,7 +33,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err);
+                    ErrorStack.PrintStack(err, "Parser/Commands/show.cs | 36");
                     Parse.EndProcess();
                     Parse.Show_isWaitingVarriable = false;
                 }
