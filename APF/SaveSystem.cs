@@ -17,17 +17,13 @@ namespace BH.APF
 
             File.WriteAllText("Input.txt", Logs.AllLogs.ToString());
 
-            ClearCurrentConsoleLine(2); Console.WriteLine("Logs printing to pdf.");
+            ClearCurrentConsoleLine(2); Console_.WriteLine("Logs printing to pdf.");
 
-            var p = new System.Diagnostics.Process();
-            p.StartInfo.FileName = $"{APF.Helper.AssemblyDirectory}\\text2pdf\\text2pdf.exe";
-            p.StartInfo.Arguments = $"\"{APF.Helper.AssemblyDirectory}\\Input.txt\" \"{SavePath}\"";
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.CreateNoWindow = true;
-            p.Start();
-            p.WaitForExit();
+            CmdFunc c = new CmdFunc(APF.Helper.AssemblyDirectory + "/text2pdf", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, false);
 
-            ClearCurrentConsoleLine(2); Console.WriteLine(Logs.AllLogs.Length+" length logs Saved.");
+            c.Input($"call text2pdf.exe \"{APF.Helper.AssemblyDirectory + "/Input.txt"}\" > \"{SavePath}\"").Print();
+            
+            ClearCurrentConsoleLine(2); Console_.WriteLine(Logs.AllLogs.Length+" length logs Saved.");
 
         }
         

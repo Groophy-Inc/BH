@@ -28,7 +28,7 @@ namespace BH.ErrorHandle
 
             var fc = Console.ForegroundColor;
             Console.ForegroundColor = c;
-            Console.WriteLine(text);
+            Console_.WriteLine(text);
             Console.ForegroundColor = fc;
         }
 
@@ -44,7 +44,7 @@ namespace BH.ErrorHandle
 
             var fc = Console.ForegroundColor;
             Console.ForegroundColor = c;
-            Console.WriteLine(text);
+            Console_.WriteLine(text);
             Console.ForegroundColor = fc;
         }
 

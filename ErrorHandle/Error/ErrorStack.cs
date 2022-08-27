@@ -34,8 +34,8 @@ namespace BH.ErrorHandle.Error
             }
             catch (Exception e)
             {
-                Console.WriteLine("This error was written manually because an error occurred in the error printing.".Color(ConsoleColor.Magenta));
-                Console.WriteLine($@"BH#2#0 - DevCode -> 0 | Path 'Unknown'
+                Console_.WriteLine("This error was written manually because an error occurred in the error printing.".Color(ConsoleColor.Magenta));
+                Console_.WriteLine($@"BH#2#0 - DevCode -> 0 | Path 'Unknown'
 Stderr: {e.Message}"); 
                 Environment.Exit(2);
             }

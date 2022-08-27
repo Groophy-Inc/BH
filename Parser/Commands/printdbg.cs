@@ -30,9 +30,7 @@ namespace BH.Parser.Commands
 
                 string log = Varriables.FixContent(command.Commands[0].Result.ToString());
                 Logs.Log(log);
-                
-                Console.WriteLine(log);
-                
+
                 Parse.EndProcess();
             }
             

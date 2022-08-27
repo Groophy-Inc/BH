@@ -30,13 +30,13 @@ namespace BH.APF
                 client.DownloadFile("https://github.com/microsoft/winget-cli/releases/download/v1.3.2091/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle", Path.GetTempPath() + "Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle");
             }
             tempcmd.Input("call \"Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle\"");
-            Console.WriteLine("Please type (C)ontinue when you install winget");
+            Console_.WriteLine("Please type (C)ontinue when you install winget");
             ConsoleKey lt = ConsoleKey.Z;
             while (lt != ConsoleKey.C)
             {
                 lt = Console.ReadKey().Key;
             }
-            Console.Write("\r\n");
+            Console_.Write("\r\n");
         }
 
         public static bool isHaveDotnet()
@@ -57,7 +57,7 @@ namespace BH.APF
             }
             File.WriteAllText(Path.GetTempPath()+"InstallDotnet.bat", "winget install -e --id Microsoft.dotnet");
             System.Diagnostics.Process.Start(Path.GetTempPath()+"InstallDotnet.bat");
-            Console.WriteLine("Please type (C)ontinue when you install dotnet");
+            Console_.WriteLine("Please type (C)ontinue when you install dotnet");
             ConsoleKey lt = ConsoleKey.Z;
             while (lt != ConsoleKey.C)
             {
@@ -101,7 +101,7 @@ namespace BH.APF
             }
             File.WriteAllText(Path.GetTempPath() + "InstallDotnet.bat", "winget install -e --id Microsoft.dotnet");
             System.Diagnostics.Process.Start(Path.GetTempPath() + "InstallDotnet.bat");
-            Console.WriteLine("Please type (C)ontinue when you install dotnet");
+            Console_.WriteLine("Please type (C)ontinue when you install dotnet");
             ConsoleKey lt = ConsoleKey.Z;
             while (lt != ConsoleKey.C)
             {
