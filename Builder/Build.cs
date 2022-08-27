@@ -138,7 +138,7 @@ namespace BH.Builder
                         HighLightLen = 1
                     };
 
-                    ErrorStack.PrintStack(err, "Builder/Build.cs | 141");
+                    ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
                     return false;
                 }
             }

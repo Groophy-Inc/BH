@@ -365,12 +365,12 @@ namespace BH.Parser
                                         ErrorPathCode = ErrorPathCodes.Parser,
                                         ErrorID = 1,
                                         DevCode = 0,
-                                        ErrorMessage = "Invalid syntax! this might be what you're looking for: '" + getClosest.Color("#"+Config.Parser.Config.Read("Suggestion","Error")) + "'.".Color(ConsoleColor.Yellow),
+                                        ErrorMessage = "Invalid syntax! this might be what you're looking for: '" + getClosest.Color(Config.Parser.Config.Read("Suggestion","Error")) + "'.".Color(ConsoleColor.Yellow),
                                         line = line,
                                         HighLightLen = word.Length
                                     };
                                     isSkipThisLine = true;
-                                    ErrorStack.PrintStack(err,"Parser/Parse.cs | 360");
+                                    ErrorStack.PrintStack(err,new System.Diagnostics.StackFrame(0, true));
                                 }
                             }
 

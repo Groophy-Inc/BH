@@ -85,7 +85,7 @@ Parse.System_isWaitingValue = true;
                                         HighLightLen = Parse.word.Length,
                                         line = Parse.line,
                                     };
-                                    ErrorStack.PrintStack(err, "Parser/Commands/system.cs | 88");
+                                    ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
                                     Parse.System_isPreloading = false;
                                     Parse.System_isWaitingValue = false;
                                     Parse.System_Command = SystemCommands.NA;

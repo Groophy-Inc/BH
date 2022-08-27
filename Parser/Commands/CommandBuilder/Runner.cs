@@ -39,7 +39,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err, "Parser/Commands/CommandBuilder/Runner | 42");
+                    ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
                     Parse.EndProcess();
                     return;
                 }
@@ -66,7 +66,7 @@ namespace BH.Parser.Commands
                             HighLightLen = Parse.word.Length,
                             line = Parse.line,
                         };
-                        ErrorStack.PrintStack(err, "Parser/Commands/CommandBuilder/Runner | 69");
+                        ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
                         Parse.EndProcess();
                     }
                     break;
@@ -89,7 +89,7 @@ namespace BH.Parser.Commands
                             HighLightLen = Parse.word.Length,
                             line = Parse.line,
                         };
-                        ErrorStack.PrintStack(err, "Parser/Commands/CommandBuilder/Runner | 92");
+                        ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
                         Parse.EndProcess();
                     }
                     break;
@@ -110,7 +110,7 @@ namespace BH.Parser.Commands
                             HighLightLen = Parse.word.Length,
                             line = Parse.line,
                         };
-                        ErrorStack.PrintStack(err, "Parser/Commands/CommandBuilder/Runner | 113");
+                        ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
                         Parse.EndProcess();
                     }
                     break;
@@ -159,7 +159,7 @@ namespace BH.Parser.Commands
                             HighLightLen = Parse.word.Length,
                             line = Parse.line,
                         };
-                        ErrorStack.PrintStack(err, "Parser/Commands/CommandBuilder/Runner | 159");
+                        ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
                         Parse.EndProcess();
                         break;
                     }
@@ -203,7 +203,7 @@ namespace BH.Parser.Commands
                             HighLightLen = Parse.word.Length,
                             line = Parse.line,
                         };
-                        ErrorStack.PrintStack(err, "Parser/Commands/CommandBuilder/Runner | 202");
+                        ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
                         Parse.EndProcess();
                         break;
                     }
@@ -219,7 +219,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err, "Parser/Commands/CommandBuilder/Runner | 217");
+                    ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
                     Parse.EndProcess();
                     break;
                 }

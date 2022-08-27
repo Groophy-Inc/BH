@@ -21,7 +21,7 @@ namespace BH.APF
 
             CmdFunc c = new CmdFunc(APF.Helper.AssemblyDirectory + "/text2pdf", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, false);
 
-            c.Input($"call text2pdf.exe \"{APF.Helper.AssemblyDirectory + "/Input.txt"}\" > \"{SavePath}\"").Print();
+            c.Input($"call text2pdf.exe \"{APF.Helper.AssemblyDirectory + "/Input.txt"}\" > \"{SavePath}\"");
             
             ClearCurrentConsoleLine(2); Console_.WriteLine(Logs.AllLogs.Length+" length logs Saved.");
 

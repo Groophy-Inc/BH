@@ -31,7 +31,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err, "Parser/Commands/Ankita.cs | 34");
+                    ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
 
                     Parse.EndProcess();
                     Parse.Ankita_DEBUGBoolean = false;
@@ -90,7 +90,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err, "Parser/Commands/Ankita.cs | 93");
+                    ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
                     Parse.Ankita_DEBUGBoolean = false;
                     Parse.Ankita_isWaitingDEBUG = false;
                     Parse.Ankita_isWaitingBoolean = false;
@@ -124,7 +124,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err, "Parser/Commands/Ankita.cs | 127");
+                    ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
                     Parse.Ankita_DEBUGBoolean = false;
                     Parse.Ankita_isWaitingDEBUG = false;
                     Parse.Ankita_isWaitingBoolean = false;

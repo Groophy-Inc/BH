@@ -20,7 +20,7 @@ namespace BH
 {
     internal class Program
     {
-        public static readonly string Ver = "0.4.0";
+        public static readonly string Ver = "0.4.2";
         
         static async Task Main(string[] args) 
         {
@@ -31,12 +31,11 @@ namespace BH
                 "C:\\Users\\GROOPHY\\Desktop\\Logs.pdf",
                 //"--debug",
                 "--parse",
-                @"C:\Users\GROOPHY\Desktop\umstest.txt",
+                @"C:\Users\GROOPHY\Desktop\ums2.txt",
                 "--srcPath",
                 @"C:\Users\GROOPHY\Desktop\desktop\Code\Batch\BH_2\Src\",
                 //"--checkhashforfastbuild",
             };
-
 
             APF.ArgumentParser.ParseArgs(args);
             if (APF.ArgumentParser.ParseFailed) return;
@@ -47,7 +46,7 @@ namespace BH
                 Console_.WriteLine(APF.Helper.FixRead(File.ReadAllText(Parse.masterPagePath)+"\r\n-------------------------"));
                 return 0;
             };
-            
+
             var _Runner = await Runner.Base.Run(MainWorker);
             
         }

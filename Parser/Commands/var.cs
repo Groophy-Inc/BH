@@ -40,7 +40,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err, "Parser/Commands/var.cs | 43");
+                    ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
                     Parse.EndProcess();
                     Parse.Var_isWaitingVarName = false;
                     Parse.Var_VarName = "";
@@ -66,7 +66,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err,"Parser/Commands/var.cs | 69");
+                    ErrorStack.PrintStack(err,new System.Diagnostics.StackFrame(0, true));
                     Parse.EndProcess();
                     Parse.Var_isWaitingVarName = false;
                     Parse.Var_VarName = "";
@@ -87,7 +87,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err,"Parser/Commands/var.cs | 90");
+                    ErrorStack.PrintStack(err,new System.Diagnostics.StackFrame(0, true));
                     Parse.EndProcess();
                     Parse.isSkipThisLine = true;
                     Parse.Var_isWaitingVarName = false;
@@ -121,7 +121,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err,"Parser/Commands/var.cs | 124");
+                    ErrorStack.PrintStack(err,new System.Diagnostics.StackFrame(0, true));
                     Parse.EndProcess();
                     Parse.Var_isWaitingVarName = false;
                     Parse.Var_VarName = "";
@@ -145,7 +145,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err,"Parser/Commands/var.cs | 148");
+                    ErrorStack.PrintStack(err,new System.Diagnostics.StackFrame(0, true));
                     Parse.EndProcess();
                     Parse.Var_isWaitingVarName = false;
                     Parse.Var_VarName = "";
@@ -189,7 +189,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err,"Parser/Commands/var.cs | 192");
+                    ErrorStack.PrintStack(err,new System.Diagnostics.StackFrame(0, true));
                     Parse.EndProcess();
                     Parse.Var_isWaitingVarName = false;
                     Parse.Var_VarName = "";
@@ -206,7 +206,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err,"Parser/Commands/var.cs | 209");
+                    ErrorStack.PrintStack(err,new System.Diagnostics.StackFrame(0, true));
                     Parse.EndProcess();
                     Parse.Var_isWaitingVarName = false;
                     Parse.Var_VarName = "";
@@ -277,7 +277,7 @@ namespace BH.Parser.Commands
                                 HighLightLen = Parse.word.Length,
                                 line = Parse.line,
                             };
-                            ErrorStack.PrintStack(err,"Parser/Commands/var.cs | 280");
+                            ErrorStack.PrintStack(err,new System.Diagnostics.StackFrame(0, true));
                             Parse.EndProcess();
                             Parse.Var_isWaitingVarName = false;
                             Parse.Var_VarName = "";

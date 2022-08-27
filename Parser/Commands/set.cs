@@ -94,7 +94,7 @@ namespace BH.Parser.Commands
                                         HighLightLen = Parse.word.Length,
                                         line = Parse.line,
                                     };
-                                    ErrorStack.PrintStack(err, "Parser/Commands/set.cs | 97");
+                                    ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
                                 }
                             }
 
@@ -161,7 +161,7 @@ namespace BH.Parser.Commands
                                             HighLightLen = Parse.word.Length,
                                             line = Parse.line,
                                         };
-                                        ErrorStack.PrintStack(err, "Parser/Commands/set.cs | 164");
+                                        ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
                                     }
                                 }
                             }
@@ -221,7 +221,7 @@ namespace BH.Parser.Commands
                                 HighLightLen = Parse.word.Length,
                                 line = Parse.line,
                             };
-                            ErrorStack.PrintStack(err, "Parser/Commands/set.cs | 224");
+                            ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
                         }
                     }
 

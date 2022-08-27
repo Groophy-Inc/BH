@@ -91,7 +91,7 @@ namespace BH
                             HighLightLen = Parse.word.Length,
                             line = Parse.line,
                         };
-                        ErrorStack.PrintStack(err, "Varriables/Varriable.cs | 94");
+                        ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
                     }
                 }
             }

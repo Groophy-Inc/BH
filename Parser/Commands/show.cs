@@ -33,7 +33,7 @@ namespace BH.Parser.Commands
                         HighLightLen = Parse.word.Length,
                         line = Parse.line,
                     };
-                    ErrorStack.PrintStack(err, "Parser/Commands/show.cs | 36");
+                    ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
                     Parse.EndProcess();
                     Parse.Show_isWaitingVarriable = false;
                 }
