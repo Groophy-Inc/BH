@@ -117,6 +117,13 @@ namespace BH.Parser.Commands
                 case CommandParseType.content: // [""]
                     var status = rule.StatusValue_NotForUsers;
                     if (status == 0) rule.Result = "";
+
+                    if (status != 0) //Check space or newline
+                    {
+                        if (Parse.isNewLine) rule.Result += "\r\n";
+                        else rule.Result += " ";
+                    }
+                    
                     var append = (string)rule.Result;
                     ContentSearch(Parse.word, ref status, ref append);
                     rule.StatusValue_NotForUsers = status;

@@ -39,6 +39,7 @@ namespace BH.Parser
         public static string ProjectName = "";
         public static List<CommandBuilder> Commands = new List<CommandBuilder>();
         public static pbp_Command callit = new pbp_Command();
+        public static bool isNewLine = false;
 
         //General Handle
         public static bool isErrorStack = false;
@@ -139,7 +140,7 @@ namespace BH.Parser
 
         private static AllElements _ParseLines(string[] lines)
         {
-            Logs.Log("--------------------------------------------------------\r\nParse started.\r\n");
+            Logs.Log("--------------------------------------------------------\r\nParse started.\r\n--------------------------------------------------------\r\n");
             Logs.Log(string.Join("\r\n", lines));
             Logs.Log("--------------------------------------------------------");
             ReGen();
@@ -150,6 +151,8 @@ namespace BH.Parser
             for (int i = 0; i < lines.Length; i++)
             {
                 line = lines[i];
+
+                isNewLine = true;
 
                 if (!isAnyContent) line += " ";
 
@@ -179,6 +182,8 @@ namespace BH.Parser
                 string[] words = line.Split(' ');
                 for (int j = 0; j < words.Length; j++)
                 {
+                    if (j != 0) isNewLine = false;
+                    
                     word = words[j].Trim();
                     wordLower = word.Replace("ı", "i").Replace("I", "i").ToLower();
 
