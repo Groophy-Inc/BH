@@ -9,6 +9,37 @@ namespace BH.Parser.Commands
         signed_values,  //[CF|PS|CS]
         unsigned_value, //[$]
         content,        //[""]
+        attribute       //[":"]
+    }
+
+    public class attributes
+    {
+        public List<attribute> attr { get; set; } = new List<attribute>();
+
+        public attribute lastest_attr { get; set; } = new attribute();
+
+        public Dictionary<string, string> getDic()
+        {
+            Dictionary<string, string> retenv = new Dictionary<string, string>();
+            foreach (var attribute in attr)
+            {
+                if (attribute.key.Replace('I', 'i').ToLower() != "inner") retenv.Add(attribute.key, attribute.value);
+            }
+
+            return retenv;
+        }
+    }
+    
+    public class attribute
+    {
+        public string key { get; set; }
+        public string value { set; get; }
+
+        public void appentToContent(string text, int status)
+        {
+            if (status == 1) key += text;
+            else if (status == 4) value += text;
+        }
     }
 
     public class pbp_Command

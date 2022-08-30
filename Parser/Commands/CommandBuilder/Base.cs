@@ -32,6 +32,11 @@ namespace BH.Parser.Commands
                 {
                     c.Type = CommandParseType.content;
                 }
+                else if (clear.StartsWith("\":\"")) //attribute
+                {
+                    c.Type = CommandParseType.attribute;
+                    c.StatusValue_NotForUsers = -1;
+                }
                 else //Signed_Value
                 {
                     c.Type = CommandParseType.signed_value;

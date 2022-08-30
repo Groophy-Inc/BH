@@ -8,7 +8,7 @@ namespace BH.APF
         {
             get
             {
-                return "0.5.0";
+                return "0.5.1";
             }
         }
     }
