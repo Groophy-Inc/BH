@@ -16,7 +16,7 @@ namespace BH.Parser.Config
 
         public static void Parse()
         {
-            string[] lines = File.ReadAllLines("config.cfg");
+            string[] lines = File.ReadAllLines(APF.Helper.AssemblyDirectory+"\\config.cfg");
             string lastest_section = "";
 
             for (int i = 0; i < lines.Length; i++)

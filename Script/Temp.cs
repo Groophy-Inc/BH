@@ -68,10 +68,12 @@ namespace BH.Script
                 var ot = CmdFunc.OneTimeInput("dotnet build", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, APF.Helper.AssemblyDirectory + "\\Temp\\");
                 RunApp();
                 ErrorHandle.Logs.Log("Dotnet build Stdout - \r\n" + ot.Stdout.ToString());
+                ErrorHandle.Logs.Log("IsError: " + ot.Stderr);
             }
             else
             {
-                CmdFunc.OneTimeInput("dotnet build", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, APF.Helper.AssemblyDirectory + "\\Temp\\");
+                var ot = CmdFunc.OneTimeInput("dotnet build", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, APF.Helper.AssemblyDirectory + "\\Temp\\");
+                ErrorHandle.Logs.Log("IsError: " + ot.Stderr);
                 RunApp();
             }
         }
