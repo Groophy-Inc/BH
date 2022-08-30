@@ -12,19 +12,26 @@ namespace BH.APF
         {
             if (string.IsNullOrEmpty(SavePath)) return;
             if (!File.Exists(SavePath)) File.Create(SavePath);
-            Console_.WriteLine("Logs saving...");
+            if (!APF.ArgumentParser.Silence)
+            {
+                Console_.WriteLine("Logs saving...");
+            }
             Logs.Log("Saving...");
 
-            File.WriteAllText("Input.txt", Logs.AllLogs.ToString());
+            File.WriteAllText(APF.Helper.AssemblyDirectory+"\\Input.txt", Logs.AllLogs.ToString());
 
-            ClearCurrentConsoleLine(2); Console_.WriteLine("Logs printing to pdf.");
-
+            if (!APF.ArgumentParser.Silence)
+            {
+                ClearCurrentConsoleLine(2); Console_.WriteLine("Logs printing to pdf.");
+            }
+            
             CmdFunc c = new CmdFunc(APF.Helper.AssemblyDirectory + "/text2pdf", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, false);
 
             c.Input($"call text2pdf.exe \"{APF.Helper.AssemblyDirectory + "/Input.txt"}\" > \"{SavePath}\"");
-            
-            ClearCurrentConsoleLine(2); Console_.WriteLine(Logs.AllLogs.Length+" length logs Saved.");
-
+            if (!APF.ArgumentParser.Silence)
+            {
+                ClearCurrentConsoleLine(2); Console_.WriteLine(Logs.AllLogs.Length+" length logs Saved.");
+            }
         }
         
         private static void ClearCurrentConsoleLine(int DelLineCount = 0)
