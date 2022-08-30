@@ -14,7 +14,7 @@ namespace BH.Parser.Commands
             {
                 if (Parse.word == ";")
                 {
-                    Console_.WriteLine(Program.Ver);
+                    Console_.WriteLine(APF.Version.Read);
 
                     Parse.Version_isWaitingEndKey = false;
                     Logs.OnPropertyChanged("Version_isWaitingEndKey", false);
