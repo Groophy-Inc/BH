@@ -23,7 +23,7 @@ namespace BH.Builder
             if (window.Genre.Replace('I', 'i').ToLower() == "window")
             {
                 Stopwatch sw = Stopwatch.StartNew();
-                CreateFiles(window.Attributes["name"], window.Attributes);
+                CreateFiles(window.Attributes["name"], window.Attributes, window);
                 Script.Temp.RunAppByDotnet(true);
                 sw.Stop();
                 window.Stopwatch = sw;
@@ -43,64 +43,31 @@ namespace BH.Builder
             }
             Directory.CreateDirectory(temp);
         }
-        public static void CreateFiles(string ProjectName, Dictionary<string, string> attr)
+        public static void CreateFiles(string ProjectName, Dictionary<string, string> attr, Element window)
         {
             string tempPath = APF.Helper.AssemblyDirectory + "\\Temp\\";
             if (!Directory.Exists(tempPath)) Directory.CreateDirectory(tempPath);
 
-            CreateCSPROJ(tempPath, ProjectName);
+            CreateCSPROJ(tempPath, ProjectName,window);
             CreateASSEMBLY(tempPath);
             CreateApp_Xaml(tempPath, ProjectName);
-            CreateApp_Xaml_CS(tempPath, ProjectName);
-            if (!CreateMainWindow_Xaml(tempPath, ProjectName, attr))
+            CreateApp_Xaml_CS(tempPath, ProjectName, window);
+            if (!CreateMainWindow_Xaml(tempPath, ProjectName, attr, window))
             {
                 Environment.Exit(11);
             }
-            CreateMainWindow_Xaml_CS(tempPath, ProjectName);
+            CreateMainWindow_Xaml_CS(tempPath, ProjectName, window);
             //CmdFunc.OneTimeInput("dotnet run", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, tempPath);
         }
 
-        private static void CreateMainWindow_Xaml_CS(string tempPath, string ProjectName)
+        private static void CreateMainWindow_Xaml_CS(string tempPath, string ProjectName, Element window)
         {
-            Structes.BodyClasses._Namespace ns = new Structes.BodyClasses._Namespace()
-            {
-                //using System;
-                //using System.Collections.Generic;
-                //            using System.Configuration;
-                //            using System.Data;
-                //            using System.Linq;
-                //            using System.Threading.Tasks;
-                //            using System.Windows;
-                Using = new System.Collections.Generic.List<string>(new string[] { "System.Collections.Generic", "System.Linq", "System.Text", "System.Threading.Tasks", "System.Windows", "System.Windows.Controls", "System.Windows.Data",
-                "System.Windows.Documents","System.Windows.Input","System.Windows.Media","System.Windows.Media.Imaging","System.Windows.Navigation","System.Windows.Shapes"}),
-                Name = ProjectName,
-                Classes = new List<Structes.BodyClasses._Class>()
-            {
-                new Structes.BodyClasses._Class()
-                {
-                    Name = "MainWindow",
-                    isConjunction = true,
-                    Conjunction = ": Window",
-                    Access = "public partial",
-                    Voides = new List<Structes.BodyClasses._Void>()
-                    {
-                        new Structes.BodyClasses._Void()
-                        {
-                            Access="public",
-                            Args=new List<string>(),
-                            Code = "InitializeComponent();",
-                            Name = "MainWindow",
-                            ReturnType = ""
-        }
-                    }
-                }
-            }
-            };
-            string code = JustFixBracket(Init(ns));
+            string code = JustFixBracket(Init(window.appcs));
+            
             File.WriteAllText(tempPath + "MainWindow.xaml.cs", code);
         }
 
-        private static bool CreateMainWindow_Xaml(string tempPath, string ProjectName, Dictionary<string, string> attrs)
+        private static bool CreateMainWindow_Xaml(string tempPath, string ProjectName, Dictionary<string, string> attrs, Element window)
         {
             //            <Window x:Class="CleanTemp.MainWindow"
             //        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -142,6 +109,20 @@ namespace BH.Builder
                     return false;
                 }
             }
+
+            string comps = "";
+
+            foreach (var comp in window.comps)
+            {
+                string adv = "";
+                foreach (var keypair in comp.Item3)
+                {
+                    adv += $"{keypair.Key}=\"{keypair.Value}\" ";
+                }
+
+                comps += $"<{comp.Item1} {adv}>{comp.Item2}</{comp.Item1}>\r\n";
+            }
+            
             File.WriteAllText(tempPath + "MainWindow.xaml", $"<Window x:Class=\"{ProjectName}.MainWindow\"\r\n" +
                             "        xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"\r\n" +
                             "        xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"\r\n" +
@@ -151,12 +132,13 @@ namespace BH.Builder
                             "        mc:Ignorable=\"d\"\r\n" +
                             $"        {tt}>\r\n" +  
                             "    <Grid>\r\n" +
+                            comps + 
                             "    </Grid>\r\n" +
                             "</Window>\r\n");
             return true;
         }
 
-        private static void CreateCSPROJ(string tempPath, string ProjectName)
+        private static void CreateCSPROJ(string tempPath, string ProjectName, Element window)
         {
             //<Project Sdk="Microsoft.NET.Sdk">
 
@@ -169,6 +151,13 @@ namespace BH.Builder
 
             //</Project>
 
+            string nugs = "";
+
+            foreach (var nuget in window.appcs.Nugets)
+            {
+                nugs += $"    <PackageReference Include=\"{nuget}\" />\r\n";
+            }
+
             File.WriteAllText(tempPath + $"{ProjectName}.csproj", "<Project Sdk=\"Microsoft.NET.Sdk\">" + @"
 
   <PropertyGroup>
@@ -177,7 +166,9 @@ namespace BH.Builder
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
-
+<ItemGroup>
+"+ nugs + @"
+  </ItemGroup>
 </Project>
 ");
         }
@@ -204,7 +195,7 @@ namespace BH.Builder
                 "</Application>\r\n");
         }
 
-        private static void CreateApp_Xaml_CS(string tempPath, string ProjectName)
+        private static void CreateApp_Xaml_CS(string tempPath, string ProjectName, Element window)
         {
             Structes.BodyClasses._Namespace ns = new Structes.BodyClasses._Namespace()
             {
@@ -218,18 +209,19 @@ namespace BH.Builder
                 Using = new List<string>(new string[] { "System.Collections.Generic", "System.Configuration", "System.Data", "System.Linq", "System.Threading.Tasks", "System.Windows" }),
                 Name = ProjectName,
                 Classes = new List<Structes.BodyClasses._Class>()
-            {
-                new Structes.BodyClasses._Class()
                 {
-                    Name = "App",
-                    isConjunction = true,
-                    Conjunction = ": Application",
-                    Access = "public partial"
+                    new Structes.BodyClasses._Class()
+                    {
+                        Name = "App",
+                        isConjunction = true,
+                        Conjunction = ": Application",
+                        Access = "public partial"
+                    }
                 }
-            }
             };
             string code = JustFixBracket(Init(ns));
             File.WriteAllText(tempPath + "App.xaml.cs", code);
+            
         }
 
         private static void CreateASSEMBLY(string tempPath)
@@ -314,7 +306,7 @@ namespace BH.Builder
                         if (!arg.Equals("(")) arg = arg.Substring(0, arg.Length - 1);
                         arg += ")";
                         FVoid += @$"
-{y.Access} {y.Name} {arg} " + "\r\n{" + $@"
+{y.Access} {y.ReturnType} {y.Name} {arg} " + "\r\n{" + $@"
 {y.Code}
 " + "}\r\n";
                     }

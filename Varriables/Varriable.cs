@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BH.ErrorHandle;
 using BH.ErrorHandle.Error;
 using BH.Parser;
 using BH.Script.Types;
 using BH.Structes.ErrorStack;
+using CSScripting;
 
 namespace BH
 {
@@ -143,16 +145,17 @@ namespace BH
 
         public static IVarriable TryGet(string key, ref bool isFound)
         {
+            if (key.StartsWith('$')) key = key.Substring(1);
             if (key.ToLower() == "thingno") return null;
-            isFound = true;
-            try
+            if (Vars.Any(x => x.Key == key))
             {
+                isFound = true;
                 return Vars[key];
             }
-            catch
+            else
             {
                 isFound = false;
-                return null;
+                return new IVarriable(){Obj = new object()};
             }
         }
 

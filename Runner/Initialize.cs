@@ -20,6 +20,8 @@ namespace BH.Runner
         public static void Init_Commands()
         {
             printdbg.Init();
+            app.Init();
+            com.Init();
         }
 
         public static void Init_Cfg() => Parser.Config.Parser.Parse();

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="ErrorHandle\Warning\" />
+    <Folder Include="Logo" />
     <Folder Include="Script\" />
   </ItemGroup>
 

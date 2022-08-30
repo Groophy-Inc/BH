@@ -221,6 +221,45 @@ namespace BH.Parser
 
                             if (retenv.Item1)
                             {
+                                if (retenv.Item2.Genre == "window")
+                                {
+                                    Structes.BodyClasses._Namespace ns = new Structes.BodyClasses._Namespace()
+                                    {
+                                        //using System;
+                                        //using System.Collections.Generic;
+                                        //            using System.Configuration;
+                                        //            using System.Data;
+                                        //            using System.Linq;
+                                        //            using System.Threading.Tasks;
+                                        //            using System.Windows;
+                                        Using = new System.Collections.Generic.List<string>(new string[] { "System.Collections.Generic", "System.Linq", "System.Text", "System.Threading.Tasks", "System.Windows", "System.Windows.Controls", "System.Windows.Data",
+                                            "System.Windows.Documents","System.Windows.Input","System.Windows.Media","System.Windows.Media.Imaging","System.Windows.Navigation","System.Windows.Shapes"}),
+                                        Name = ProjectName,
+                                        Classes = new List<Structes.BodyClasses._Class>()
+                                        {
+                                            new Structes.BodyClasses._Class()
+                                            {
+                                                Name = "MainWindow",
+                                                isConjunction = true,
+                                                Conjunction = ": Window",
+                                                Access = "public partial",
+                                                Voides = new List<Structes.BodyClasses._Void>()
+                                                {
+                                                    new Structes.BodyClasses._Void()
+                                                    {
+                                                        Access="public",
+                                                        Args=new List<string>(),
+                                                        Code = "InitializeComponent();",
+                                                        Name = "MainWindow",
+                                                        ReturnType = ""
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    };
+                                    retenv.Item2.appcs = ns;
+                                }
+                                
                                 allofelements.Add(retenv.Item2);
                                 Varriables.AddorUpdate(retenv.Item2.Attributes["name"], retenv.Item2);
                             }
@@ -310,7 +349,7 @@ namespace BH.Parser
                             }
                             else if (wordLower == "version;")
                             {
-                                Console_.WriteLine(Program.Ver);
+                                Console_.WriteLine(APF.Version.Read);
                                 Logs.Log($"Syntax: '{ProgressSyntax}' [{DateTime.Now.ToString("HH:mm:ss")}]\r\n");
                                 Logs.isTab = true;
 
@@ -358,6 +397,7 @@ namespace BH.Parser
                                         Command c = new Command();
                                         c.Type = _command.Type;
                                         c.Value = _command.Value;
+                                        c.StatusValue_NotForUsers = _command.StatusValue_NotForUsers;
                                         callit.Commands.Add(c);
                                     }
                                 }

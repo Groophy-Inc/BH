@@ -25,7 +25,7 @@ namespace BH.Structes.BodyClasses
 
     public class _Void
     {
-        public string Access { get; set; }
+        public string Access { get; set; } = "public";
         public List<string> Args { get; set; } = new List<string>();
         public string Name { get; set; }
         public string Code { get; set; }
