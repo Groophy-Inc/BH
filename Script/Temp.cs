@@ -66,15 +66,28 @@ namespace BH.Script
             if (printMS)
             {
                 var ot = CmdFunc.OneTimeInput("dotnet build", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, APF.Helper.AssemblyDirectory + "\\Temp\\");
+                CmdFunc.OneTimeInput("dotnet format", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, APF.Helper.AssemblyDirectory + "\\Temp\\");
                 RunApp();
                 ErrorHandle.Logs.Log("Dotnet build Stdout - \r\n" + ot.Stdout.ToString());
                 ErrorHandle.Logs.Log("IsError: " + ot.Stderr);
+                if (APF.ArgumentParser.dotout)
+                {
+                    Console.OutputEncoding = Encoding.UTF8;
+                    Console.WriteLine(ot.Stdout);
+                }
             }
             else
             {
                 var ot = CmdFunc.OneTimeInput("dotnet build", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, APF.Helper.AssemblyDirectory + "\\Temp\\");
+                CmdFunc.OneTimeInput("dotnet format", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, APF.Helper.AssemblyDirectory + "\\Temp\\");
+                ErrorHandle.Logs.Log("Dotnet build Stdout - \r\n" + ot.Stdout.ToString());
                 ErrorHandle.Logs.Log("IsError: " + ot.Stderr);
                 RunApp();
+                if (APF.ArgumentParser.dotout)
+                {
+                    Console.OutputEncoding = Encoding.UTF8;
+                    Console.WriteLine(ot.Stdout);
+                }
             }
         }
 
