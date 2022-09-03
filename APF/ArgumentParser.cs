@@ -18,6 +18,7 @@ namespace BH.APF
         public static bool isParsedSrcPath = false;
 
         public static bool Silence = false;
+        public static bool dotout = false;
 
         public static void ParseArgs(bool debug)
         {
@@ -30,10 +31,11 @@ namespace BH.APF
                     "--Silence",
                     //"--debug",
                     "--parse",
-                    @"C:\Users\GROOPHY\Desktop\desktop\Code\Batch\BH_2\Src\Test.BH",
+                    @"C:\Users\GROOPHY\Desktop\desktop\Code\Batch\BH_2\Src\simple.BH",
                     "--srcPath",
                     @"C:\Users\GROOPHY\Desktop\desktop\Code\Batch\BH_2\Src\",
                     //"--checkhashforfastbuild",
+                    "--dotout"
                 };
             else
             {
@@ -76,12 +78,17 @@ namespace BH.APF
                 {
                     Silence = true;
                 }
+                else if (narg.Key == "dotout")
+                {
+                    dotout = true;
+                }
             }
 
             if (!APF.ArgumentParser.isParsedMasterPage && !APF.ArgumentParser.isParsedSrcPath)
             {
+                ParseFailed = true;
                 ANSIIConsole.Gecho.Print(
-                    @"<#2f2f8a>BH <w>[-s|--save <#af916d>\<SAVE PATH\><w>] <#18cff2>[--debug] <r>!<w>[-p|--parse <#af916d>\<MASTER PAGE PATH\><w>] <r>!<w>[-src|--srcpath <#af916d>\<SRCPATH WHERE HAVE YOUR TOOLS\><w>] <#18cff2>[--checkhashforfastbuild|-chffb] <#18cff2>[--ClearBHTemp|-cbt]");
+                    @"<#2f2f8a>BH <w>[-s|--save <#af916d>\<SAVE PATH\><w>] <#18cff2>[--debug] <r>!<w>[-p|--parse <#af916d>\<MASTER PAGE PATH\><w>] <r>!<w>[-src|--srcpath <#af916d>\<SRCPATH WHERE HAVE YOUR TOOLS\><w>] <#18cff2>[--checkhashforfastbuild|-chffb] <#18cff2>[--ClearBHTemp|-cbt] <#18cff2>[--dotout]");
             }
 
             if (ParseFailed) Environment.Exit(-1);
