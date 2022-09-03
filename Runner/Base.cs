@@ -44,6 +44,11 @@ namespace BH.Runner
         
         public static async Task<int> Run(Func<int> act,bool debug = false)
         {
+            bool ishavedotnet = APF.Validate.isHaveDotnet();
+            if (!ishavedotnet)
+            {
+                APF.Validate.InstallDotnet();
+            }
             APF.ArgumentParser.ParseArgs(debug);
             Initialize.Inıt_All();
             if (!ANSIInitializer.Init(false)) ANSIInitializer.Enabled = false;
