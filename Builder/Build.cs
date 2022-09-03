@@ -62,7 +62,8 @@ namespace BH.Builder
 
         private static void CreateMainWindow_Xaml_CS(string tempPath, string ProjectName, Element window)
         {
-            string code = JustFixBracket(Init(window.appcs));
+            string _code = Init(window.appcs);
+            string code = JustFixBracket(_code);
             
             File.WriteAllText(tempPath + "MainWindow.xaml.cs", code);
         }
@@ -84,7 +85,7 @@ namespace BH.Builder
             string tt = "";
             foreach (var attr in attrs)
             {
-                if (attr.Key.ToLower() == "name" || attr.Key.ToLower() == "genre")
+                if (attr.Key.ToLower() == "name" || attr.Key.ToLower() == "genre" || attr.Key.ToLower() == "nugets"|| attr.Key.ToLower() == "using")
                 {
                     continue;
                 }
@@ -337,7 +338,7 @@ namespace BH.Builder
                 }
                 else if (c == '}')
                 {
-                    sb.Append("[0m" + c.ToString());
+                    sb.Append("[0m"+ c.ToString());
                     tabcount--;
                 }
                 else

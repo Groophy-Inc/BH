@@ -257,6 +257,23 @@ namespace BH.Parser
                                             }
                                         }
                                     };
+                                    string _ = "NaN";
+                                    if (retenv.Item2.Attributes.TryGetValue("nugets", out _))
+                                    {
+                                        foreach (var nuget in _.Split(','))
+                                        {
+                                            ns.Nugets.Add(nuget);
+                                        }
+                                    }
+                                    
+                                    _ = "NaN";
+                                    if (retenv.Item2.Attributes.TryGetValue("using", out _))
+                                    {
+                                        foreach (var _using in _.Split(','))
+                                        {
+                                            ns.Using.Add(_using);
+                                        }
+                                    }
                                     retenv.Item2.appcs = ns;
                                 }
                                 

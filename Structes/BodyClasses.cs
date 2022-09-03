@@ -8,10 +8,10 @@ namespace BH.Structes.BodyClasses
 {
     public class _Namespace
     {
-        public string Name { get; set; }
-        public List<_Class> Classes { get; set; }
-        public List<string> Nugets { get; set; }
-        public List<string> Using { get; set; }
+        public string Name { get; set; } = String.Empty;
+        public List<_Class> Classes { get; set; } = new List<_Class>();
+        public List<string> Nugets { get; set; } = new List<string>();
+        public List<string> Using { get; set; } = new List<string>();
     }
 
     public class _Class
@@ -27,10 +27,10 @@ namespace BH.Structes.BodyClasses
     {
         public string Access { get; set; } = "public";
         public List<string> Args { get; set; } = new List<string>();
-        public string Name { get; set; }
-        public string Code { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Code { get; set; } = string.Empty;
         public bool isField { get; set; } = false;
         public string ReturnType { get; set; } = "void";
-        public string FieldDefualt { get; set; }
+        public string FieldDefualt { get; set; } = string.Empty;
     }
 }
