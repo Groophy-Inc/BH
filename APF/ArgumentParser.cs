@@ -64,6 +64,7 @@ namespace BH.APF
                 else if (narg.Key == "srcpath" || narg.Key == "src")
                 {
                     Parser.Parse.srcPath = narg.Value;
+                    Varriables.AddorUpdate("srcpath", arg.Value);
                     isParsedSrcPath = true;
                 }
                 else if (narg.Key == "checkhashforfastbuild" || narg.Key == "chffb")
