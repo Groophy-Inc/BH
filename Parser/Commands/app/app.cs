@@ -7,11 +7,6 @@ using BH.Parser.Commands.SubCommand;
 
 namespace BH.Parser.Commands
 {
-    public enum comps
-    {
-        Button,
-        Label,
-    }
     
     public class app
     {
@@ -28,7 +23,7 @@ namespace BH.Parser.Commands
                 "[->]",
                 "[$]",
                 "[as]",
-                $"[{string.Join('|', Enum.GetValues(typeof(comps)).Cast<comps>().ToList())}]",
+                "[?()]",
                 "[:]",
                 "[\":\"]"
             }, Decompose);
@@ -45,7 +40,7 @@ namespace BH.Parser.Commands
             {
                 isEnd = false;
 
-                Comp.Update(command.Commands[3].Result.ToString(), ((Tuple<bool, string>)command.Commands[5].Result).Item2, ((attributes)command.Commands[7].Result));
+                Comp.Update(command.Commands[3].Result.ToString(), (string)command.Commands[5].Result, ((attributes)command.Commands[7].Result));
 
                 Parse.EndProcess();
                 left = 0;
