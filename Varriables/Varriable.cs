@@ -158,6 +158,20 @@ namespace BH
                 return new IVarriable(){Obj = new object()};
             }
         }
+        
+        public static IVarriable Get(string key)
+        {
+            if (key.StartsWith('$')) key = key.Substring(1);
+            if (key.ToLower() == "thingno") return null;
+            if (Vars.Any(x => x.Key == key))
+            {
+                return Vars[key];
+            }
+            else
+            {
+                return new IVarriable(){Obj = new object()};
+            }
+        }
 
         public static bool AddorUpdate(string key, string value)
         {
