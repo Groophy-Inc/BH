@@ -177,6 +177,7 @@ namespace BH.Builder.Components
         Width,
         WindowStartupLocation,
         WindowState,
-        WindowStyle
+        WindowStyle,
+        Loaded
     }
 }

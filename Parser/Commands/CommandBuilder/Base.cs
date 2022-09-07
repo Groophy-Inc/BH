@@ -26,7 +26,7 @@ namespace BH.Parser.Commands
                 }
                 else if (clear.StartsWith('$')) //unsigned_value
                 {
-                    c.Type = CommandParseType.unsigned_value;
+                    c.Type = CommandParseType.unsigned_varriable;
                 }
                 else if (clear.StartsWith("\"\"")) //Content
                 {
@@ -36,6 +36,11 @@ namespace BH.Parser.Commands
                 {
                     c.Type = CommandParseType.attribute;
                     c.StatusValue_NotForUsers = -1;
+                }
+                else if (clear.StartsWith('?'))
+                {
+                    c.Type = CommandParseType.unsigned_value;
+                    c.Value = new Tuple<char, char>(clear[1], clear[2]);
                 }
                 else //Signed_Value
                 {

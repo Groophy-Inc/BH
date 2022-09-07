@@ -108,7 +108,7 @@ namespace BH.Parser.Commands
                         }
 
                         break;
-                    case CommandParseType.unsigned_value: // [$hi]
+                    case CommandParseType.unsigned_varriable: // [$hi]
                         if (word.StartsWith('$'))
                         {
                             rule.Result = NoLower;
@@ -184,11 +184,100 @@ namespace BH.Parser.Commands
                         else word = "";
                         
                         break;
+                    case CommandParseType.unsigned_value:
+                        
+                        var statusU = rule.StatusValue_NotForUsers;
+                        if (statusU == 0) rule.Result = "";
+
+                        if (statusU == 1) //Check space or newline
+                        {
+                            if (Parse.isNewLine) rule.Result += "\r\n";
+                            else rule.Result += " ";
+                        }
+
+                        var appendU = (string)rule.Result;
+                        Tuple<bool, string> endleftU = new Tuple<bool, string>(false, "");
+                        Tuple<char, char> between = (Tuple<char, char>)rule.Value;
+                        SearchBetween(Parse.word, ref statusU, ref appendU, between.Item1, between.Item2, ref endleftU);
+                        rule.StatusValue_NotForUsers = statusU;
+                        rule.Result = appendU;
+                        if (statusU == 2)
+                        {
+                            rule.Result = Varriables.FixContent(((string)rule.Result));
+                            left++;
+                        }
+
+                        if (endleftU.Item1) word = endleftU.Item2;
+                        else word = "";
+                        
+                        break;
                 }
 
                 if (end)
                 {
                     left = 0;
+                }
+            }
+        }
+
+        //0 -> waiting contentkey as fb
+        //1 -> waiting contentend as fe
+        //2 -> end
+        public static void SearchBetween(string Word, ref int status, ref string text_to_append, char fb, char fe, ref Tuple<bool, string> isEnd_and_Extra)
+        {
+            bool isBackslash = false;
+            foreach (char c in Word)
+            {
+                if (status == 0)
+                {
+                    if (c == fb)
+                    {
+                        status++;
+                        isContent = true;
+                    }
+                    else
+                    {
+                        if (c == ' ') continue;
+                        Error err = new Error()
+                        {
+                            ErrorPathCode = ErrorPathCodes.Parser,
+                            ErrorID = 4,
+                            DevCode = 0,
+                            ErrorMessage = "Content start key('"+fb+"') not found.",
+                            HighLightLen = Parse.word.Length,
+                            line = Parse.line,
+                        };
+                        ErrorStack.PrintStack(err, new System.Diagnostics.StackFrame(0, true));
+                        Parse.EndProcess();
+                        break;
+                    }
+                }
+                else if (status == 1)
+                {
+                    if (isBackslash)
+                    {
+                        text_to_append += c;
+                    }
+                    else
+                    {
+                        if (c == '\\')
+                        {
+                            isBackslash = true;
+                        }
+                        else
+                        {
+                            if (c == fe)
+                            {
+                                status++;
+                                isContent = false;
+                            }
+                            else text_to_append += c;
+                        }
+                    }
+                }
+                else if (status == 2)
+                {
+                    isEnd_and_Extra = new Tuple<bool, string>(true, isEnd_and_Extra.Item2 + c);
                 }
             }
         }

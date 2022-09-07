@@ -7,9 +7,10 @@ namespace BH.Parser.Commands
     {
         signed_value,   //[ums]
         signed_values,  //[CF|PS|CS]
-        unsigned_value, //[$]
+        unsigned_varriable, //[$]
         content,        //[""]
-        attribute       //[":"]
+        attribute,      //[":"]
+        unsigned_value  //[?()]
     }
 
     public class attributes
