@@ -10,6 +10,7 @@ using BH.Parser.Utils;
 using System.IO;
 using BH.Structes;
 using BH.ErrorHandle.Error;
+using BH.Structes.BodyClasses;
 using BH.Structes.ErrorStack;
 
 namespace BH.Builder
@@ -48,6 +49,9 @@ namespace BH.Builder
             string tempPath = APF.Helper.AssemblyDirectory + "\\Temp\\";
             if (!Directory.Exists(tempPath)) Directory.CreateDirectory(tempPath);
 
+            Directory.CreateDirectory(tempPath + "BH.CmdFunc");
+            CopyFilesRecursively(APF.Helper.AssemblyDirectory+"\\BH.CmdFunc", tempPath + "BH.CmdFunc");
+
             CreateCSPROJ(tempPath, ProjectName,window);
             CreateASSEMBLY(tempPath);
             CreateApp_Xaml(tempPath, ProjectName);
@@ -57,11 +61,34 @@ namespace BH.Builder
                 Environment.Exit(11);
             }
             CreateMainWindow_Xaml_CS(tempPath, ProjectName, window);
-            //CmdFunc.OneTimeInput("dotnet run", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, tempPath);
         }
+        
+        private static void CopyFilesRecursively(string sourcePath, string targetPath)
+        {
+            
+            foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
+            {
+                Directory.CreateDirectory(dirPath.Replace(sourcePath, targetPath));
+            }
+            
+            foreach (string newPath in Directory.GetFiles(sourcePath, "*.*",SearchOption.AllDirectories))
+            {
+                File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
+            }
+        }
+        
 
         private static void CreateMainWindow_Xaml_CS(string tempPath, string ProjectName, Element window)
         {
+            
+            window.appcs.Classes[0].Voides.Add(new _Void()
+            {
+                ReturnType = "CmdFunc",
+                Name = "Batch",
+                isField = true,
+                FieldDefualt = " = new CmdFunc(\"C:\\\\\", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, false);"
+            });
+            
             string _code = Init(window.appcs);
             string code = JustFixBracket(_code);
             
@@ -166,9 +193,14 @@ namespace BH.Builder
     <TargetFramework>net5.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
   </PropertyGroup>
 <ItemGroup>
 "+ nugs + @"
+  </ItemGroup>
+<ItemGroup>
+    "+"<ProjectReference Include=\"..\\BH.CmdFunc\\BH.CmdFunc.csproj\" />"+@"
   </ItemGroup>
 </Project>
 ");
@@ -216,7 +248,7 @@ namespace BH.Builder
                         Name = "App",
                         isConjunction = true,
                         Conjunction = ": Application",
-                        Access = "public partial"
+                        Access = "public partial",
                     }
                 }
             };
@@ -275,6 +307,8 @@ namespace BH.Builder
             {
                 Using += "using " + x+";\r\n";
             }
+
+            
 
             string Namespace = @$"namespace {_Namespace.Name}"+"\r\n" + "{\r\n"; //namespace with {
             string InNamespace = ""; //in Namespace

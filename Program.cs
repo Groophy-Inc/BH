@@ -1,6 +1,4 @@
-﻿using BH.Structes;
-
-namespace BH
+﻿namespace BH
 {
     internal class Program
     {
@@ -12,8 +10,7 @@ namespace BH
                 return 0;
             };
 
-            var _Runner = await Runner.Base.Run();
-            
+            var _Runner = await Runner.Base.Run(false);
         }
     }
 }

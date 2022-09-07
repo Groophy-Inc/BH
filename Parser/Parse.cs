@@ -233,7 +233,7 @@ namespace BH.Parser
                                         //            using System.Threading.Tasks;
                                         //            using System.Windows;
                                         Using = new System.Collections.Generic.List<string>(new string[] { "System.Collections.Generic", "System.Linq", "System.Text", "System.Threading.Tasks", "System.Windows", "System.Windows.Controls", "System.Windows.Data",
-                                            "System.Windows.Documents","System.Windows.Input","System.Windows.Media","System.Windows.Media.Imaging","System.Windows.Navigation","System.Windows.Shapes"}),
+                                            "System.Windows.Documents","System.Windows.Input","System.Windows.Media","System.Windows.Media.Imaging","System.Windows.Navigation","System.Windows.Shapes", "BH"}),
                                         Name = ProjectName,
                                         Classes = new List<Structes.BodyClasses._Class>()
                                         {

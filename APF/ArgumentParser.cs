@@ -31,9 +31,9 @@ namespace BH.APF
                     "--Silence",
                     //"--debug",
                     "--parse",
-                    @"C:\Users\GROOPHY\Desktop\desktop\Code\Batch\BH_2\Src\simple.BH",
+                    @"C:\Users\GROOPHY\Desktop\desktop\Code\Batch\BH_2\BH\Test.BH",
                     "--srcPath",
-                    @"C:\Users\GROOPHY\Desktop\desktop\Code\Batch\BH_2\Src\",
+                    @"C:\Users\GROOPHY\Desktop\desktop\Code\Batch\BH_2\BH",
                     //"--checkhashforfastbuild",
                     "--dotout"
                 };
@@ -63,8 +63,10 @@ namespace BH.APF
                 }
                 else if (narg.Key == "srcpath" || narg.Key == "src")
                 {
-                    Parser.Parse.srcPath = narg.Value;
-                    Varriables.AddorUpdate("srcpath", arg.Value);
+                    string src = arg.Value;
+                    src = fixone(src);
+                    Parser.Parse.srcPath = src;
+                    Varriables.AddorUpdate("srcpath", src);
                     isParsedSrcPath = true;
                 }
                 else if (narg.Key == "checkhashforfastbuild" || narg.Key == "chffb")
@@ -93,6 +95,11 @@ namespace BH.APF
             }
 
             if (ParseFailed) Environment.Exit(-1);
+        }
+
+        public static string fixone(string text)
+        {
+            return text.Replace(@"\", @"\\").Replace(@"\\\\", @"\\");
         }
 
         public static Dictionary<string, string> Parse(string[] args)

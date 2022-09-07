@@ -9,6 +9,7 @@ namespace BH.Runner
     {
         public static void Inıt_All()
         {
+            if (!ANSIInitializer.Init(false)) ANSIInitializer.Enabled = false;
             System.Console.OutputEncoding = Encoding.UTF8;
             Init_Cfg();
             Init_Logs();
