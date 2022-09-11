@@ -14,6 +14,11 @@ namespace BH.Runner
         
         public static async Task<int> Run(bool debug = false)
         {
+            bool ishavedotnet = APF.Validate.isHaveDotnet();
+            if (!ishavedotnet)
+            {
+                APF.Validate.InstallDotnet();
+            }
             APF.ArgumentParser.ParseArgs(debug);
             Initialize.Inıt_All();
             
@@ -51,7 +56,6 @@ namespace BH.Runner
             }
             APF.ArgumentParser.ParseArgs(debug);
             Initialize.Inıt_All();
-            if (!ANSIInitializer.Init(false)) ANSIInitializer.Enabled = false;
             if (File.Exists(APF.Helper.AssemblyDirectory + "\\LastestHash.hash")) LastestHash = File.ReadAllText(APF.Helper.AssemblyDirectory + "\\LastestHash.hash");
             if (File.Exists(APF.Helper.AssemblyDirectory + "\\LastestProjectName")) Parse.ProjectName = File.ReadAllText(APF.Helper.AssemblyDirectory + "\\LastestProjectName");
             Console.Title = "BH - ThinkNo - " + APF.Version.Read;

@@ -17,7 +17,7 @@ namespace BH.Builder
 {
     internal class Build
     {
-        public static void Demo(object objwindow)
+        public static void Demo(object objwindow, bool runit = true)
         {
             ClearTemp(APF.Helper.AssemblyDirectory + "\\Temp");
             Element window = objwindow as Element;
@@ -25,7 +25,9 @@ namespace BH.Builder
             {
                 Stopwatch sw = Stopwatch.StartNew();
                 CreateFiles(window.Attributes["name"], window.Attributes, window);
-                Script.Temp.RunAppByDotnet(true);
+                if (runit) Script.Temp.RunAppByDotnet(true);
+                else {var ot = CmdFunc.OneTimeInput("dotnet build", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, APF.Helper.AssemblyDirectory + "\\Temp\\");
+                      CmdFunc.OneTimeInput("dotnet format", CF_Structes.ShellType.ChairmanandManagingDirector_CMD, APF.Helper.AssemblyDirectory + "\\Temp\\");}
                 sw.Stop();
                 window.Stopwatch = sw;
             }

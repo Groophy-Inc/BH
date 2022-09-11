@@ -23,6 +23,7 @@ namespace BH.Runner
             printdbg.Init();
             app.Init();
             com.Init();
+            compile.Init();
         }
 
         public static void Init_Cfg() => Parser.Config.Parser.Parse();

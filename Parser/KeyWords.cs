@@ -28,7 +28,8 @@ namespace BH.Parser
             ankita,
             version,
             printdbg,
-            show
+            show,
+            compile
         }
     }
 }

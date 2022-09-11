@@ -10,7 +10,7 @@
                 return 0;
             };
 
-            var _Runner = await Runner.Base.Run(false);
+            var _Runner = await Runner.Base.Run(MainWorker,true);
         }
     }
 }
