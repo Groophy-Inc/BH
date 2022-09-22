@@ -1,0 +1,41 @@
+﻿
+//Made with BH
+
+set $windowName (window):
+"Title": "Clock",
+"Width": "480",
+"Height": "320",
+"ResizeMode": "NoResize",
+"Loaded": "Window_Loaded"
+;
+
+com new method -> $windowName as cs:
+"name": "Window_Loaded",
+"args": "sender, e",
+"code": "
+						Icon = new BitmapImage(new Uri(\"$srcpath\\\\clean.ico\"));
+".
+;
+
+com new method -> $windowName as cs:
+"name": "Btn_Clicked",
+"args": "sender, e",
+"code": "
+						Detail.Content = Batch.Input(\"bat detail 17\").Stdout.ToString();
+".
+;
+
+app new comp -> $windowName as (Button):
+"inner": "Get Info For Gecho",
+"Name": "Getbtn",
+"VerticalAlignment": "Top",
+"Click": "Btn_Clicked",
+"Margin": "62,10,62,0".
+;
+
+app new comp -> $windowName as (Label):
+"Name": "Detail",
+"Margin": "0,30,0,0".
+;
+
+show $windowName;

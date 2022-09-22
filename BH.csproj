@@ -6,6 +6,10 @@
     <ErrorReport>none</ErrorReport>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
   <ItemGroup>
     <Folder Include="ErrorHandle\Warning\" />
     <Folder Include="Logo" />

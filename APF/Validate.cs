@@ -7,7 +7,7 @@ namespace BH.APF
 {
     internal class Validate
     {
-        private static CmdFunc tempcmd = new CmdFunc(Path.GetTempPath(), CF_Structes.ShellType.ChairmanandManagingDirector_CMD, false);
+        private static CmdFunc tempcmd = new CmdFunc(Path.GetTempPath(), CF_Structes.ShellType.ChairmanandManagingDirector_CMD, true);
 
         public static bool isHaveWinget()
         {

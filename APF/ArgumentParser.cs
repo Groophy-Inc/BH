@@ -31,7 +31,7 @@ namespace BH.APF
                     "--Silence",
                     //"--debug",
                     "--parse",
-                    @"C:\Users\GROOPHY\Desktop\desktop\Code\Batch\BH_2\BH\Test.BH",
+                    @"C:\Users\GROOPHY\Desktop\desktop\Code\Batch\BH_2\Src\Clock.BH",
                     "--srcPath",
                     @"C:\Users\GROOPHY\Desktop\desktop\Code\Batch\BH_2\Src\",
                     //"--checkhashforfastbuild",
